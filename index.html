@@ -214,7 +214,7 @@ button.pt-name:hover { text-decoration-color: var(--c); }
   <span><i class="sw ln"></i>Solid · Garching</span>
   <span><i class="sw ln dash"></i>Dashed · München-Nord, on the U6</span>
   <span><i class="sw ln dot"></i>Dotted · far from the U6 (other lines)</span>
-  <span><i class="sw ln dbl"></i>Double · nearby towns, by bus (Unterföhring, Oberschleißheim, Eching)</span>
+  <span><i class="sw ln dbl"></i>Double · nearby towns, by bus</span>
   <span><i class="clx">3</i>Dorms too close together; click to zoom in</span>
   <label class="areas">Zoom to
     <select id="go-area">
@@ -224,7 +224,7 @@ button.pt-name:hover { text-decoration-color: var(--c); }
       <option value="far">Far from U6</option>
       <option value="ufg">Unterföhring</option>
       <option value="osh">Oberschleißheim</option>
-      <option value="ech">Eching</option>
+      <option value="ech">Eching-Dietersheim</option>
     </select>
   </label>
 </div>
@@ -877,7 +877,7 @@ function show(i, fly) {
   const panel = $("panel");
   panel.hidden = false;
   panel.style.setProperty("--c", COL[d.ch]);
-  const areaName = { garching: "Garching", north: "München-Nord", far: "Far from U6", ufg: "Unterföhring", osh: "Oberschleißheim", ech: "Eching" }[d.area];
+  const areaName = { garching: "Garching", north: "München-Nord", far: "Far from U6", ufg: "Unterföhring", osh: "Oberschleißheim", ech: "Eching-Dietersheim" }[d.area];
   $("p-op").textContent = `${d.op} · ${areaName}`;
   $("p-name").textContent = d.name;
   $("p-meta").textContent = `${d.rating} · ${d.street}`;
