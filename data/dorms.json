@@ -1,0 +1,1490 @@
+{
+  "areas": [
+    {
+      "id": "garching",
+      "label": "Garching",
+      "style": "solid",
+      "legend": "Solid · Garching",
+      "town": "85748 Garching bei München",
+      "connNote": "Buses 230, 292, X205 and 690 also go straight to the campus."
+    },
+    {
+      "id": "north",
+      "label": "München-Nord",
+      "style": "dashed",
+      "legend": "Dashed · München-Nord, on the U6",
+      "town": "München"
+    },
+    {
+      "id": "far",
+      "label": "Far from U6",
+      "style": "dotted",
+      "legend": "Dotted · far from the U6 (other lines)",
+      "town": "München"
+    },
+    {
+      "id": "ufg",
+      "label": "Unterföhring",
+      "style": "double",
+      "legend": "Double · nearby towns, by bus",
+      "town": "München"
+    },
+    {
+      "id": "osh",
+      "label": "Oberschleißheim",
+      "style": "double",
+      "legend": "Double · nearby towns, by bus",
+      "town": "München"
+    },
+    {
+      "id": "ech",
+      "label": "Eching-Dietersheim",
+      "style": "double",
+      "legend": "Double · nearby towns, by bus",
+      "town": "München"
+    }
+  ],
+  "channels": {
+    "stwm": {"legend": "Waiting list · STWM, AWO"},
+    "eswm": {"legend": "The house chooses · application rounds"},
+    "priv": {"legend": "First come, first served · private"}
+  },
+  "templates": {
+    "stwm": {
+      "how": "STWM online application, choose up to 3 dorms",
+      "when": "Window for the winter semester opens 15 May",
+      "chip": ["ok", "Yes, from 15 May 2027"]
+    }
+  },
+  "dorms": [
+    {
+      "short": "Garching I",
+      "name": "Garching I",
+      "area": "garching",
+      "ch": "stwm",
+      "op": "STWM",
+      "street": "Jochbergweg 1–7",
+      "lng": 11.66009,
+      "lat": 48.25274,
+      "rating": "5.0 ★ (2)",
+      "template": "stwm",
+      "chips": [["check", "Earlier? Ask STWM"]],
+      "rent": "€385.90–403.90 warm · room in a WG",
+      "wait": "≈ 3 semesters",
+      "note": "Max. 4 semesters on a Master's, 7 on a Bachelor's. Deposit is 3× base rent. In-house pub.",
+      "rooms": [{"kind": "wg", "note": "Room in a shared flat · 106 places"}],
+      "walk": {"m": 910, "station": "Garching"},
+      "campus": 13,
+      "parts": [
+        {"name": "Jochbergweg 1"},
+        {"name": "Jochbergweg 3"},
+        {"name": "Jochbergweg 5", "note": "house management"},
+        {"name": "Jochbergweg 7"}
+      ],
+      "other": [],
+      "rev": {"good": [], "bad": [], "basis": "no written reviews, only 2 star ratings."},
+      "url": "https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/garching-oberschleissheim/jochbergweg-garching-i/"
+    },
+    {
+      "short": "Garching II",
+      "name": "Garching II",
+      "area": "garching",
+      "ch": "stwm",
+      "op": "STWM",
+      "street": "Enzianstraße 1+3",
+      "lng": 11.65552,
+      "lat": 48.2578,
+      "rating": "4.0 ★ (8)",
+      "template": "stwm",
+      "chips": [["check", "Earlier? Ask STWM"]],
+      "rent": "€340.00–369.90 warm · 2-person WG, Teilapartment, Einzelapartment",
+      "wait": "≈ 4–5 semesters",
+      "note": "Glass outer walls, access by outdoor walkway. Max. 4 semesters on a Master's. Deposit is 3× base rent.",
+      "rooms": [
+        {"kind": "studio", "note": "32 places"},
+        {"kind": "part", "note": "64 places"},
+        {"kind": "wg", "note": "Room in a 2-person flat · 16 places"}
+      ],
+      "conn": {
+        "station": "Garching",
+        "door": 8,
+        "steps": [
+          {"kind": "walk", "text": "to the stop Untere Straßäcker", "time": "4 min"},
+          {"kind": "bus", "line": "230", "text": "Untere Straßäcker → Garching", "time": "3 min"}
+        ]
+      },
+      "walk": {"m": 1143, "station": "Garching"},
+      "campus": 6,
+      "parts": [{"name": "Enzianstraße 1"}, {"name": "Enzianstraße 3"}],
+      "other": [],
+      "rev": {
+        "good": [
+          "Quiet; the basement party room is rarely used",
+          "Bright, roomy, well-designed rooms; fast internet included",
+          "Bar and cinema room, storage basement",
+          "Bus at the door, U-Bahn 8–10 min walk, supermarkets opposite"
+        ],
+        "bad": ["Top (3rd) floor gets very hot in summer"],
+        "basis": "all 3 written reviews (of 8 ratings), newest 2 months ago."
+      },
+      "url": "https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/garching-oberschleissheim/enzianstrasse-garching-ii/"
+    },
+    {
+      "short": "HHG",
+      "name": "Hochschulhaus Garching",
+      "area": "garching",
+      "ch": "eswm",
+      "op": "ESWM",
+      "street": "Enzianstraße 5+7",
+      "lng": 11.65516,
+      "lat": 48.25701,
+      "rating": "4.5 ★ (50)",
+      "chips": [["ok", "Yes"], ["check", "Only one ESWM house: HHG or GLH"]],
+      "how": "ESWM online form, only one ESWM house per person",
+      "when": "Deadline 30 May for the winter semester",
+      "rent": "from €547 · 20.6–24 m² apartment",
+      "wait": "No queue. Chosen or not, each semester",
+      "note": "Home address must be outside MVV zones M–4. Enrolment in Munich needed at move-in. Stay 1–6 semesters.",
+      "rooms": [{"kind": "studio", "note": "95 apartments, 20–39 m²"}],
+      "conn": {
+        "station": "Garching",
+        "door": 8,
+        "steps": [
+          {"kind": "walk", "text": "to the stop Untere Straßäcker", "time": "4 min"},
+          {"kind": "bus", "line": "230", "text": "Untere Straßäcker → Garching", "time": "3 min"}
+        ]
+      },
+      "walk": {"m": 1052, "station": "Garching"},
+      "campus": 7,
+      "parts": [{"name": "Enzianstraße 5"}, {"name": "Enzianstraße 7"}],
+      "other": [
+        "Residents run their own house app and wiki (Google Play, HHG wiki)",
+        "Mix of students, PhDs and university staff (ESWM)",
+        "The application form expects residents to take on responsibility in the community (ESWM form)"
+      ],
+      "rev": {
+        "good": [
+          "Strong community: bar nights, tutor events, movie nights",
+          "Quiet and safe; friendly, helpful residents",
+          "Lidl, Rewe and the U6 close by; rent seen as fair",
+          "Party room you can book, with a big screen"
+        ],
+        "bad": ["Apartments are small", "No sofa or TV provided"],
+        "basis": "all 13 written reviews (of 50 ratings), newest about a year ago."
+      },
+      "url": "https://eswm.de/haeuser/hhg"
+    },
+    {
+      "short": "DOMINO",
+      "name": "Studentenhaus DOMINO",
+      "area": "garching",
+      "ch": "priv",
+      "op": "Private",
+      "street": "Untere Straßäcker 21",
+      "lng": 11.65772,
+      "lat": 48.258,
+      "rating": "4.6 ★ (23)",
+      "chips": [["ok", "Yes"], ["check", "Rent only on request"]],
+      "how": "Email the application form (Bewerbungsbogen, on the website) to studentenhaus@domino-bau.de",
+      "when": "Any time, no deadline",
+      "rent": "On request only (website) · minimum 3 semesters",
+      "wait": "No list published; flats are let when free",
+      "note": "82 flats: 69 one-room apartments and 13 two-room flats for a 2-person WG. Let only to students, assistants, PhD students and university staff. Party room, underground parking.",
+      "rooms": [
+        {
+          "kind": "studio",
+          "note": "69 one-room apartments, ≈ 21 m² + balcony; kitchen not shown on the floor plan"
+        },
+        {"kind": "wg", "note": "13 two-room flats for 2: shared kitchen-living room and bath"}
+      ],
+      "walk": {"m": 1369, "station": "Garching"},
+      "campus": 9,
+      "other": [
+        "Website: 1-room apartments ≈ 21 m² with bath and balcony; 2-person WGs ≈ 50 m² with shared kitchen-living room; rent on request, minimum 3 semesters (studentenhaus-domino.de)",
+        "A resident subletting in 2020: bright room with balcony, TUM visible from the window, park nearby, grilling on the balcony (WG-Gesucht)"
+      ],
+      "rev": {
+        "good": [
+          "Clean, calm and well maintained",
+          "Walking distance to TUM and the town centre",
+          "Supermarkets at the corner; fast internet"
+        ],
+        "bad": [],
+        "basis": "all 8 written reviews (of 23 ratings), newest 9 months ago. Most are 6–9 years old."
+      },
+      "url": "https://www.studentenhaus-domino.de/bewerbungsbogen.htm"
+    },
+    {
+      "short": "SLC",
+      "name": "Student Living Campus",
+      "area": "garching",
+      "ch": "priv",
+      "op": "Private",
+      "street": "Freisinger Landstraße 45a, 47, 47a",
+      "lng": 11.65225,
+      "lat": 48.25672,
+      "rating": "3.5 ★ (41)",
+      "chips": [["ok", "Yes"], ["check", "Deposit complaints"]],
+      "how": "Rental inquiry form on apartments-garching.de, or phone (089) 990 160 810",
+      "when": "Any time, no deadline",
+      "rent": "from €940 all-in · ≈ 22–48 m²",
+      "wait": "No waiting list published; flats are let when free",
+      "note": "Run by Jost Verwaltung (same as GLC). For students, PhD students, lecturers and trainees. Rent includes heating, water, internet; electricity is not in the all-in list.",
+      "rooms": [
+        {"kind": "studio", "note": "≈ 22–48 m², for one person or a couple"},
+        {
+          "kind": "wg",
+          "note": "\"Two-Party\" flat ≈ 48 m² at SLC 1: 2 lockable rooms, shared bath, kitchen and balcony"
+        }
+      ],
+      "conn": {
+        "station": "Garching",
+        "door": 10,
+        "steps": [
+          {"kind": "walk", "text": "to the stop Untere Straßäcker", "time": "5 min"},
+          {"kind": "bus", "line": "230", "text": "Untere Straßäcker → Garching", "time": "3 min"}
+        ]
+      },
+      "walk": {"m": 1064, "station": "Garching"},
+      "campus": 10,
+      "parts": [
+        {"name": "SLC 1", "note": "Freisinger Landstraße 47 · Single, Patio Couple and Two Party apartments"},
+        {"name": "SLC 2", "note": "Freisinger Landstraße 45a · letting office"},
+        {"name": "SLC 3", "note": "Freisinger Landstraße 47a"}
+      ],
+      "other": [
+        "Two reviews from 2012: modern, almost always fully rented, residents play football and grill together (yopi.de, very old)"
+      ],
+      "rev": {
+        "good": [
+          "Next to Rewe and Lidl, close to the university",
+          "Pool, football pitch, beach volleyball, small gym",
+          "Well kept, private storage room per apartment"
+        ],
+        "bad": [
+          "Deposit returns: several waited months, some went to court",
+          "Expensive (one cites about €900 for 28 m²)",
+          "Slow email replies; one finds the caretaker rude"
+        ],
+        "basis": "all 17 written reviews (of 41 ratings). The newest real ones (3–4 months ago) are about deposit disputes."
+      },
+      "url": "https://apartments-garching.de/en/faq-gallery"
+    },
+    {
+      "short": "GLC",
+      "name": "Garching Living Center",
+      "area": "garching",
+      "ch": "priv",
+      "op": "Private",
+      "street": "Einsteinstraße 3",
+      "lng": 11.64606,
+      "lat": 48.25072,
+      "rating": "4.0 ★ (77)",
+      "chips": [["ok", "Yes"], ["check", "Deposit complaints"]],
+      "how": "Rental inquiry form on apartments-garching.de, or phone (089) 321 991 10",
+      "when": "Any time, no deadline",
+      "rent": "€1,220 all-in",
+      "wait": "No waiting list published; flats are let when free",
+      "note": "Run by Jost Verwaltung (same as SLC). Cinema room, library, panorama sauna, roof terrace. Electricity is not in the all-in list; reviews mention extra power bills.",
+      "rooms": [{"kind": "studio", "note": "with balcony; shared kitchens with billiards as extra"}],
+      "walk": {"m": 593, "station": "Garching"},
+      "campus": 13,
+      "other": [
+        "A resident subletting: supermarket, drugstore and pharmacy in the complex; U-Bahn and town centre 5 min away (WG-Gesucht)"
+      ],
+      "rev": {
+        "good": [
+          "Modern furnished apartments with balcony",
+          "Gym, sauna, rooftop pool, cinema, kitchens with billiards",
+          "Shops in the building, U-Bahn within walking distance"
+        ],
+        "bad": [
+          "High price per m²",
+          "Deposit held back for months; strict move-out checks and cleaning fees",
+          "Extra electricity charges (one parent says the contract states this)",
+          "Defects from move-in left unfixed (review 9 months ago)"
+        ],
+        "basis": "all 33 written reviews (of 77 ratings), newest 2 months ago."
+      },
+      "url": "https://apartments-garching.de/en/prices"
+    },
+    {
+      "short": "Haidpark (AWO)",
+      "name": "Studentisches Wohnen im Haidpark",
+      "area": "north",
+      "ch": "stwm",
+      "op": "AWO",
+      "street": "Admiralbogen 37–47, 80939 München",
+      "lng": 11.6141,
+      "lat": 48.21032,
+      "rating": "3.5 ★ (8)",
+      "chips": [["ok", "Yes, if you apply before 30"], ["check", "Wait at least 1.5 years"]],
+      "how": "Email your name, phone number and address to studentenwohnen-haidpark@awo-muenchen.de to join the list",
+      "when": "Any time; the AWO says join early",
+      "rent": "€349.50 incl. utilities, power and heating (internet extra) · deposit €540",
+      "wait": "At least 1.5 years (AWO)",
+      "note": "Built 2012 by the AWO, a social welfare association; also called 'Studentenwohnheim Fröttmaning'. Rules: enrolled at a university in the Studierendenwerk's area, income not above the BAföG maximum, parents living outside the MVV area, apply before your 30th birthday.",
+      "rooms": [
+        {"kind": "studio", "note": "17.5 m²"},
+        {
+          "kind": "wg",
+          "note": "Maisonette flats for 4, 7 or 8; each room has its own WC and shower, kitchen shared"
+        }
+      ],
+      "walk": {"m": 324, "station": "Fröttmaning"},
+      "campus": 15,
+      "parts": [
+        {"name": "Single apartments", "note": "17.5 m², kitchenette, own WC and shower"},
+        {
+          "name": "Maisonette WGs",
+          "note": "for 4, 7 or 8 people; every room has its own WC and shower; shared kitchen"
+        },
+        {"name": "Shared spaces", "note": "roof terraces, student pub, copy shop, bike rooms, laundry"}
+      ],
+      "partsLabel": "What's inside",
+      "other": [
+        "AWO website: rent €349.50, deposit €540, 'a very long waiting list', at least 1.5 years (awo-muenchen.de)",
+        "AWO: rooftop terraces with views of the Allianz Arena and the Alps; student pub in the house (awo-muenchen.de)",
+        "Residents subletting: 20 m² single apartment for €550 incl. Wi-Fi, power and heating; WG rooms with own bath and balcony (WG-Gesucht)"
+      ],
+      "rev": {
+        "good": ["Garden, friendly staff and management", "Solar panels planned on all balconies"],
+        "bad": ["Two applicants (2 months ago) say they waited 2.5 and 4.5 years and stopped getting replies"],
+        "basis": "all 4 written reviews (of 8 ratings)."
+      },
+      "url": "https://www.awo-muenchen.de/spezielles/studentisches-wohnen-im-haidpark/ueber-uns"
+    },
+    {
+      "short": "Heidemannstraße",
+      "name": "Heidemannstraße",
+      "area": "north",
+      "ch": "stwm",
+      "op": "STWM",
+      "street": "Paul-Hindemith-Allee 4+6, Karl-Köglsperger-Str. 3–9",
+      "lng": 11.60621,
+      "lat": 48.2004,
+      "rating": "No Google listing",
+      "template": "stwm",
+      "chips": [["check", "May not combine with Garching picks"]],
+      "rent": "€362.80–416.80 warm · Einzelapartment (2er-WG rooms €335.90 / €380.90)",
+      "wait": "≈ 2–3 semesters",
+      "note": "Almost only studio apartments. Max. 4 semesters on a Master's. Deposit is 3× base rent.",
+      "rooms": [
+        {"kind": "studio", "note": "227 places"},
+        {"kind": "wg", "note": "Room in a 2-person flat · 48 places"}
+      ],
+      "conn": {
+        "station": "Kieferngarten",
+        "door": 2,
+        "steps": [
+          {
+            "kind": "bus",
+            "line": "180 · 178 · 182",
+            "text": "Paul-Hindemith-Allee → Kieferngarten",
+            "time": "2–3 min"
+          }
+        ]
+      },
+      "walk": {"m": 928, "station": "Kieferngarten"},
+      "campus": 18,
+      "parts": [
+        {"name": "Paul-Hindemith-Allee 4"},
+        {"name": "Paul-Hindemith-Allee 6"},
+        {"name": "Karl-Köglsperger-Straße 3–9", "note": "includes 19 larger flats"}
+      ],
+      "other": ["STWM: residents can choose to join community life or keep to themselves (STWM)"],
+      "rev": {"good": [], "bad": [], "basis": "no listing for the dorm itself, so no reviews."},
+      "url": "https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/munich/north-munich/hall-of-residence-heidemannstrasse/"
+    },
+    {
+      "short": "GLH",
+      "name": "Georg-Lanzenstiel-Haus",
+      "area": "north",
+      "ch": "eswm",
+      "op": "ESWM",
+      "street": "Kieferngartenstraße 12, 80939 München",
+      "lng": 11.61215,
+      "lat": 48.20113,
+      "rating": "4.8 ★ (45)",
+      "chips": [["ok", "Yes"], ["check", "Only one ESWM house: GLH or HHG"]],
+      "how": "ESWM online form, only one ESWM house per person",
+      "when": "Deadline 30 May for the winter semester",
+      "rent": "€459–479 · ≈ 15 m² room with own shower and WC",
+      "wait": "No queue. Chosen or not, each semester",
+      "note": "127 single rooms, 3 double rooms (€686), 12 shared kitchens. Same ESWM rules as HHG: home address outside MVV zones M–4, stay 1–6 semesters.",
+      "rooms": [{"kind": "part", "note": "127 single rooms ≈ 15 m² with own shower and WC; 12 shared kitchens"}],
+      "walk": {"m": 360, "station": "Kieferngarten"},
+      "campus": 16,
+      "other": [],
+      "rev": {
+        "good": [
+          "Very strong community; warmly run",
+          "Low rent; practical rooms with their own bathroom",
+          "Several call it the best part of their studies"
+        ],
+        "bad": ["Hard to get a place (one compares it to winning the lottery)"],
+        "basis": "all 11 written reviews (of 45 ratings), newest 3 months ago."
+      },
+      "url": "https://eswm.de/en"
+    },
+    {
+      "short": "Josef-Wirth-Weg",
+      "name": "Josef-Wirth-Weg",
+      "area": "north",
+      "ch": "stwm",
+      "op": "STWM",
+      "street": "Josef-Wirth-Weg 19, München",
+      "lng": 11.62551,
+      "lat": 48.20004,
+      "rating": "3.7 ★ (16)",
+      "template": "stwm",
+      "chips": [["check", "May not combine with Garching picks"]],
+      "rent": "€471.90–538.30 warm · Einzelapartment",
+      "wait": "≈ 2–3 semesters",
+      "note": "Rented by STWM. No lift. Bus 181 to U6 Kieferngarten.",
+      "rooms": [{"kind": "studio", "note": "188 places"}],
+      "conn": {
+        "station": "Studentenstadt",
+        "door": 8,
+        "steps": [
+          {"kind": "walk", "text": "to the stop Josef-Wirth-Weg", "time": "2 min"},
+          {
+            "kind": "bus",
+            "line": "181",
+            "text": "Josef-Wirth-Weg → Studentenstadt",
+            "time": "5 min · about every 10 min"
+          }
+        ],
+        "alt": "Or bus 182 to U6 Kieferngarten (6 min)."
+      },
+      "walk": {"m": 1430, "station": "Freimann"},
+      "campus": 26,
+      "other": [
+        "Residents subletting (2023): 16 m² apartment, common room on every floor, bus stop almost at the door (WG-Gesucht)",
+        "The house brochure describes a resident-run bar, a study room and a Facebook group (jww19.de brochure)"
+      ],
+      "rev": {
+        "good": ["Quiet and clean", "Lidl nearby", "Bus 181 to Studentenstadt"],
+        "bad": [
+          "Rent high for a dorm",
+          "Repairs slow; internet and heating problems (one: no working heating in winter)",
+          "Bus 181 takes a long detour; a bike helps"
+        ],
+        "basis": "all 7 written reviews (of 16 ratings), newest about a year ago."
+      },
+      "url": "https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/munich/north-munich/hall-of-residence-josef-wirth-weg/"
+    },
+    {
+      "short": "Unity Alpha",
+      "name": "Unity Alpha",
+      "area": "north",
+      "ch": "priv",
+      "op": "Private",
+      "street": "Josef-Wirth-Weg 21, 80939 München",
+      "lng": 11.62586,
+      "lat": 48.19963,
+      "rating": "4.0 ★ (65)",
+      "chips": [["ok", "Yes"], ["check", "First come, first served"]],
+      "how": "Online reservation form on wohnen-in-bayern.com (Grammer Immobilien); contact +49 9621 7659-25",
+      "when": "Any time; earlier requests win",
+      "rent": "from €660 warm (≈ 20 m²) to €790 (roof terrace) · double €1,186",
+      "wait": "No list: the order requests arrive in decides",
+      "note": "422 apartments run by Grammer Immobilien. Students and trainees only; you need an enrolment certificate, liability insurance and ID. Deposit from €1,626.",
+      "rooms": [{"kind": "studio", "note": "23 m², terrace"}],
+      "conn": {
+        "station": "Studentenstadt",
+        "door": 7,
+        "steps": [
+          {"kind": "walk", "text": "to the stop Josef-Wirth-Weg", "time": "1 min"},
+          {
+            "kind": "bus",
+            "line": "181",
+            "text": "Josef-Wirth-Weg → Studentenstadt",
+            "time": "5 min · about every 10 min"
+          }
+        ],
+        "alt": "Or bus 182 to U6 Kieferngarten (6 min)."
+      },
+      "walk": {"m": 1451, "station": "Freimann"},
+      "campus": 25,
+      "other": [
+        "Landlord website: 5 types from €660 (20 m²) to €1,186 (40 m² double); 'the order of receipt will be decisive' (wohnen-in-bayern.com)",
+        "A resident subletting in 2026: own bathroom, terrace and kitchenette; free study rooms, bike cellar and washers; quiet atmosphere (WG-Gesucht)"
+      ],
+      "rev": {
+        "good": [
+          "Clean, modern, well maintained",
+          "Very helpful caretaker and manager (several recent reviews)",
+          "Courtyards for volleyball and BBQ; Aldi and bus nearby"
+        ],
+        "bad": [
+          "Rent has gone up; some call it too expensive",
+          "Contracts only for six months, then renewed (one review)",
+          "Main-road noise right by the building (one review)",
+          "Long, narrow rooms; heating a bit weak; buses every 20 min, less often at weekends"
+        ],
+        "basis": "25 written reviews read (of 65 ratings), newest 1 month ago."
+      },
+      "url": "https://wohnen-in-bayern.com/en/objekt/apartmentanlage-unity-%CE%B1/"
+    },
+    {
+      "short": "Unity Beta",
+      "name": "Unity Beta",
+      "area": "north",
+      "ch": "priv",
+      "op": "Private",
+      "street": "Freisinger Landstraße 86–90, 80939 München",
+      "lng": 11.62752,
+      "lat": 48.20016,
+      "rating": "3.6 ★ (103)",
+      "chips": [["ok", "Yes"], ["check", "Caretaker complaints"]],
+      "how": "Online reservation form on wohnen-in-bayern.com (Grammer Immobilien); contact +49 9621 7659-15",
+      "when": "Any time; earlier requests win",
+      "rent": "from €657 warm (≈ 19 m²), €713 with balcony · double €1,200",
+      "wait": "No list: the order requests arrive in decides",
+      "note": "482 apartments built 2015, run by Grammer Immobilien (same as Unity Alpha). Students and trainees only. Deposit from €1,700. Kitchenette with hob and fridge, no oven.",
+      "rooms": [{"kind": "studio", "note": "19–45 m², most with balcony or roof deck"}],
+      "conn": {
+        "station": "Studentenstadt",
+        "door": 8,
+        "steps": [
+          {"kind": "walk", "text": "to the stop Josef-Wirth-Weg", "time": "3 min"},
+          {
+            "kind": "bus",
+            "line": "181",
+            "text": "Josef-Wirth-Weg → Studentenstadt",
+            "time": "5 min · about every 10 min"
+          }
+        ],
+        "alt": "Or bus 182 to U6 Kieferngarten (6 min)."
+      },
+      "walk": {"m": 1645, "station": "Freimann"},
+      "campus": 26,
+      "parts": [
+        {"name": "Freisinger Landstraße 86"},
+        {"name": "Freisinger Landstraße 88"},
+        {"name": "Freisinger Landstraße 90"}
+      ],
+      "other": [
+        "Landlord website: from €657 (19 m²), €713 with balcony, €1,200 double; first come, first served (wohnen-in-bayern.com)",
+        "A listing describes 482 furnished apartments of 19–45 m², most with balcony, loggia or roof deck, near the Isar and the Englischer Garten; rent covers all costs (WG-Gesucht)"
+      ],
+      "rev": {
+        "good": [
+          "Next to the Isar meadows and woods",
+          "Fairly new, clean and well kept; furnished; study rooms, party and bike cellar",
+          "Aldi a few steps away"
+        ],
+        "bad": [
+          "Many reviews describe a rude, aggressive caretaker, especially at move-out (others defend him)",
+          "Large deposit deductions at move-out; one says cash without a receipt",
+          "Internet outages; uncomfortable furniture, no oven; flats close together; bugs in summer"
+        ],
+        "basis": "51 written reviews read (of 103 ratings), newest 5 months ago."
+      },
+      "url": "https://wohnen-in-bayern.com/en/objekt/apartmentanlage-unity-%CE%B2/"
+    },
+    {
+      "short": "Helmut-Kamm-Haus",
+      "name": "Helmut-Kamm-Haus",
+      "area": "north",
+      "ch": "eswm",
+      "op": "EWV",
+      "street": "Maiglöckchenstraße 6, 80939 München",
+      "lng": 11.62948,
+      "lat": 48.19472,
+      "rating": "4.8 ★ (17)",
+      "chips": [["ok", "Yes"], ["check", "Motivation letter needed"]],
+      "how": "Email the self-disclosure form, proof of studies, a motivation letter and ID to studentenwohnheim.spe@ewv-muenchen.de",
+      "when": "Any time, no deadline on the website",
+      "rent": "€660 all-in · 20–21 m² studio",
+      "wait": "Not stated on the website; office open Mon–Fri mornings (Tue until 16:00)",
+      "note": "New building of the Evangelischer Waisenhausverein, same association as Spengelhof. Deposit €940. Same rules: up to 12 semesters, €150 fee if you leave within 6 months.",
+      "rooms": [{"kind": "studio", "note": "117 apartments, 20–21 m²; plus one shared kitchen per floor"}],
+      "conn": {
+        "station": "Studentenstadt",
+        "door": 17,
+        "steps": [
+          {"kind": "walk", "text": "to the stop Emmerigweg", "time": "9 min"},
+          {
+            "kind": "bus",
+            "line": "181",
+            "text": "Emmerigweg → Studentenstadt",
+            "time": "4 min · about every 10 min"
+          }
+        ],
+        "alt": "Or bus 182 to U6 Kieferngarten."
+      },
+      "walk": {"m": 1760, "station": "Freimann"},
+      "campus": 34,
+      "other": [
+        "Association website: 117 furnished studios with kitchenette and small shower room, plus a shared kitchen and common room on every floor; beach volleyball, laundry café (ewv-muenchen.de)"
+      ],
+      "rev": {
+        "good": ["Calm area, good for students", "Clean, spacious, functional studios"],
+        "bad": ["A bit far from the bus stop"],
+        "basis": "all 3 written reviews (of 17 ratings), newest 2 years ago."
+      },
+      "url": "https://ewv-muenchen.de/?page_id=12"
+    },
+    {
+      "short": "Spengelhof",
+      "name": "Spengelhof",
+      "area": "north",
+      "ch": "eswm",
+      "op": "EWV",
+      "street": "Sondermeierstraße 86, 80939 München",
+      "lng": 11.62843,
+      "lat": 48.19421,
+      "rating": "4.6 ★ (10)",
+      "chips": [["ok", "Yes"], ["check", "Motivation letter needed"]],
+      "how": "Email the self-disclosure form, proof of studies, a motivation letter and ID to studentenwohnheim.spe@ewv-muenchen.de",
+      "when": "Any time, no deadline on the website",
+      "rent": "€440 all-in · single room in a WG (double rooms from €650)",
+      "wait": "Not stated on the website; office open Mon–Fri mornings (Tue until 16:00)",
+      "note": "Same association as Helmut-Kamm-Haus. Deposit €600. Stay up to 12 semesters; contracts run to the end of each semester. €150 fee if you leave within 6 months.",
+      "rooms": [
+        {"kind": "wg", "note": "46 single rooms of 11–18 m² in flats for 5–8; one floor for women only"},
+        {"kind": "wg", "note": "3 double rooms from 20 m²"}
+      ],
+      "conn": {
+        "station": "Studentenstadt",
+        "door": 14,
+        "steps": [
+          {"kind": "walk", "text": "to the stop Emmerigweg", "time": "7 min"},
+          {
+            "kind": "bus",
+            "line": "181",
+            "text": "Emmerigweg → Studentenstadt",
+            "time": "4 min · about every 10 min"
+          }
+        ],
+        "alt": "Or bus 182 to U6 Kieferngarten."
+      },
+      "walk": {"m": 1583, "station": "Freimann"},
+      "campus": 31,
+      "other": [
+        "Association website: 46 single and 3 double rooms on 8 floors, WGs of 5–8 with shared kitchen and bathrooms, one common room per floor, study and music rooms (ewv-muenchen.de)"
+      ],
+      "rev": {
+        "good": ["Residents are glad to have a place", "Nicely redesigned outdoor area"],
+        "bad": [],
+        "basis": "all 2 written reviews (of 10 ratings)."
+      },
+      "url": "https://ewv-muenchen.de/?page_id=12"
+    },
+    {
+      "short": "NP3",
+      "name": "NP3 Studentenwohnungen",
+      "area": "north",
+      "ch": "priv",
+      "op": "Private",
+      "street": "St.-Nikolaus-Platz 3, 80939 München",
+      "lng": 11.61596,
+      "lat": 48.19297,
+      "rating": "3.5 ★ (25)",
+      "chips": [["ok", "Yes"], ["check", "Minimum contract 24 months"]],
+      "how": "Inquiry form on np3-muenchen.de, or immobilien.np3@gmail.com / +49 151 14798167 (Mon–Fri 8:30–12:30)",
+      "when": "Any time; availability 'on request'",
+      "rent": "≈ €1,003 (base from €840 + €163 heating, water, power) · ≈ 20 m² studio",
+      "wait": "No list published; the website asks you to enquire",
+      "note": "76 furnished flats: studios, 2-person WGs and larger 'comfort' flats. Non-smokers, no pets. In a WG the main tenant signs and pays the whole deposit.",
+      "rooms": [
+        {"kind": "studio", "note": "≈ 20 m², fitted kitchen, shower and WC"},
+        {"kind": "wg", "note": "2-person flats with separate rooms; also larger \"comfort\" flats"}
+      ],
+      "walk": {"m": 336, "station": "Freimann"},
+      "campus": 19,
+      "other": ["Website: 20 m² studio from €840 + €163 costs, minimum 24 months, non-smokers (np3-muenchen.de)"],
+      "rev": {
+        "good": [
+          "2 minutes to U6 Freimann but you don't hear it; quiet street next to a cemetery",
+          "Modern, recently renovated, clean and well equipped",
+          "Several say the landlord replies fast and paperwork is clear"
+        ],
+        "bad": [
+          "Heating or hot water out for weeks (several reviews)",
+          "Months of loud renovation work (two reviews)",
+          "Rent keeps rising; one paid €913",
+          "A few describe slow or rude management"
+        ],
+        "basis": "21 written reviews read (of 25 ratings), newest about a year ago."
+      },
+      "url": "https://www.np3-muenchen.de/en/ez"
+    },
+    {
+      "short": "My Room Active",
+      "name": "My Room Active",
+      "area": "north",
+      "ch": "priv",
+      "op": "Private",
+      "street": "Freisinger Landstraße 21, 80939 München",
+      "lng": 11.62003,
+      "lat": 48.19153,
+      "rating": "1.8 ★ (12)",
+      "chips": [["ok", "Yes, students and trainees"], ["check", "Very poor reviews"]],
+      "how": "No central letting office: the flats were sold one by one to private owners, who advertise them on WG-Gesucht and similar sites",
+      "when": "Whenever an owner advertises",
+      "rent": "Set by each owner · older ads asked €595–650 for 19–21 m²",
+      "wait": "No list",
+      "note": "Built 2020. City rules allow letting only to students and trainees for the length of their studies. Ads usually ask for at least 12 months.",
+      "rooms": [{"kind": "studio", "note": "≈ 18–45 m², own kitchen and shower bath (per letting ads)"}],
+      "walk": {"m": 664, "station": "Freimann"},
+      "walkAlt": "Or bus 181 from Floriansmühlstraße to Studentenstadt (3 min).",
+      "campus": 22,
+      "other": [
+        "The building's flats were sold to investors as single units by the developer, so each one is let by its owner (sale listings on mapio.net)"
+      ],
+      "rev": {
+        "good": ["New building with common rooms"],
+        "bad": [
+          "Poor soundproofing; loud music and a dryer that beeps day and night",
+          "Heating and hot water break down often; doorbell broken for a year",
+          "Several management companies; bills kept coming after moving out; strict house rules"
+        ],
+        "basis": "all 8 written reviews (of 12 ratings), newest 5 months ago."
+      },
+      "url": "https://www.wg-gesucht.de/1-zimmer-wohnungen-in-Munchen-Schwabing-Freimann.8174893.html"
+    },
+    {
+      "short": "Berzeliusstraße",
+      "name": "Studentenwohnheim Schwabing",
+      "area": "north",
+      "ch": "priv",
+      "op": "Private",
+      "street": "Berzeliusstraße 3, 80939 München",
+      "lng": 11.61196,
+      "lat": 48.18983,
+      "rating": "4.5 ★ (24)",
+      "chips": [["ok", "Yes"], ["check", "Minimum 12-month contract"]],
+      "how": "Contact form on studentenwohnheim-schwabing.com (choose 'Mietgesuch'), or phone 07142 46989-10",
+      "when": "No published deadline",
+      "rent": "€815–920 all-in · ≈ 20 m² apartment (by balcony/terrace)",
+      "wait": "Not stated on the website; ask by phone or the contact form",
+      "note": "Run by KüSt Invest II GmbH, built 2013. For students, trainees and interns. Deposit €1,935–2,250. Net rent rises 2.5% a year. Very close to U6 Freimann.",
+      "rooms": [{"kind": "studio", "note": "≈ 20 m², 5 categories by balcony or terrace"}],
+      "walk": {"m": 351, "station": "Freimann"},
+      "campus": 19,
+      "parts": [
+        {"name": "Category 1", "note": "no balcony or terrace · €815 · deposit €1,935"},
+        {"name": "Category 2", "note": "small terrace · €830 · deposit €1,980"},
+        {"name": "Category 3", "note": "ground-floor terrace · €845 · deposit €2,025"},
+        {"name": "Category 4", "note": "large ground-floor terrace · €870 · deposit €2,100"},
+        {"name": "Category 5", "note": "roof terrace (12 on the 3rd floor) · €920 · deposit €2,250"}
+      ],
+      "partsLabel": "Apartment types",
+      "other": [
+        "Website: all-inclusive rent (heating, power, 60 Mbit/s Wi-Fi); stay until you finish your studies; subletting allowed for up to 12 months; deposit returned about 6 weeks after moving out (studentenwohnheim-schwabing.com)",
+        "Party room with table football and darts, barbecue area, fitness room, own solar panels; supervisor on site weekdays 8–15 (studentenwohnheim-schwabing.com)"
+      ],
+      "rev": {
+        "good": [
+          "Quiet; very close to the U-Bahn",
+          "Good apartments; park behind the building",
+          "Caretaker and management very helpful"
+        ],
+        "bad": ["No supermarket nearby", "Usually full"],
+        "basis": "all 10 written reviews (of 24 ratings), newest 2 years ago."
+      },
+      "url": "https://www.studentenwohnheim-schwabing.com/"
+    },
+    {
+      "short": "Studentenstadt",
+      "name": "Studentenstadt Freimann",
+      "area": "north",
+      "ch": "stwm",
+      "op": "STWM",
+      "street": "Studentenstadt, 80805 München",
+      "lng": 11.61135,
+      "lat": 48.18307,
+      "rating": "4.2 ★ (115)",
+      "template": "stwm",
+      "chips": [["check", "Renovation ongoing"]],
+      "rent": "€283.20–480.70 warm · room in a WG (apartments €401.10–505.50)",
+      "wait": "≈ 3–4 semesters",
+      "note": "Germany's largest student housing complex, next to the Englischer Garten. Many houses are empty while being renovated.",
+      "rooms": [
+        {"kind": "wg", "note": "462 places · 8–20 m²"},
+        {"kind": "part", "note": "264 places"},
+        {"kind": "studio", "note": "282 places"}
+      ],
+      "walk": {"m": 462, "station": "Studentenstadt"},
+      "campus": 20,
+      "parts": [
+        {
+          "name": "Altstadt",
+          "note": "low 2–3 storey houses, mostly numbered; 627 single rooms of 8–20 m² with shared kitchens and baths"
+        },
+        {
+          "name": "Max-Kade-Haus",
+          "note": "9-storey tower, Grasmeierstraße 25 · 4.3 ★ (28): cheap but dirty, one mentions mouldy kitchens",
+          "lng": 11.61178,
+          "lat": 48.1819
+        },
+        {
+          "name": "Egon-Wiberg-Haus (EWH)",
+          "note": "9-storey tower, Willi-Graf-Straße 17 · 4.3 ★ (23): party floors, unclean kitchen; friendly rivalry with Max-Kade-Haus",
+          "lng": 11.61302,
+          "lat": 48.1829
+        },
+        {"name": "Dieter-Maßberg-Haus", "note": "formerly Haus 14; shared flats"},
+        {
+          "name": "Sophie-Scholl-Haus",
+          "note": "formerly the Blue House; renovated and reopened May 2023 with 246 places"
+        },
+        {
+          "name": "Hanns-Seidel-Haus",
+          "note": "Green House, 19 storeys, about 620 apartments; closed after the 2021 fire, being renovated"
+        },
+        {
+          "name": "Oranges Haus, Rotes Haus, Erich-Markel-Haus",
+          "note": "other Neustadt towers; Rotes Haus partly unusable after a 2021 sauna fire"
+        },
+        {"name": "Hans-Scholl-Halle", "note": "multi-purpose hall, reopened 2025 after renovation"}
+      ],
+      "other": [
+        "Houses 9 and 12 are being renovated by BayernHeim: 1,025 apartments, finished 2027–2028 (Bavarian government, Apr 2026)",
+        "Goldbeck was hired in Nov 2026 to renovate houses 10 and 13 (konii.de)",
+        "STWM has been doing urgent repairs in the Altstadt (kitchens, showers, common rooms) since Feb 2026 (STWM)"
+      ],
+      "rev": {
+        "good": [
+          "Cheap for Munich; U6 right at the door",
+          "Next to the Englischer Garten; green, mostly quiet grounds",
+          "Lively community, parties and the Stustaculum festival"
+        ],
+        "bad": [
+          "Many buildings empty or under renovation; parts feel neglected",
+          "Old, dirty kitchens and rooms; one review mentions insects",
+          "Student-run services keep irregular hours"
+        ],
+        "basis": "39 written reviews read (of 115 ratings), newest 5 months ago."
+      },
+      "url": "https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/munich/north-munich/studentenstadt-freimann/"
+    },
+    {
+      "short": "Max-Bill-Straße",
+      "name": "Max-Bill-Straße",
+      "area": "north",
+      "ch": "stwm",
+      "op": "STWM",
+      "street": "Max-Bill-Straße 67, 80807 München",
+      "lng": 11.59852,
+      "lat": 48.18697,
+      "rating": "4.2 ★ (46)",
+      "template": "stwm",
+      "chips": [["check", "May not combine with Garching picks"]],
+      "rent": "€429.80–447.30 warm · Einzelapartment (WG rooms €436.10–461.10)",
+      "wait": "≈ 4 semesters",
+      "note": "Rented by STWM. U6 Alte Heide or Studentenstadt.",
+      "rooms": [
+        {"kind": "studio", "note": "104 places"},
+        {"kind": "wg", "note": "Room in a flat for 3 or 6 · 36 places"}
+      ],
+      "conn": {
+        "station": "Studentenstadt",
+        "door": 7,
+        "steps": [
+          {"kind": "walk", "text": "to the stop Max-Bill-Straße", "time": "2 min"},
+          {
+            "kind": "bus",
+            "line": "177",
+            "text": "Max-Bill-Straße → Studentenstadt",
+            "time": "4 min · every 10 min"
+          }
+        ]
+      },
+      "walk": {"m": 1376, "station": "Alte Heide"},
+      "campus": 26,
+      "other": [],
+      "rev": {
+        "good": ["Modern and clean; good value for Munich", "Good common-room parties"],
+        "bad": [
+          "Anonymous if you live in a single apartment; few common spaces",
+          "Poor cleaning company; one mentions theft in the laundry room",
+          "One reviewer moved out at once: smell and vermin"
+        ],
+        "basis": "23 written reviews read (of 46 ratings), newest 10 months ago."
+      },
+      "url": "https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/"
+    },
+    {
+      "short": "Ludwigskolleg",
+      "name": "Ludwigskolleg",
+      "area": "north",
+      "ch": "eswm",
+      "op": "Church",
+      "street": "Guerickestraße 19, 80805 München",
+      "lng": 11.59725,
+      "lat": 48.175,
+      "rating": "5.0 ★ (3)",
+      "chips": [["ok", "Yes, if income ≤ €1,289/month"], ["check", "Next window 1 Dec – 31 Jan"]],
+      "how": "Online application on the Ludwigskolleg page while the window is open, plus enrolment certificate, photo and CV by email",
+      "when": "15 May – 30 June (winter) · 1 Dec – 31 Jan (summer)",
+      "rent": "€339 (washbasin only) or €426 (own bath) · deposit €600 / €760",
+      "wait": "No waiting list: apply again each semester",
+      "note": "170 rooms, international dorm run by the archdiocese. Income limit: BAföG maximum + 30% (currently €1,289 a month). They send no receipts or rejections; results by mid/late July (winter) or February (summer).",
+      "rooms": [
+        {"kind": "room", "note": "127 rooms with washbasin; shower and WC on the corridor · €339"},
+        {"kind": "part", "note": "38 rooms with own shower and WC · €426"}
+      ],
+      "walk": {"m": 333, "station": "Nordfriedhof"},
+      "campus": 24,
+      "other": [
+        "House page: online application 15 May–30 June / 1 Dec–31 Jan; €339 or €426; income ≤ €1,289 (erzbistum-muenchen.de)",
+        "LMU list (Aug 2026): 127 rooms with washbasin and corridor shower/WC for €329, 38 with own shower/WC for €413, 5 wheelchair-accessible rooms (LMU). An older archdiocese list still says 103 rooms for €217–300."
+      ],
+      "rev": {"good": [], "bad": [], "basis": "no written reviews, only 3 star ratings."},
+      "url": "https://www2.erzbistum-muenchen.de/ordinariat/ressort-4-seelsorge-und-kirchliches-leben/hochschulpastoral/ludwigskolleg-studentenwohnheim"
+    },
+    {
+      "short": "Biederstein",
+      "name": "Biedersteiner Wohnheim",
+      "area": "north",
+      "ch": "stwm",
+      "op": "STWM",
+      "street": "Biedersteiner Straße 22–32, 80805 München",
+      "lng": 11.59569,
+      "lat": 48.16559,
+      "rating": "4.6 ★ (52)",
+      "template": "stwm",
+      "chips": [["check", "May not combine with Garching picks"]],
+      "rent": "€350.00–465.10 warm · room in a WG (apartments €362.90–418.30)",
+      "wait": "≈ 4 semesters",
+      "note": "U6 Dietlindenstraße. Known for its parties.",
+      "rooms": [{"kind": "wg", "note": "137 places"}, {"kind": "studio", "note": "33 places"}],
+      "walk": {"m": 657, "station": "Dietlindenstraße"},
+      "campus": 30,
+      "parts": [
+        {
+          "name": "Biedersteiner Straße 22–32",
+          "note": "several houses around a shared atrium; WG rooms and single apartments"
+        }
+      ],
+      "other": [],
+      "rev": {
+        "good": [
+          "Famous parties (atrium carnival, pool parties) and calmer events like acoustic sessions",
+          "Sauna, gym, music room, beach volleyball, pizza oven",
+          "Friendly community; fair prices"
+        ],
+        "bad": [
+          "Loud traffic from the Mittlerer Ring",
+          "Some kitchens and baths shared",
+          "One review describes the basement as in bad shape"
+        ],
+        "basis": "22 written reviews read (of 52 ratings), newest 11 months ago."
+      },
+      "url": "https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/"
+    },
+    {
+      "short": "Deutsche Burse",
+      "name": "Deutsche Burse",
+      "area": "north",
+      "ch": "eswm",
+      "op": "Assoc.",
+      "street": "Friedrichstraße 34, 80801 München",
+      "lng": 11.58061,
+      "lat": 48.16055,
+      "rating": "4.8 ★ (25)",
+      "chips": [["no", "Men only"], ["check", "Application evening"]],
+      "how": "Online form or PDF on deutsche-burse.de; after a check you are invited to an application evening",
+      "when": "Any time; move-in on 1 Oct or 1 Apr",
+      "rent": "€200–305 warm · room (house website, last updated 2018)",
+      "wait": "Not stated; the first semester is a trial",
+      "note": "Run by an association; for male students only, per LMU's list. Near U3/U6 Münchner Freiheit and Giselastraße.",
+      "rooms": [
+        {
+          "kind": "room",
+          "note": "84 rooms of 10–20 m² with washbasin; showers, WCs and kitchen on each floor"
+        }
+      ],
+      "walk": {"m": 698, "station": "Münchner Freiheit"},
+      "campus": 32,
+      "other": [
+        "House website: application evening after a first check; rooms let from 1 Oct and 1 Apr; one trial semester, then yearly extensions (deutsche-burse.de)",
+        "House website: rooms of 10–20 m² with a washbasin; showers, WCs and a new kitchen on every floor; first contract 6 months, then extendable (deutsche-burse.de)",
+        "LMU's list of dorms (Aug 2026) puts it under 'only for male students' (LMU)"
+      ],
+      "rev": {
+        "good": [
+          "Cheap for such a central location",
+          "Good community; helpful house speaker and friendly management",
+          "Fibre internet via LRZ"
+        ],
+        "bad": [],
+        "basis": "all 7 written reviews (of 25 ratings), newest about a year ago."
+      },
+      "url": "https://www.deutsche-burse.de/bewerben/"
+    },
+    {
+      "short": "Pater-Rupert-Mayer",
+      "name": "Pater-Rupert-Mayer-Heim",
+      "area": "north",
+      "ch": "eswm",
+      "op": "Assoc.",
+      "street": "Kaiserplatz 13, 80803 München",
+      "lng": 11.57999,
+      "lat": 48.16146,
+      "rating": "3.8 ★ (25)",
+      "chips": [["ok", "Yes"], ["check", "Post only; need statement"]],
+      "how": "Post the signed form, photo, CV, cover letter and need statement to Kaiserplatz 13 (email applications are not accepted)",
+      "when": "Must arrive by 15 July (winter) / 15 January (summer)",
+      "rent": "€389–571 (cold €234–416 + €155 costs) + own electricity",
+      "wait": "Chosen each semester; no carry-over list",
+      "note": "120 places, mixed dorm, reopened 2023 after renovation. Students on BAföG or with little money are preferred; 20% of rooms for international students (max. 3 per country). Residents' speakers pre-select, then the management decides.",
+      "rooms": [
+        {
+          "kind": "room",
+          "note": "120 places; rooms 8.5–12 m² with washbasin; men's and women's showers, WCs and kitchens on each floor"
+        }
+      ],
+      "walk": {"m": 686, "station": "Münchner Freiheit"},
+      "campus": 33,
+      "other": [
+        "House website: postal applications only; deadlines 15 July and 15 January; rooms 8.5–12 m² with washbasin, showers and kitchens on each floor (prm-heim.de)",
+        "LMU's list of dorms (Aug 2026): 91 rooms, €184–276 (LMU)"
+      ],
+      "rev": {
+        "good": ["Freshly renovated; quiet, pleasant area", "Nice people, relaxed atmosphere (older reviews)"],
+        "bad": [
+          "Recent reviews describe controlling management; every visitor must be reported by email",
+          "One claims only German women will be accepted from now on (unconfirmed)",
+          "Dirty shared kitchen and bath; noise at night"
+        ],
+        "basis": "all 9 written reviews (of 25 ratings), newest 6 months ago."
+      },
+      "url": "https://www.pater-rupert-mayer-heim.de/bewerbung"
+    },
+    {
+      "short": "Felsennelkenanger",
+      "name": "Felsennelkenanger",
+      "area": "far",
+      "ch": "stwm",
+      "op": "STWM",
+      "street": "Felsennelkenanger 7–21, 80937 München",
+      "lng": 11.56397,
+      "lat": 48.21001,
+      "rating": "4.1 ★ (48)",
+      "template": "stwm",
+      "chips": [["check", "On the U2, not the U6"]],
+      "rent": "€378.10–390.30 warm · room in a 3–5er WG (Teilapartment €378.40–420.30)",
+      "wait": "≈ 1–2 semesters",
+      "note": "Shortest STWM wait around here. U2 Dülferstraße; Garching needs a change of line.",
+      "rooms": [
+        {"kind": "wg", "note": "Room in a flat for 3–5 · 198 places"},
+        {"kind": "wg", "note": "Room in a flat for 3–10, bath shared by two · 112 places"},
+        {"kind": "part", "note": "216 places"}
+      ],
+      "conn": {
+        "station": "Münchner Freiheit",
+        "door": 17,
+        "steps": [
+          {"kind": "walk", "text": "to U2 Dülferstraße", "time": "5 min"},
+          {"kind": "u2", "line": "U2", "text": "Dülferstraße → Scheidplatz", "time": "7 min"},
+          {"kind": "u3", "line": "U3", "text": "Scheidplatz → Münchner Freiheit", "time": "2 min"}
+        ],
+        "alt": "Or bus 170 to U6 Kieferngarten (20 min ride)."
+      },
+      "walk": {"m": 4560, "station": "Fröttmaning"},
+      "campus": 41,
+      "parts": [
+        {
+          "name": "Houses 7–21",
+          "note": "Felsennelkenanger 7, 9, 11 … 21; family flats on the ground floor, WGs higher up; open corridors at no. 21"
+        }
+      ],
+      "other": [],
+      "rev": {
+        "good": [
+          "Helpful tutors and caretaker",
+          "Modern, fair rent, fast internet",
+          "Mira mall, Penny and Aldi next door; cheap bar, gym, rooftop terrace"
+        ],
+        "bad": [
+          "Noise, parties, doors slammed at night; house rules ignored",
+          "Food and laundry taken from shared kitchens and machines; one mentions rats",
+          "Single apartments very small; kitchens always shared"
+        ],
+        "basis": "21 written reviews read (of 48 ratings), newest 5 months ago."
+      },
+      "url": "https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/"
+    },
+    {
+      "short": "Uni Apart Zwillingstr.",
+      "name": "Uni Apart Zwillingstraße",
+      "area": "far",
+      "ch": "priv",
+      "op": "Private",
+      "street": "Zwillingstraße 4, 80807 München",
+      "lng": 11.56877,
+      "lat": 48.18292,
+      "rating": "3.9 ★ (48)",
+      "chips": [["ok", "Yes"], ["check", "Co-signer in Germany needed"]],
+      "how": "Rental request form on uniapart.de, per apartment type",
+      "when": "Any time; fully booked right now",
+      "rent": "€765 (21 m²) – €1,155 (43 m²) incl. all costs · 7 types",
+      "wait": "Fully booked at the moment (website)",
+      "note": "118 apartments, built 2010. For students, trainees, interns and PhD students. You need proof of studies, liability insurance and a co-signer living in Germany. Lounge bar, 3 seminar rooms, gym.",
+      "rooms": [{"kind": "studio", "note": "7 types, 21–43 m²: fitted kitchen with oven, own bath"}],
+      "conn": {
+        "station": "Studentenstadt",
+        "door": 20,
+        "steps": [
+          {"kind": "walk", "text": "to the stop Curt-Mezger-Platz", "time": "4 min"},
+          {
+            "kind": "bus",
+            "line": "177",
+            "text": "Curt-Mezger-Platz → Studentenstadt",
+            "time": "14 min · every 10 min"
+          }
+        ],
+        "alt": "Or walk 8 min to U2 Milbertshofen, change to the U3 at Scheidplatz, then the U6 at Münchner Freiheit."
+      },
+      "walk": {"m": 3070, "station": "Nordfriedhof"},
+      "campus": 38,
+      "other": [
+        "Uni Apart website: 7 types from Studio SI/SA (21 m², €765) to Sky Suite (43 m², €1,155), all with fitted kitchen with oven and own bath (uniapart.de)"
+      ],
+      "rev": {
+        "good": [
+          "Large furnished apartments (Studio L) with own bath; many stay for years",
+          "Helpful management (several recent reviews)",
+          "Rewe and Rossmann next door; bus and U-Bahn a few minutes away"
+        ],
+        "bad": [
+          "Fixed-term contracts; leaving early means finding a replacement tenant; German reference person needed (one review)",
+          "Weak internet; some appliances broken",
+          "One says much of the deposit was kept without reason"
+        ],
+        "basis": "27 written reviews read (of 48 ratings), newest 3 months ago."
+      },
+      "url": "https://www.uniapart.de/standort/muenchen-zwillingstr-4"
+    },
+    {
+      "short": "Uni Apart Schleißh.",
+      "name": "Uni Apart Schleißheimer Straße",
+      "area": "far",
+      "ch": "priv",
+      "op": "Private",
+      "street": "Schleißheimer Straße 330, 80809 München",
+      "lng": 11.56719,
+      "lat": 48.18121,
+      "rating": "3.4 ★ (26)",
+      "chips": [["ok", "Yes"], ["check", "Co-signer in Germany needed"]],
+      "how": "Rental request form on uniapart.de",
+      "when": "Any time; fully booked right now",
+      "rent": "Not listed while fully booked (Zwillingstr. costs €765–1,155)",
+      "wait": "Fully booked (website); one review mentions about a year",
+      "note": "74 apartments of 20–32 m², built 2004, same company as Zwillingstraße and same rules. Bus stop at the door, lounge, garden.",
+      "rooms": [{"kind": "studio", "note": "20–32 m², fitted kitchen and own bath"}],
+      "conn": {
+        "station": "Studentenstadt",
+        "door": 15,
+        "steps": [
+          {
+            "kind": "bus",
+            "line": "177",
+            "text": "Curt-Mezger-Platz (at the door) → Studentenstadt",
+            "time": "14 min · every 10 min"
+          }
+        ],
+        "alt": "Or walk 7 min to U2 Milbertshofen, change to the U3 at Scheidplatz, then the U6 at Giselastraße or Münchner Freiheit."
+      },
+      "walk": {"m": 3025, "station": "Dietlindenstraße"},
+      "campus": 34,
+      "other": ["Uni Apart website: 74 apartments of 20–32 m², currently fully booked (uniapart.de)"],
+      "rev": {
+        "good": [
+          "Bus stop at the door; supermarkets around the corner",
+          "Management much better since a new house manager (several reviews)",
+          "Modern 30 m² apartments; fast application for some"
+        ],
+        "bad": [
+          "Earlier: poor communication and run-down apartments",
+          "One old review mentions a year-long waiting list; one says staff refused to speak English"
+        ],
+        "basis": "14 written reviews read (of 26 ratings), newest 1 month ago."
+      },
+      "url": "https://www.uniapart.de/standort/muenchen-schleissheimer-strasse-330"
+    },
+    {
+      "short": "Olympisches Dorf",
+      "name": "Olympisches Dorf",
+      "area": "far",
+      "ch": "stwm",
+      "op": "STWM",
+      "street": "Helene-Mayer-Ring 7a+b, Connollystraße 3, 7–11",
+      "lng": 11.55193,
+      "lat": 48.17995,
+      "rating": "4.6 ★ (40)",
+      "template": "stwm",
+      "chips": [["check", "U3, not U6"]],
+      "rent": "€391.10–487.10 warm · Einzelapartment (2er-WG rooms €441.15 / €489.85)",
+      "wait": "≈ 4–5 semesters (WG rooms 1–2)",
+      "note": "Former 1972 Olympic Village, U3 Olympiazentrum. The largest STWM complex after Studentenstadt.",
+      "rooms": [
+        {"kind": "studio", "note": "bungalows and high-rise; every type has its own kitchenette and bath"},
+        {"kind": "wg", "note": "Room in a 2-person flat · 80 places"}
+      ],
+      "conn": {
+        "station": "Münchner Freiheit",
+        "door": 13,
+        "steps": [
+          {"kind": "walk", "text": "to U3 Olympiazentrum", "time": "6 min"},
+          {
+            "kind": "u3",
+            "line": "U3",
+            "text": "Olympiazentrum → Münchner Freiheit",
+            "time": "5 min · every 5 min"
+          }
+        ],
+        "alt": "Some U3 trips are better to change at Giselastraße instead."
+      },
+      "walk": {"m": 4244, "station": "Münchner Freiheit"},
+      "campus": 37,
+      "parts": [
+        {
+          "name": "Bungalows",
+          "note": "Connollystraße 3 · small two-level bungalows painted by their residents · 4.6 ★ (64)",
+          "lng": 11.55341,
+          "lat": 48.17898
+        },
+        {
+          "name": "Hochhaus",
+          "note": "Helene-Mayer-Ring 7a+b · high-rise with single apartments · 4.8 ★ (6)",
+          "lng": 11.55346,
+          "lat": 48.17995
+        }
+      ],
+      "other": [],
+      "rev": {
+        "good": [
+          "Unique painted bungalows; car-free and quiet",
+          "Next to the Olympiapark, U3 and BMW Welt",
+          "Affordable single apartments"
+        ],
+        "bad": [
+          "Very small, narrow units; weak sound insulation",
+          "Grey and dirty in winter; litter, rats near the bins",
+          "One recent review calls it mismanaged"
+        ],
+        "basis": "22 written reviews of the village (of 40) and 27 of the bungalows (of 64), newest 4 weeks ago."
+      },
+      "url": "https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/"
+    },
+    {
+      "short": "Marchionini",
+      "name": "Marchionini-Stiftung",
+      "area": "far",
+      "ch": "eswm",
+      "op": "Foundation",
+      "street": "Lerchenauer Straße 41, 80809 München",
+      "lng": 11.56131,
+      "lat": 48.17282,
+      "rating": "4.5 ★ (24)",
+      "chips": [["ok", "Yes"], ["check", "Committee + waiting list"]],
+      "how": "Post the official form, a motivation letter and 2 photos to the office at Steinickeweg 7, 80798 München",
+      "when": "Any time, no deadline",
+      "rent": "≈ €420 all-in · deposit ≈ €840 (application leaflet)",
+      "wait": "A committee decides; then a waiting list (always full)",
+      "note": "84 residents near the Olympiapark, self-run with a house bar. Only students of Munich's public universities; the house expects political interest and help with running the dorm.",
+      "rooms": [
+        {
+          "kind": "studio",
+          "note": "84 hexagonal rooms of 20 m² with own bath and kitchenette; shared kitchen too"
+        }
+      ],
+      "conn": {
+        "station": "Münchner Freiheit",
+        "door": 16,
+        "steps": [
+          {"kind": "walk", "text": "to U3 Petuelring", "time": "8 min"},
+          {
+            "kind": "u3",
+            "line": "U3",
+            "text": "Petuelring → Münchner Freiheit",
+            "time": "4 min · every 5 min"
+          }
+        ],
+        "alt": "Some U3 trips are better to change at Giselastraße instead."
+      },
+      "walk": {"m": 2823, "station": "Dietlindenstraße"},
+      "campus": 40,
+      "other": [
+        "House leaflet: committee of residents and the head decides; accepted applicants wait on a list; first contract 12 months on trial, then 2 more years (marchionini.net)",
+        "House website: hexagonal 20 m² rooms with own bath and kitchenette, fully furnished; roof terrace, bar, kitchen and workshop (marchionini.net)"
+      ],
+      "rev": {
+        "good": ["Great community; several call it the best dorm in Munich", "Popular house bar"],
+        "bad": ["Hexagonal rooms look striking but are hard to furnish"],
+        "basis": "all 7 written reviews (of 24 ratings), newest 10 months ago."
+      },
+      "url": "https://www.marchionini.net/de/bewerbung"
+    },
+    {
+      "short": "Apian",
+      "name": "Apian Aparthaus",
+      "area": "ufg",
+      "ch": "priv",
+      "op": "Private",
+      "street": "Apianstraße 7–7b, 85774 Unterföhring",
+      "lng": 11.64038,
+      "lat": 48.17415,
+      "rating": "3.6 ★ (63)",
+      "chips": [["ok", "Yes, students"], ["check", "Early-exit fees (reviews)"]],
+      "how": "Email info@apian-aparthaus.de or use the form on apian-aparthaus.de, with a copy of your ID, your enrolment certificate and the start date you want",
+      "when": "Any time, while flats are free",
+      "rent": "€830 all-in (Apian 1, ≈ 20 m²) or €950 (Apian 2, ≈ 24 m²) · incl. €230 costs",
+      "wait": "No list: flats are let while any are free",
+      "note": "Two private houses in Unterföhring, across the Isar from the U6 (bus 233 to Studentenstadt). Apian 1 is for students only; Apian 2 also takes nursing and social-care staff. The town owns 17 flats in Apian 2 (house B) and lets them itself for €450 + costs.",
+      "rooms": [
+        {
+          "kind": "studio",
+          "note": "≈ 20 m² (Apian 1) or ≈ 24 m² (Apian 2): kitchenette with ceramic hob and fridge, own shower bath"
+        }
+      ],
+      "conn": {
+        "station": "Studentenstadt",
+        "door": 15,
+        "steps": [
+          {"kind": "walk", "text": "to the stop Apianstraße", "time": "8 min"},
+          {
+            "kind": "bus",
+            "line": "233",
+            "text": "Apianstraße → Studentenstadt",
+            "time": "7 min · every 10 min"
+          }
+        ]
+      },
+      "walk": {"m": 3881, "station": "Freimann"},
+      "campus": 35,
+      "parts": [
+        {"name": "Apian 1 · Apianstraße 7", "note": "475 flats ≈ 20 m², students only · €600 + €230 costs"},
+        {
+          "name": "Apian 2 · Apianstraße 7a/7b",
+          "note": "128 flats ≈ 24 m², built over the car park; students and social/nursing jobs · €720 + €230"
+        },
+        {
+          "name": "Town flats in Apian 2, house B",
+          "note": "17 furnished flats of 23.7 m² for €450 + heating and costs; students, trainees, town staff and social jobs; max. 8 years; town hall allocates in rounds"
+        }
+      ],
+      "other": [
+        "Unterföhring town paper (Apr 2026): the town bought 17 flats in Apian 2 house B and lets them for €450 + costs; written applications to the town hall, decided by the housing committee (unterfoehring.de)",
+        "Operator website: let 'at any time, while stocks last'; furnished, kitchenette with ceramic hob and fridge, own bath with daylight; security service and video surveillance (apian-aparthaus.de)"
+      ],
+      "rev": {
+        "good": [],
+        "bad": [
+          "Expensive for the size: one calls it 'over €830 for a prison cell', another says about €30 per m²",
+          "Fees to leave early (€1,000 and €3,500 mentioned); deposits returned slowly and not in full",
+          "Contract says move out 3 days before it ends, which falls in Oktoberfest week",
+          "Strict quiet rules after 22:00, unfriendly staff, slow repairs; one mentions bugs",
+          "Several say the operator gets bad reviews removed, so the score may be too high"
+        ],
+        "basis": "the 5 written reviews Google shows first (of 63 ratings); I could not page through the rest without the browser."
+      },
+      "url": "https://www.apian-aparthaus.de/en"
+    },
+    {
+      "short": "Oberschleißheim",
+      "name": "Studierendenwohnanlage Oberschleißheim",
+      "area": "osh",
+      "ch": "stwm",
+      "op": "STWM",
+      "street": "Am Schäferanger 9–15, 85764 Oberschleißheim",
+      "lng": 11.54568,
+      "lat": 48.25626,
+      "rating": "4.0 ★ (71)",
+      "template": "stwm",
+      "chips": [["check", "Bus 292 every 20 min"]],
+      "rent": "€399.50–420.40 warm · room in a WG (bath shared by two €431.30–438.20; own bath €445.30)",
+      "wait": "≈ 1 semester",
+      "note": "171 places next to the regatta lake, opened 1997, first meant for vet students. S1 Oberschleißheim for Munich; bus 292 for Garching. Max. 7 semesters on a Bachelor's, 4 on a Master's. Deposit is 3× base rent.",
+      "rooms": [
+        {"kind": "wg", "note": "Room in a flat for 3–4 · 41 places"},
+        {"kind": "wg", "note": "Room in a flat for 4–12, bath shared by two · 122 places"},
+        {"kind": "part", "note": "8 places"}
+      ],
+      "conn": {
+        "station": "Garching-Hochbrück",
+        "door": 27,
+        "steps": [
+          {"kind": "walk", "text": "to the stop Am Stutenanger", "time": "6 min"},
+          {
+            "kind": "bus",
+            "line": "292",
+            "text": "Am Stutenanger → Garching-Hochbrück",
+            "time": "19 min · every 20 min"
+          }
+        ],
+        "alt": "Or stay on bus 292 all the way to Garching-Forschungszentrum (33 min ride)."
+      },
+      "walk": {"m": 7888, "station": "Garching-Hochbrück"},
+      "campus": 37,
+      "other": [
+        "STWM: Munich, Garching and Weihenstephan are each about 25 min away by public transport; communal kitchens and a common room (studierendenwerk-muenchen-oberbayern.de)",
+        "DAAD hall finder: 171 furnished places; single rooms share shower, WC and kitchen in their group (daad.de)"
+      ],
+      "rev": {
+        "good": [
+          "Friendly people; good for studying and for parties",
+          "Quiet and peaceful",
+          "Direct bus to the Garching campus; supermarkets, pool, post office nearby"
+        ],
+        "bad": ["Rural, feels far from Munich at first", "A bit far from the city centre"],
+        "basis": "the 5 written reviews Google shows first."
+      },
+      "url": "https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/garching-oberschleissheim/oberschleissheim/"
+    },
+    {
+      "short": "Dietersheim",
+      "name": "Wohnanlage Dietersheim (MAYRBAU)",
+      "area": "ech",
+      "ch": "priv",
+      "op": "Private",
+      "street": "Hauptstraße 2a, 85386 Eching-Dietersheim",
+      "lng": 11.67322,
+      "lat": 48.27788,
+      "rating": "3.0 ★ (1)",
+      "chips": [["ok", "Yes, student flats"], ["check", "Each flat advertised separately"]],
+      "how": "Answer the ads for 'Hauptstraße 2a, Dietersheim' on immowelt or WG-Gesucht (many posted by Hans Mayr Hochbau GmbH); no central website found",
+      "when": "Whenever a flat is advertised",
+      "rent": "≈ €660–830 cold for 18–25.5 m² (ads), plus utilities · one WG-Gesucht ad: €817 for 19 m²",
+      "wait": "No list: flats are let as they come free",
+      "note": "New building by Baugeschäft Mayr (MAYRBAU), finished 2025: 85 furnished flats of 20–35 m², half reserved for students. Bus 690 or X660 from the door reaches Garching-Forschungszentrum in 4–5 min.",
+      "rooms": [
+        {
+          "kind": "studio",
+          "note": "18–35 m², fully furnished: kitchenette with ceramic hob, combi microwave and fridge; shower and WC"
+        }
+      ],
+      "conn": {
+        "station": "Garching-Forschungszentrum",
+        "door": 5,
+        "steps": [
+          {
+            "kind": "bus",
+            "line": "690 · X660",
+            "text": "Am Isardamm (at the door) → Garching-Forschungszentrum",
+            "time": "4–5 min · together about every 10 min"
+          }
+        ],
+        "alt": "You arrive straight at the campus, where the U6 starts."
+      },
+      "walk": {"m": 2200, "station": "Garching-Forschungszentrum"},
+      "campus": 5,
+      "other": [
+        "Eching town press release (Jul 2025): 85 furnished units, 50% for student housing; common room, free laundry, cellar for each flat, about 60 underground parking spaces; KfW 40 Plus with groundwater heat pump and solar (eching.de)",
+        "Letting ads: student flats only for students; kitchenette with combi microwave, ceramic hob and fridge, shower and WC; some ground-floor flats with a terrace (immowelt.de)"
+      ],
+      "rev": {
+        "good": [],
+        "bad": ["€200 charged for cleaning a one-room flat at move-out, without being told clearly"],
+        "basis": "the only written review."
+      },
+      "url": "https://www.eching.de/news/fertigstellung-und-bezug-der-neuen-wohnanlage-in-dietersheim/"
+    }
+  ]
+}
