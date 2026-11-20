@@ -72,8 +72,9 @@ body.far .stn .s { display: none; }
 .sw { width: 10px; height: 10px; border-radius: 3px; background: var(--c); }
 .sw.ln { background: transparent; border: 1.5px solid var(--muted); width: 14px; height: 10px; }
 .sw.ln.dash { border-style: dashed; }
-.areas { display: flex; gap: 6px; margin-top: 4px; }
-.areas button { font: 500 12px var(--font); padding: 4px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--raise); color: var(--ink); cursor: pointer; }
+.areas { display: flex; align-items: center; gap: 8px; margin-top: 4px; font-size: 12px; color: var(--muted); }
+.areas select { font: 500 12px var(--font); padding: 4px 26px 4px 10px; border-radius: 8px; border: 1px solid var(--line); color: var(--ink); cursor: pointer;
+  appearance: none; -webkit-appearance: none; background: var(--raise) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23888' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 9px center; }
 
 /* panel */
 .panel {
@@ -137,14 +138,10 @@ button:focus-visible, a:focus-visible, .mk-in:focus-visible { outline: 2px solid
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
-/* Unterföhring markers: double border */
-.mk.ufg .mk-in { border-style: double; border-width: 3px; background: var(--raise); }
-.mk.ufg.on .mk-in { border-style: solid; border-width: 1.5px; background: var(--c); }
+/* nearby towns reached by bus: double border */
+.mk.bus .mk-in { border-style: double; border-width: 3px; background: var(--raise); }
+.mk.bus.on .mk-in { border-style: solid; border-width: 1.5px; background: var(--c); }
 .legend .sw.ln.dbl { border-style: double; border-width: 3px; }
-/* Oberschleißheim markers: solid border with an outer ring */
-.mk.osh .mk-in { background: var(--raise); box-shadow: 0 0 0 2px var(--panel), 0 0 0 3.5px var(--c), 0 2px 8px rgba(0,0,0,.18); }
-.mk.osh.on .mk-in { background: var(--c); }
-.legend .sw.ln.ring { box-shadow: 0 0 0 1.5px var(--panel), 0 0 0 3px var(--muted); width: 11px; height: 7px; margin: 0 1.5px; }
 /* far-from-U6 markers: dotted border */
 .mk.far .mk-in { border-style: dotted; border-width: 2px; background: var(--raise); }
 .mk.far.on .mk-in { border-style: solid; background: var(--c); }
@@ -217,17 +214,19 @@ button.pt-name:hover { text-decoration-color: var(--c); }
   <span><i class="sw ln"></i>Solid · Garching</span>
   <span><i class="sw ln dash"></i>Dashed · München-Nord, on the U6</span>
   <span><i class="sw ln dot"></i>Dotted · far from the U6 (other lines)</span>
-  <span><i class="sw ln dbl"></i>Double · Unterföhring, bus to the U6</span>
-  <span><i class="sw ln ring"></i>Ringed · Oberschleißheim, bus to the U6</span>
+  <span><i class="sw ln dbl"></i>Double · nearby towns, by bus (Unterföhring, Oberschleißheim, Eching)</span>
   <span><i class="clx">3</i>Dorms too close together; click to zoom in</span>
-  <div class="areas">
-    <button type="button" id="go-g">Garching</button>
-    <button type="button" id="go-n">München-Nord</button>
-    <button type="button" id="go-f">Far from U6</button>
-    <button type="button" id="go-u">Unterföhring</button>
-    <button type="button" id="go-o">Oberschleißheim</button>
-    <button type="button" id="go-a">All</button>
-  </div>
+  <label class="areas">Zoom to
+    <select id="go-area">
+      <option value="all">All areas</option>
+      <option value="garching">Garching</option>
+      <option value="north">München-Nord</option>
+      <option value="far">Far from U6</option>
+      <option value="ufg">Unterföhring</option>
+      <option value="osh">Oberschleißheim</option>
+      <option value="ech">Eching</option>
+    </select>
+  </label>
 </div>
 
 <section class="panel" id="panel" aria-live="polite">
@@ -287,7 +286,7 @@ button.pt-name:hover { text-decoration-color: var(--c); }
 
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script>
-// area: "garching" | "north" (U6 München-Nord, down to Münchner Freiheit) | "far" (far from the U6) | "ufg" (Unterföhring) | "osh" (Oberschleißheim)
+// area: "garching" | "north" (U6 München-Nord, down to Münchner Freiheit) | "far" (far from the U6) | "ufg" (Unterföhring) | "osh" (Oberschleißheim) | "ech" (Eching-Dietersheim)
 // ch: "stwm" waiting list | "eswm" selection by an association, church or foundation | "priv" private
 const STWM_HOW = "STWM online application, choose up to 3 dorms";
 const STWM_WHEN = "Window for the winter semester opens 15 May";
@@ -592,7 +591,15 @@ const DORMS = [
     rev:{ good:["Friendly people; good for studying and for parties","Quiet and peaceful","Direct bus to the Garching campus; supermarkets, pool, post office nearby"],
           bad:["Rural, feels far from Munich at first","A bit far from the city centre"],
           basis:"the 5 written reviews Google shows first." },
-    url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/garching-oberschleissheim/oberschleissheim/" }
+    url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/garching-oberschleissheim/oberschleissheim/" },
+  { area:"ech", name:"Wohnanlage Dietersheim (MAYRBAU)", short:"Dietersheim", street:"Hauptstraße 2a, 85386 Eching-Dietersheim", op:"Private", ch:"priv", lng:11.67322, lat:48.27788, rating:"3.0 ★ (1)",
+    chips:[["ok","Yes, student flats"],["check","Each flat advertised separately"]],
+    how:"Answer the ads for 'Hauptstraße 2a, Dietersheim' on immowelt or WG-Gesucht (many posted by Hans Mayr Hochbau GmbH); no central website found", when:"Whenever a flat is advertised",
+    rent:"≈ €660–830 cold for 18–25.5 m² (ads), plus utilities · one WG-Gesucht ad: €817 for 19 m²", wait:"No list: flats are let as they come free",
+    note:"New building by Baugeschäft Mayr (MAYRBAU), finished 2025: 85 furnished flats of 20–35 m², half reserved for students. Bus 690 or X660 from the door reaches Garching-Forschungszentrum in 4–5 min.",
+    other:["Eching town press release (Jul 2025): 85 furnished units, 50% for student housing; common room, free laundry, cellar for each flat, about 60 underground parking spaces; KfW 40 Plus with groundwater heat pump and solar (eching.de)","Letting ads: student flats only for students; kitchenette with combi microwave, ceramic hob and fridge, shower and WC; some ground-floor flats with a terrace (immowelt.de)"],
+    rev:{ good:[], bad:["€200 charged for cleaning a one-room flat at move-out, without being told clearly"], basis:"the only written review." },
+    url:"https://www.eching.de/news/fertigstellung-und-bezug-der-neuen-wohnanlage-in-dietersheim/" }
 ];
 
 // Room types: kind = studio (own kitchen + own bath), part (own bath, shared kitchen),
@@ -642,11 +649,13 @@ const EXTRA = {
     conn:{ st:"Studentenstadt", door:15, steps:[["walk","","to the stop Apianstraße","8 min"],["bus","233","Apianstraße → Studentenstadt","7 min · every 10 min"]], alt:"" }, campus:35 },
   "Oberschleißheim": { rooms:[["wg","Room in a flat for 3–4 · 41 places"],["wg","Room in a flat for 4–12, bath shared by two · 122 places"],["part","8 places"]],
     conn:{ st:"Garching-Hochbrück", door:27, steps:[["walk","","to the stop Am Stutenanger","6 min"],["bus","292","Am Stutenanger → Garching-Hochbrück","19 min · every 20 min"]], alt:"Or stay on bus 292 all the way to Garching-Forschungszentrum (33 min ride)." }, campus:37 },
+  "Dietersheim": { rooms:[["studio","18–35 m², fully furnished: kitchenette with ceramic hob, combi microwave and fridge; shower and WC"]],
+    conn:{ st:"Garching-Forschungszentrum", door:5, steps:[["bus","690 · X660","Am Isardamm (at the door) → Garching-Forschungszentrum","4–5 min · together about every 10 min"]], alt:"You arrive straight at the campus, where the U6 starts." }, campus:5 },
   "Marchionini": { rooms:[["studio","84 hexagonal rooms of 20 m² with own bath and kitchenette; shared kitchen too"]],
     conn:{ st:"Münchner Freiheit", door:16, steps:[["walk","","to U3 Petuelring","8 min"],["u3","U3","Petuelring → Münchner Freiheit","4 min · every 5 min"]], alt:"Some U3 trips are better to change at Giselastraße instead." }, campus:40 }
 };
 // Walking distance along footpaths to the nearest U6 station (OSRM foot router on OpenStreetMap data, Nov 2026)
-const WALK = {"Garching I": [910, "Garching"], "Garching II": [1143, "Garching"], "HHG": [1052, "Garching"], "DOMINO": [1369, "Garching"], "SLC": [1064, "Garching"], "GLC": [593, "Garching"], "Haidpark (AWO)": [324, "Fröttmaning"], "Heidemannstraße": [928, "Kieferngarten"], "GLH": [360, "Kieferngarten"], "Josef-Wirth-Weg": [1430, "Freimann"], "Unity Alpha": [1451, "Freimann"], "Unity Beta": [1645, "Freimann"], "Helmut-Kamm-Haus": [1760, "Freimann"], "Spengelhof": [1583, "Freimann"], "NP3": [336, "Freimann"], "My Room Active": [664, "Freimann"], "Berzeliusstraße": [351, "Freimann"], "Studentenstadt": [462, "Studentenstadt"], "Max-Bill-Straße": [1376, "Alte Heide"], "Ludwigskolleg": [333, "Nordfriedhof"], "Biederstein": [657, "Dietlindenstraße"], "Deutsche Burse": [698, "Münchner Freiheit"], "Pater-Rupert-Mayer": [686, "Münchner Freiheit"], "Felsennelkenanger": [4560, "Fröttmaning"], "Uni Apart Zwillingstr.": [3070, "Nordfriedhof"], "Uni Apart Schleißh.": [3025, "Dietlindenstraße"], "Olympisches Dorf": [4244, "Münchner Freiheit"], "Marchionini": [2823, "Dietlindenstraße"], "Apian": [3881, "Freimann"], "Oberschleißheim": [7888, "Garching-Hochbrück"]};
+const WALK = {"Garching I": [910, "Garching"], "Garching II": [1143, "Garching"], "HHG": [1052, "Garching"], "DOMINO": [1369, "Garching"], "SLC": [1064, "Garching"], "GLC": [593, "Garching"], "Haidpark (AWO)": [324, "Fröttmaning"], "Heidemannstraße": [928, "Kieferngarten"], "GLH": [360, "Kieferngarten"], "Josef-Wirth-Weg": [1430, "Freimann"], "Unity Alpha": [1451, "Freimann"], "Unity Beta": [1645, "Freimann"], "Helmut-Kamm-Haus": [1760, "Freimann"], "Spengelhof": [1583, "Freimann"], "NP3": [336, "Freimann"], "My Room Active": [664, "Freimann"], "Berzeliusstraße": [351, "Freimann"], "Studentenstadt": [462, "Studentenstadt"], "Max-Bill-Straße": [1376, "Alte Heide"], "Ludwigskolleg": [333, "Nordfriedhof"], "Biederstein": [657, "Dietlindenstraße"], "Deutsche Burse": [698, "Münchner Freiheit"], "Pater-Rupert-Mayer": [686, "Münchner Freiheit"], "Felsennelkenanger": [4560, "Fröttmaning"], "Uni Apart Zwillingstr.": [3070, "Nordfriedhof"], "Uni Apart Schleißh.": [3025, "Dietlindenstraße"], "Olympisches Dorf": [4244, "Münchner Freiheit"], "Marchionini": [2823, "Dietlindenstraße"], "Apian": [3881, "Freimann"], "Oberschleißheim": [7888, "Garching-Hochbrück"], "Dietersheim": [2200, "Garching-Forschungszentrum"]};
 DORMS.forEach(d => { Object.assign(d, EXTRA[d.short] || {}); d.walk = WALK[d.short]; });
 
 const COL = { stwm:"var(--stwm)", eswm:"var(--eswm)", priv:"var(--priv)" };
@@ -712,7 +721,7 @@ map.on("zoom", labelZoom); labelZoom();
 // dorm markers
 const markers = DORMS.map((d, i) => {
   const root = document.createElement("div");
-  root.className = "mk " + d.area;
+  root.className = "mk " + d.area + (["ufg", "osh", "ech"].includes(d.area) ? " bus" : "");
   const inner = document.createElement("span");
   inner.className = "mk-in"; inner.tabIndex = 0;
   inner.setAttribute("role", "button");
@@ -868,7 +877,7 @@ function show(i, fly) {
   const panel = $("panel");
   panel.hidden = false;
   panel.style.setProperty("--c", COL[d.ch]);
-  const areaName = { garching: "Garching", north: "München-Nord", far: "Far from U6", ufg: "Unterföhring", osh: "Oberschleißheim" }[d.area];
+  const areaName = { garching: "Garching", north: "München-Nord", far: "Far from U6", ufg: "Unterföhring", osh: "Oberschleißheim", ech: "Eching" }[d.area];
   $("p-op").textContent = `${d.op} · ${areaName}`;
   $("p-name").textContent = d.name;
   $("p-meta").textContent = `${d.rating} · ${d.street}`;
@@ -941,14 +950,9 @@ $("close").addEventListener("click", () => {
 const pad = () => innerWidth <= 640 ? { top: 40, bottom: innerHeight * .58, left: 30, right: 30 } : { top: 60, bottom: 60, left: 60, right: 400 };
 function fitArea(filter) {
   const ds = DORMS.filter(filter);
-  map.fitBounds([[Math.min(...ds.map(d => d.lng)), Math.min(...ds.map(d => d.lat))], [Math.max(...ds.map(d => d.lng)), Math.max(...ds.map(d => d.lat))]], { padding: pad(), duration: reduce ? 0 : 900 });
+  map.fitBounds([[Math.min(...ds.map(d => d.lng)), Math.min(...ds.map(d => d.lat))], [Math.max(...ds.map(d => d.lng)), Math.max(...ds.map(d => d.lat))]], { padding: pad(), maxZoom: 15, duration: reduce ? 0 : 900 });
 }
-$("go-g").addEventListener("click", () => fitArea(d => d.area === "garching"));
-$("go-n").addEventListener("click", () => fitArea(d => d.area === "north"));
-$("go-f").addEventListener("click", () => fitArea(d => d.area === "far"));
-$("go-u").addEventListener("click", () => fitArea(d => d.area === "ufg"));
-$("go-o").addEventListener("click", () => fitArea(d => d.area === "osh"));
-$("go-a").addEventListener("click", () => fitArea(() => true));
+$("go-area").addEventListener("change", e => { const v = e.target.value; fitArea(v === "all" ? () => true : d => d.area === v); });
 show(0, false);
 </script>
 </body>
