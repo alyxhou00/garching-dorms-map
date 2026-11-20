@@ -20,6 +20,7 @@ Code: `index.html` (layout), `css/style.css`, `js/` (`map.js` map and markers, `
 - TODO: Add functionalities for finding WGs in the future. Any (unofficial) APIs? 
 - Preferred location for a WG: Garching, Ismaning, (Unterföhring), M Schwabing-Freimann?
 - TODO: Add Zurich, Heilbronn, Stuttgart for comparison?
+- TODO: should look good on mobile!
 
 **Other towns nearby:**
 
