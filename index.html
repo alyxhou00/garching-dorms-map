@@ -169,6 +169,32 @@ button.pt-name:hover { text-decoration-color: var(--c); }
 .pt-note { font-size: 12px; color: var(--muted); }
 .legend .sw.ln.dot { border-style: dotted; border-width: 2px; }
 .legend .clx { display: inline-grid; place-items: center; width: 16px; height: 16px; border-radius: 8px; background: var(--ink); color: var(--panel); font: 600 9px/1 var(--font); }
+
+.sec { margin-top: 14px; }
+.rooms { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 7px; }
+.rt-head { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; }
+.rt { font-size: 11.5px; font-weight: 600; padding: 2px 7px; border-radius: 999px; background: var(--chip, rgba(127,127,127,.12)); white-space: nowrap; }
+.rt.studio { background: color-mix(in srgb, #2f8f5b 16%, transparent); color: color-mix(in srgb, #2f8f5b 80%, var(--ink, #222)); }
+.rt.part { background: color-mix(in srgb, #3b6fd1 15%, transparent); color: color-mix(in srgb, #3b6fd1 80%, var(--ink, #222)); }
+.rt.wg { background: color-mix(in srgb, #c47a12 17%, transparent); color: color-mix(in srgb, #c47a12 80%, var(--ink, #222)); }
+.rt.room { background: color-mix(in srgb, #8a5bc4 16%, transparent); color: color-mix(in srgb, #8a5bc4 80%, var(--ink, #222)); }
+.rt.unk { background: rgba(127,127,127,.14); color: var(--muted); }
+.rt-k { font-size: 12px; color: var(--muted); }
+.rt-n { font-size: 12.5px; margin-top: 2px; }
+.conn { list-style: none; margin: 8px 0 0; padding: 0; position: relative; display: grid; gap: 8px; }
+.conn li { display: flex; align-items: flex-start; gap: 8px; position: relative; }
+.conn li:not(:last-child)::after { content: ""; position: absolute; left: 13px; top: 20px; bottom: -8px; width: 2px; background: rgba(127,127,127,.25); }
+.bd { flex: none; min-width: 28px; height: 18px; padding: 0 5px; border-radius: 4px; font: 700 10.5px/18px var(--font); color: #fff; text-align: center; position: relative; z-index: 1; }
+.bd.walk { background: var(--panel, #fff); color: var(--muted); border: 1.5px solid rgba(127,127,127,.4); line-height: 0; display: inline-flex; align-items: center; justify-content: center; height: 18px; box-sizing: border-box; }
+.bd.bus { background: #00586a; }
+.bd.u2 { background: #c3022d; }
+.bd.u3 { background: #ed6720; }
+.bd.u6 { background: #0065ae; }
+.cn-t { font-size: 12.5px; display: flex; flex-direction: column; line-height: 1.35; padding-top: 1px; }
+.cn-time { color: var(--muted); font-size: 12px; }
+.cn-alt { font-size: 12.5px; color: var(--muted); margin: 8px 0 0; }
+.cn-campus { font-size: 12.5px; margin: 6px 0 0; }
+.cn-src { color: var(--muted); }
 </style>
 </head>
 <body>
@@ -217,6 +243,16 @@ button.pt-name:hover { text-decoration-color: var(--c); }
       <dt>Rent</dt><dd class="num" id="p-rent"></dd>
       <dt>Wait</dt><dd class="num" id="p-wait"></dd>
     </dl>
+    <div class="sec">
+      <div class="label">Room types</div>
+      <ul class="rooms" id="p-rooms"></ul>
+    </div>
+    <div class="sec">
+      <div class="label">Getting to the U6</div>
+      <ol class="conn" id="p-conn"></ol>
+      <p class="cn-alt" id="p-conn-alt"></p>
+      <p class="cn-campus"><span id="p-campus"></span><span class="cn-src"> · MVG route planner, Monday about 8:00</span></p>
+    </div>
     <p class="note" id="p-note"></p>
     <div class="parts" id="p-parts" hidden>
       <div class="label" id="p-parts-label">Made up of</div>
@@ -325,8 +361,8 @@ const DORMS = [
   { area:"north", name:"Georg-Lanzenstiel-Haus", short:"GLH", street:"Kieferngartenstraße 12, 80939 München", op:"ESWM", ch:"eswm", lng:11.61215, lat:48.20113, rating:"4.8 ★ (45)",
     chips:[["ok","Yes"],["check","Only one ESWM house: GLH or HHG"]],
     how:"ESWM online form, only one ESWM house per person", when:"Deadline 30 May for the winter semester",
-    rent:"from €430 · single room", wait:"No queue. Chosen or not, each semester",
-    note:"127 single rooms. Same ESWM rules as HHG: home address outside MVV zones M–4, stay 1–6 semesters.",
+    rent:"€459–479 · ≈ 15 m² room with own shower and WC", wait:"No queue. Chosen or not, each semester",
+    note:"127 single rooms, 3 double rooms (€686), 12 shared kitchens. Same ESWM rules as HHG: home address outside MVV zones M–4, stay 1–6 semesters.",
     other:[],
     rev:{ good:["Very strong community; warmly run","Low rent; practical rooms with their own bathroom","Several call it the best part of their studies"],
           bad:["Hard to get a place (one compares it to winning the lottery)"], basis:"all 11 written reviews (of 45 ratings), newest 3 months ago." },
@@ -361,22 +397,22 @@ const DORMS = [
           basis:"51 written reviews read (of 103 ratings), newest 5 months ago." },
     url:"https://www.wg-gesucht.de/en/1-zimmer-wohnungen-in-Muenchen-Schwabing-Freimann.9231219.html" },
   { area:"north", name:"Helmut-Kamm-Haus", short:"Helmut-Kamm-Haus", street:"Maiglöckchenstraße 6, 80939 München", op:"EWV", ch:"eswm", lng:11.62948, lat:48.19472, rating:"4.8 ★ (17)",
-    chips:[["ok","Yes"],["check","Rent not published"]],
-    how:"Contact the Evangelischer Waisenhausverein via ewv-muenchen.de", when:"No published deadline",
-    rent:"Not published · ask", wait:"Not published · ask",
-    note:"New building of the Evangelischer Waisenhausverein, same association as Spengelhof.",
-    other:[],
+    chips:[["ok","Yes"],["check","Motivation letter needed"]],
+    how:"Email the self-disclosure form, proof of studies, a motivation letter and ID to studentenwohnheim.spe@ewv-muenchen.de", when:"No published deadline",
+    rent:"€660 all-in · 20–21 m² studio", wait:"Not published · ask",
+    note:"New building of the Evangelischer Waisenhausverein, same association as Spengelhof. Deposit €940. Same rules: up to 12 semesters, €150 fee if you leave within 6 months.",
+    other:["Association website: 117 furnished studios with kitchenette and small shower room, plus a shared kitchen and common room on every floor; beach volleyball, laundry café (ewv-muenchen.de)"],
     rev:{ good:["Calm area, good for students","Clean, spacious, functional studios"], bad:["A bit far from the bus stop"],
           basis:"all 3 written reviews (of 17 ratings), newest 2 years ago." },
-    url:"https://ewv-muenchen.de/" },
+    url:"https://ewv-muenchen.de/?page_id=12" },
   { area:"north", name:"Spengelhof", short:"Spengelhof", street:"Sondermeierstraße 86, 80939 München", op:"EWV", ch:"eswm", lng:11.62843, lat:48.19421, rating:"4.6 ★ (10)",
-    chips:[["ok","Yes"],["check","Wait not published"]],
-    how:"Apply via ewv-muenchen.de (Evangelischer Waisenhausverein)", when:"No published deadline",
-    rent:"€413 · room with own shower and WC", wait:"Not published · ask",
-    note:"Same association as Helmut-Kamm-Haus. Also has mother-and-child apartments.",
-    other:["LMU's list of dorms (Aug 2026): rooms with own shower/WC for €413, plus 5 wheelchair-accessible rooms (LMU)"],
+    chips:[["ok","Yes"],["check","Motivation letter needed"]],
+    how:"Email the self-disclosure form, proof of studies, a motivation letter and ID to studentenwohnheim.spe@ewv-muenchen.de", when:"No published deadline",
+    rent:"€440 all-in · single room in a WG (double rooms from €650)", wait:"Not published · ask",
+    note:"Same association as Helmut-Kamm-Haus. Deposit €600. Stay up to 12 semesters; contracts run to the end of each semester. €150 fee if you leave within 6 months.",
+    other:["Association website: 46 single and 3 double rooms on 8 floors, WGs of 5–8 with shared kitchen and bathrooms, one common room per floor, study and music rooms (ewv-muenchen.de)"],
     rev:{ good:["Residents are glad to have a place","Nicely redesigned outdoor area"], bad:[], basis:"all 2 written reviews (of 10 ratings)." },
-    url:"https://ewv-muenchen.de/" },
+    url:"https://ewv-muenchen.de/?page_id=12" },
   { area:"north", name:"NP3 Studentenwohnungen", short:"NP3", street:"St.-Nikolaus-Platz 3, 80939 München", op:"Private", ch:"priv", lng:11.61596, lat:48.19297, rating:"3.5 ★ (25)",
     chips:[["ok","Yes"],["check","Mixed reviews on heating and hot water"]],
     how:"Contact the landlord (phone on Google: +49 1511 4798167)", when:"No published deadline",
@@ -436,11 +472,11 @@ const DORMS = [
           basis:"23 written reviews read (of 46 ratings), newest 10 months ago." },
     url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/" },
   { area:"north", name:"Ludwigskolleg", short:"Ludwigskolleg", street:"Guerickestraße 19, 80805 München", op:"Church", ch:"eswm", lng:11.59725, lat:48.17500, rating:"5.0 ★ (3)",
-    chips:[["ok","Yes"],["check","Shared showers on the corridor"]],
+    chips:[["ok","Yes"],["check","Most rooms share corridor showers"]],
     how:"Email ludwigskolleg@eomuc.de (Archdiocese of Munich and Freising)", when:"No published deadline",
-    rent:"€217–300 · room, shower and WC on the corridor", wait:"Not published · ask",
-    note:"103 rooms, described as an international dorm. Run by the Catholic archdiocese.",
-    other:["Archdiocese list of its dorms: 103 rooms, shower/WC on the corridor, €217–300 (erzbistum-muenchen.de)"],
+    rent:"€329–413 all-in · room (€413 with own shower and WC)", wait:"Not published · ask",
+    note:"170 rooms, described as an international dorm. Run by the Catholic archdiocese. Rent includes utilities and internet.",
+    other:["LMU list (Aug 2026): 127 rooms with washbasin and corridor shower/WC for €329, 38 with own shower/WC for €413, 5 wheelchair-accessible rooms (LMU). An older archdiocese list still says 103 rooms for €217–300."],
     rev:{ good:[], bad:[], basis:"no written reviews, only 3 star ratings." },
     url:"https://www.erzbistum-muenchen.de/ludwigskolleg" },
   { area:"north", name:"Biedersteiner Wohnheim", short:"Biederstein", street:"Biedersteiner Straße 22–32, 80805 München", op:"STWM", ch:"stwm", lng:11.59569, lat:48.16559, rating:"4.6 ★ (52)",
@@ -454,14 +490,14 @@ const DORMS = [
           basis:"22 written reviews read (of 52 ratings), newest 11 months ago." },
     url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/" },
   { area:"north", name:"Deutsche Burse", short:"Deutsche Burse", street:"Friedrichstraße 34, 80801 München", op:"Assoc.", ch:"eswm", lng:11.58061, lat:48.16055, rating:"4.8 ★ (25)",
-    chips:[["no","Men only"],["check","Rent not published"]],
+    chips:[["no","Men only"],["check","Rent info from 2018"]],
     how:"Contact the house office (phone 089 349414)", when:"No published deadline",
-    rent:"Not published · a 2026 sublet asked €590", wait:"Not published · ask",
+    rent:"€200–305 warm · room (house website, last updated 2018)", wait:"Not published · ask",
     note:"Run by an association; for male students only, per LMU's list. Near U3/U6 Münchner Freiheit and Giselastraße.",
-    other:["LMU's list of dorms (Aug 2026) puts it under 'only for male students' (LMU)"],
+    other:["House website: rooms of 10–20 m² with a washbasin; showers, WCs and a new kitchen on every floor; first contract 6 months, then extendable (deutsche-burse.de)","LMU's list of dorms (Aug 2026) puts it under 'only for male students' (LMU)"],
     rev:{ good:["Cheap for such a central location","Good community; helpful house speaker and friendly management","Fibre internet via LRZ"], bad:[],
           basis:"all 7 written reviews (of 25 ratings), newest about a year ago." },
-    url:"https://www.google.com/maps/search/?api=1&query=Deutsche+Burse+Friedrichstra%C3%9Fe+34+M%C3%BCnchen" },
+    url:"https://www.deutsche-burse.de/unsere-zimmer/" },
   { area:"north", name:"Pater-Rupert-Mayer-Heim", short:"Pater-Rupert-Mayer", street:"Kaiserplatz 13, 80803 München", op:"Assoc.", ch:"eswm", lng:11.57999, lat:48.16146, rating:"3.8 ★ (25)",
     chips:[["ok","Yes"],["check","Strict management (reviews)"]],
     how:"Contact the Pater-Rupert-Mayer-Heim association", when:"No published deadline",
@@ -517,15 +553,63 @@ const DORMS = [
           basis:"22 written reviews of the village (of 40) and 27 of the bungalows (of 64), newest 4 weeks ago." },
     url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/" },
   { area:"far", name:"Marchionini-Stiftung", short:"Marchionini", street:"Lerchenauer Straße 41, 80809 München", op:"Foundation", ch:"eswm", lng:11.56131, lat:48.17282, rating:"4.5 ★ (24)",
-    chips:[["ok","Yes"],["check","Rent not published"]],
-    how:"Apply to the Alfred and Karl Marchionini Foundation (listed by TUM)", when:"No published deadline",
+    chips:[["ok","Yes"],["check","Apply by post"]],
+    how:"Apply by post to the Alfred and Karl Marchionini Foundation (details on marchionini.net)", when:"No published deadline",
     rent:"Not published · ask", wait:"Not published · ask",
-    note:"Foundation-run dorm near the Olympiapark, with its own bar.",
-    other:[],
+    note:"84 residents near the Olympiapark, self-run with a house bar. Only students of Munich's public universities; the house expects political interest and help with running the dorm.",
+    other:["House website: hexagonal 20 m² rooms with own bath and kitchenette, fully furnished; roof terrace, bar, kitchen and workshop (marchionini.net)"],
     rev:{ good:["Great community; several call it the best dorm in Munich","Popular house bar"], bad:["Hexagonal rooms look striking but are hard to furnish"],
           basis:"all 7 written reviews (of 24 ratings), newest 10 months ago." },
-    url:"https://www.tum.de/en/studies/during-your-studies/living-and-working/accommodations/student-halls-of-residence/religious-and-social-organizations" }
+    url:"https://www.marchionini.net/de" }
 ];
+
+// Room types: kind = studio (own kitchen + own bath), part (own bath, shared kitchen),
+// wg (room in a shared flat: kitchen and bath shared in the flat), room (corridor room: shared floor kitchen and bath),
+// unk (layout not confirmed)
+// Getting to the U6: MVG route planner, Monday 23 Nov 2026, leaving about 8:00, to Garching-Forschungszentrum.
+const EXTRA = {
+  "Garching I": { rooms:[["wg","Room in a shared flat · 106 places"]], campus:13 },
+  "Garching II": { conn:{ st:"Garching", door:8, steps:[["walk","","to the stop Untere Straßäcker","4 min"],["bus","230","Untere Straßäcker → Garching","3 min"]], alt:"Or walk all the way to U6 Garching." }, rooms:[["studio","32 places"],["part","64 places"],["wg","Room in a 2-person flat · 16 places"]], campus:6 },
+  "HHG": { conn:{ st:"Garching", door:8, steps:[["walk","","to the stop Untere Straßäcker","4 min"],["bus","230","Untere Straßäcker → Garching","3 min"]], alt:"Or walk all the way to U6 Garching." }, rooms:[["studio","95 apartments, 20–39 m²"]], campus:7 },
+  "DOMINO": { rooms:[["studio","69 one-room apartments, ≈ 21 m² + balcony; kitchen not shown on the floor plan"],["wg","13 two-room flats for 2: shared kitchen-living room and bath"]], campus:9 },
+  "SLC": { conn:{ st:"Garching", door:10, steps:[["walk","","to the stop Untere Straßäcker","5 min"],["bus","230","Untere Straßäcker → Garching","3 min"]], alt:"Or walk all the way to U6 Garching." }, rooms:[["studio","≈ 22–48 m², for one person or a couple"]], campus:10 },
+  "GLC": { walk:[611,"Garching"], rooms:[["studio","with balcony; shared kitchens with billiards as extra"]], campus:13 },
+  "Haidpark (AWO)": { rooms:[["studio","17.5 m²"],["wg","Maisonette flats for 4, 7 or 8; each room has its own WC and shower, kitchen shared"]], walk:[340,"Fröttmaning"], campus:15 },
+  "Heidemannstraße": { rooms:[["studio","227 places"],["wg","Room in a 2-person flat · 48 places"]],
+    conn:{ st:"Kieferngarten", door:2, steps:[["bus","180 · 178 · 182","Paul-Hindemith-Allee → Kieferngarten","2–3 min"]], alt:"Or walk ≈ 8 min." }, campus:18 },
+  "GLH": { rooms:[["part","127 single rooms ≈ 15 m² with own shower and WC; 12 shared kitchens"]], walk:[365,"Kieferngarten"], campus:16 },
+  "Josef-Wirth-Weg": { rooms:[["studio","188 places"]],
+    conn:{ st:"Studentenstadt", door:8, steps:[["walk","","to the stop Josef-Wirth-Weg","2 min"],["bus","181","Josef-Wirth-Weg → Studentenstadt","5 min · about every 10 min"]], alt:"Or bus 182 to U6 Kieferngarten (6 min)." }, campus:26 },
+  "Unity Alpha": { rooms:[["studio","23 m², terrace"]],
+    conn:{ st:"Studentenstadt", door:7, steps:[["walk","","to the stop Josef-Wirth-Weg","1 min"],["bus","181","Josef-Wirth-Weg → Studentenstadt","5 min · about every 10 min"]], alt:"Or bus 182 to U6 Kieferngarten (6 min)." }, campus:25 },
+  "Unity Beta": { rooms:[["studio","19–45 m², most with balcony or roof deck"]],
+    conn:{ st:"Studentenstadt", door:8, steps:[["walk","","to the stop Josef-Wirth-Weg","3 min"],["bus","181","Josef-Wirth-Weg → Studentenstadt","5 min · about every 10 min"]], alt:"Or bus 182 to U6 Kieferngarten (6 min)." }, campus:26 },
+  "Helmut-Kamm-Haus": { rooms:[["studio","117 apartments, 20–21 m²; plus one shared kitchen per floor"]],
+    conn:{ st:"Studentenstadt", door:17, steps:[["walk","","to the stop Emmerigweg","9 min"],["bus","181","Emmerigweg → Studentenstadt","4 min · about every 10 min"]], alt:"Or bus 182 to U6 Kieferngarten." }, campus:34 },
+  "Spengelhof": { rooms:[["wg","46 single rooms of 11–18 m² in flats for 5–8; one floor for women only"],["wg","3 double rooms from 20 m²"]],
+    conn:{ st:"Studentenstadt", door:14, steps:[["walk","","to the stop Emmerigweg","7 min"],["bus","181","Emmerigweg → Studentenstadt","4 min · about every 10 min"]], alt:"Or bus 182 to U6 Kieferngarten." }, campus:31 },
+  "NP3": { rooms:[["studio","per residents' reviews"]], walk:[340,"Freimann"], campus:19 },
+  "My Room Active": { rooms:[["unk","Apartments; layout not confirmed"]], walk:[638,"Freimann"], walkAlt:"Or bus 181 from Floriansmühlstraße to Studentenstadt (3 min).", campus:22 },
+  "Berzeliusstraße": { rooms:[["studio","≈ 20 m², 5 categories by balcony or terrace"]], walk:[347,"Freimann"], campus:19 },
+  "Studentenstadt": { rooms:[["wg","462 places · 8–20 m²"],["part","264 places"],["studio","282 places"]], walk:[365,"Studentenstadt"], campus:20 },
+  "Max-Bill-Straße": { rooms:[["studio","104 places"],["wg","Room in a flat for 3 or 6 · 36 places"]],
+    conn:{ st:"Studentenstadt", door:7, steps:[["walk","","to the stop Max-Bill-Straße","2 min"],["bus","177","Max-Bill-Straße → Studentenstadt","4 min · every 10 min"]], alt:"Or walk ≈ 12 min to U6 Studentenstadt or Alte Heide." }, campus:26 },
+  "Ludwigskolleg": { rooms:[["room","127 rooms with own washbasin; shower and WC on the corridor"],["part","38 rooms with own shower and WC"]], walk:[349,"Nordfriedhof"], campus:24 },
+  "Biederstein": { rooms:[["wg","137 places"],["studio","33 places"]], walk:[650,"Dietlindenstraße"], campus:30 },
+  "Deutsche Burse": { rooms:[["room","84 rooms of 10–20 m² with washbasin; showers, WCs and kitchen on each floor"]], walk:[717,"Münchner Freiheit"], campus:32 },
+  "Pater-Rupert-Mayer": { rooms:[["room","91 rooms; reviews mention shared kitchen and bath"]], walk:[730,"Münchner Freiheit"], campus:33 },
+  "Felsennelkenanger": { rooms:[["wg","Room in a flat for 3–5 · 198 places"],["wg","Room in a flat for 3–10, bath shared by two · 112 places"],["part","216 places"]],
+    conn:{ st:"Münchner Freiheit", door:17, steps:[["walk","","to U2 Dülferstraße","5 min"],["u2","U2","Dülferstraße → Scheidplatz","7 min"],["u3","U3","Scheidplatz → Münchner Freiheit","2 min"]], alt:"Or bus 170 to U6 Kieferngarten (20 min ride)." }, campus:41 },
+  "Uni Apart Zwillingstr.": { rooms:[["studio","\"Studio L\": own bath, large kitchenette"]],
+    conn:{ st:"Studentenstadt", door:20, steps:[["walk","","to the stop Curt-Mezger-Platz","4 min"],["bus","177","Curt-Mezger-Platz → Studentenstadt","14 min · every 10 min"]], alt:"Or walk 8 min to U2 Milbertshofen, change to the U3 at Scheidplatz, then the U6 at Münchner Freiheit." }, campus:38 },
+  "Uni Apart Schleißh.": { rooms:[["studio","≈ 30 m²"]],
+    conn:{ st:"Studentenstadt", door:15, steps:[["bus","177","Curt-Mezger-Platz (at the door) → Studentenstadt","14 min · every 10 min"]], alt:"Or walk 7 min to U2 Milbertshofen, change to the U3 at Scheidplatz, then the U6 at Giselastraße or Münchner Freiheit." }, campus:34 },
+  "Olympisches Dorf": { rooms:[["studio","bungalows and high-rise; every type has its own kitchenette and bath"],["wg","Room in a 2-person flat · 80 places"]],
+    conn:{ st:"Münchner Freiheit", door:13, steps:[["walk","","to U3 Olympiazentrum","6 min"],["u3","U3","Olympiazentrum → Münchner Freiheit","5 min · every 5 min"]], alt:"Some U3 trips are better to change at Giselastraße instead." }, campus:37 },
+  "Marchionini": { rooms:[["studio","84 hexagonal rooms of 20 m² with own bath and kitchenette; shared kitchen too"]],
+    conn:{ st:"Münchner Freiheit", door:16, steps:[["walk","","to U3 Petuelring","8 min"],["u3","U3","Petuelring → Münchner Freiheit","4 min · every 5 min"]], alt:"Some U3 trips are better to change at Giselastraße instead." }, campus:40 }
+};
+DORMS.forEach(d => Object.assign(d, EXTRA[d.short] || {}));
 
 const COL = { stwm:"var(--stwm)", eswm:"var(--eswm)", priv:"var(--priv)" };
 const $ = id => document.getElementById(id);
@@ -680,6 +764,63 @@ if (document.fonts) document.fonts.ready.then(() => { markers.forEach(m => m.get
 let partMarkers = [];
 function clearParts() { partMarkers.forEach(m => m.remove()); partMarkers = []; }
 
+const ROOM = {
+  studio: ["Studio", "own kitchen · own bath"],
+  part:   ["Room + own bath", "shared kitchen"],
+  wg:     ["WG room", "kitchen and bath shared in the flat"],
+  room:   ["Corridor room", "shared kitchen and bath on the floor"],
+  unk:    ["Not confirmed", ""]
+};
+function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+function walkInfo(d) {
+  if (d.walk) return { m: d.walk[0], st: d.walk[1], min: Math.max(1, Math.round(d.walk[0] / 80)) };
+  const m = Math.round(d.u6.m * 1.25 / 10) * 10;
+  return { m, st: d.u6.n, min: Math.max(1, Math.round(m / 80)), est: true };
+}
+function renderRooms(d) {
+  $("p-rooms").replaceChildren(...(d.rooms || []).map(([k, note]) => {
+    const li = el("li");
+    const head = el("div", "rt-head");
+    head.append(el("span", "rt " + k, ROOM[k][0]));
+    if (ROOM[k][1]) head.append(el("span", "rt-k", ROOM[k][1]));
+    li.append(head);
+    if (note) li.append(el("div", "rt-n", note));
+    return li;
+  }));
+}
+function badge(kind, label) {
+  if (kind === "walk") {
+    const b = el("span", "bd walk"); b.setAttribute("aria-label", "Walk");
+    b.innerHTML = '<svg width="11" height="13" viewBox="0 0 11 13" aria-hidden="true"><circle cx="6" cy="1.8" r="1.6" fill="currentColor"/><path d="M5.2 4.2 3.4 7.6M5.2 4.2l1.1 3.6 2.4 1.4M5.8 7.8 4.6 12M6.3 7.8l1.9 4.2M5.2 4.2 7.8 5.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/></svg>';
+    return b;
+  }
+  return el("span", "bd " + kind, kind === "bus" ? "Bus " + label : label);
+}
+function renderConn(d, w) {
+  const ol = $("p-conn"); const rows = [];
+  if (d.conn) {
+    d.conn.steps.forEach(([k, line, txt, time]) => {
+      const li = el("li"); li.append(badge(k, line));
+      const b = el("div", "cn-t"); b.append(el("span", null, txt)); if (time) b.append(el("span", "cn-time", time));
+      li.append(b); rows.push(li);
+    });
+  } else {
+    const li = el("li"); li.append(badge("walk"));
+    const b = el("div", "cn-t"); b.append(el("span", null, `to U6 ${w.st}`)); b.append(el("span", "cn-time", `${w.est ? "≈ " : ""}${w.min} min · ${fmtDist(w.m)}`));
+    li.append(b); rows.push(li);
+  }
+  const li = el("li", "cn-end"); li.append(badge("u6", "U6"));
+  const b = el("div", "cn-t"); b.append(el("span", null, `${d.conn ? d.conn.st : w.st} → Garching-Forschungszentrum`)); li.append(b); rows.push(li);
+  ol.replaceChildren(...rows);
+  const sum = [];
+  if (d.conn) sum.push(`≈ ${d.conn.door} min from the door to the U6 with a good connection.`);
+  if (d.conn && d.conn.alt) sum.push(d.conn.alt);
+  if (!d.conn && d.walkAlt) sum.push(d.walkAlt);
+  if (d.area === "garching") sum.push("Buses 230, 292, X205 and 690 also go straight to the campus.");
+  $("p-conn-alt").textContent = sum.join(" ");
+  $("p-campus").textContent = d.campus ? `≈ ${d.campus} min door to door to Garching-Forschungszentrum` : "";
+}
+
 function show(i, fly) {
   cur = (i + DORMS.length) % DORMS.length;
   panelOpen = true;
@@ -693,7 +834,12 @@ function show(i, fly) {
   $("p-meta").textContent = `${d.rating} · ${d.street}`;
   $("p-u6").innerHTML = "";
   const u = document.createElement("span"); u.className = "u"; u.textContent = "U"; u.setAttribute("aria-hidden", "true");
-  const t = document.createElement("span"); t.textContent = `Nearest U6: ${d.u6.n} · ${fmtDist(d.u6.m)} in a straight line`;
+  const t = document.createElement("span");
+  const w = walkInfo(d);
+  if (d.conn) {
+    const via = d.conn.steps.filter(s => s[0] !== "walk").map(s => (s[0] === "bus" ? "Bus " : "") + s[1]).join(" + ");
+    t.textContent = `U6 ${d.conn.st} via ${via} · ≈ ${d.conn.door} min`;
+  } else t.textContent = `U6 ${w.st} · ≈ ${w.min} min walk`;
   $("p-u6").append(u, t);
   $("p-dir").href = `https://www.openstreetmap.org/directions?route=%3B${d.lat}%2C${d.lng}#map=16/${d.lat}/${d.lng}`;
   $("p-web").href = d.url;
@@ -703,6 +849,7 @@ function show(i, fly) {
   $("p-how").textContent = d.how; $("p-when").textContent = d.when;
   $("p-rent").textContent = d.rent; $("p-wait").textContent = d.wait;
   $("p-note").textContent = d.note;
+  renderRooms(d); renderConn(d, w);
 
   // parts
   clearParts();
