@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Garching &amp; München-Nord Student Dorms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+<style>
+/* Full-bleed map with one floating detail panel and a pager, like a place card. */
+:root {
+  --bg: #f4f3ef; --panel: #ffffff; --raise: #f1efe9; --ink: #1f1e1b; --muted: #6d6a62; --line: #e4e1d8;
+  --stwm: #c2603e; --eswm: #3f6d8f; --priv: #5d7a55; --good: #2f7a4b; --warn: #a8701a;
+  --shadow: 0 8px 30px rgba(0,0,0,.12);
+  --font: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Geist Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15171a; --panel: #1c1d20; --raise: #2a2b2f; --ink: #ecebe6; --muted: #a29e94; --line: #34353a;
+    --stwm: #e0805c; --eswm: #79a6c8; --priv: #8fb185; --good: #6cc08d; --warn: #e0b05a;
+    --shadow: 0 8px 30px rgba(0,0,0,.45);
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 14px/1.5 var(--font); -webkit-font-smoothing: antialiased; }
+#map { position: absolute; inset: 0; }
+
+/* markers: the root element is left untouched so MapLibre can position it */
+.mk-in {
+  display: block; padding: 4px 10px; border-radius: 9px; cursor: pointer;
+  background: var(--panel); color: var(--ink); border: 1.5px solid var(--c);
+  font: 500 12px/1.3 var(--font); white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,.18);
+  transition: transform .15s, background .15s, color .15s;
+}
+.mk-in:hover { transform: translateY(-1px); }
+.mk.north .mk-in { border-style: dashed; background: var(--raise); }
+.mk.north.on .mk-in { border-style: solid; background: var(--c); }
+.mk.on { z-index: 3; }
+.mk.on .mk-in { background: var(--c); color: var(--panel); transform: scale(1.08); }
+
+
+/* U-Bahn stations: blue square U, label beside it */
+.stn { pointer-events: none; }
+.stn-in { display: flex; align-items: center; gap: 5px; transform: translateX(calc(50% - 9px)); }
+.stn .u {
+  width: 18px; height: 18px; border-radius: 4px; background: #0065ae; color: #fff;
+  font: 700 12px/18px var(--font); text-align: center; box-shadow: 0 0 0 2px var(--panel);
+}
+.stn .s {
+  font-size: 11.5px; font-weight: 500; color: #0065ae; white-space: nowrap;
+  text-shadow: 0 0 3px var(--panel), 0 0 3px var(--panel), 0 0 3px var(--panel);
+}
+@media (prefers-color-scheme: dark) { .stn .s { color: #7fb2e5; } }
+body.far .stn .s { display: none; }
+.sw.u6 { width: 14px; height: 4px; border-radius: 2px; background: #0065ae; }
+.legend .ux { display: inline-grid; place-items: center; width: 14px; height: 14px; border-radius: 3px; background: #0065ae; color: #fff; font: 700 9px/1 var(--font); }
+
+/* legend */
+.legend {
+  position: absolute; top: 12px; left: 12px; z-index: 2; display: grid; gap: 4px;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px;
+  font-size: 12px; color: var(--muted); box-shadow: var(--shadow);
+}
+.legend b { color: var(--ink); font-weight: 600; font-size: 13px; }
+.legend span { display: flex; align-items: center; gap: 8px; }
+.sw { width: 10px; height: 10px; border-radius: 3px; background: var(--c); }
+.sw.ln { background: transparent; border: 1.5px solid var(--muted); width: 14px; height: 10px; }
+.sw.ln.dash { border-style: dashed; }
+.areas { display: flex; gap: 6px; margin-top: 4px; }
+.areas button { font: 500 12px var(--font); padding: 4px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--raise); color: var(--ink); cursor: pointer; }
+
+/* panel */
+.panel {
+  position: absolute; top: 12px; right: 12px; bottom: 12px; width: 350px; z-index: 4;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow);
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.panel[hidden] { display: none; }
+.p-head { position: relative; padding: 18px 18px 14px; border-top: 4px solid var(--c); display: grid; gap: 4px; }
+.close {
+  position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; border-radius: 8px;
+  border: 0; background: var(--raise); color: var(--ink); cursor: pointer; display: grid; place-items: center;
+}
+.op { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--c); font-weight: 600; }
+h1 { margin: 0; font-size: 19px; font-weight: 600; letter-spacing: -.01em; padding-right: 40px; text-wrap: balance; }
+.meta { color: var(--muted); font-size: 13px; }
+.actions { display: flex; gap: 8px; margin-top: 10px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 9px;
+  background: var(--raise); color: var(--ink); text-decoration: none; font-weight: 500; font-size: 13px;
+  border: 1px solid var(--line);
+}
+.btn.primary { background: var(--ink); color: var(--panel); border-color: var(--ink); }
+.btn.icon { width: 34px; padding: 0; justify-content: center; }
+.btn:hover { filter: brightness(1.06); }
+.p-body { flex: 1; overflow-y: auto; padding: 4px 18px 16px; display: grid; gap: 14px; align-content: start; }
+.label { font-size: 12px; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 11.5px; padding: 2px 9px; border-radius: 999px; border: 1px solid currentColor; }
+.chip.ok { color: var(--good); } .chip.check { color: var(--warn); }
+dl { margin: 0; display: grid; grid-template-columns: 54px 1fr; gap: 8px 12px; }
+dt { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); padding-top: 2px; }
+dd { margin: 0; font-size: 13.5px; }
+.num { font-family: var(--mono); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.note { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 12px; margin: 0; }
+.rev { display: grid; gap: 10px; border-top: 1px solid var(--line); padding-top: 12px; }
+.rv-row { display: grid; grid-template-columns: 74px 1fr; gap: 10px; align-items: start; }
+.rv-k { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; padding-top: 2px; }
+.rv-k.good { color: var(--good); } .rv-k.other { color: var(--muted); } .rv-k.bad { color: var(--warn); }
+.rev ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 13px; }
+.rev li { padding-left: 12px; position: relative; }
+.rev li::before { content: ""; position: absolute; left: 0; top: .6em; width: 5px; height: 5px; border-radius: 50%; background: var(--muted); }
+.rev li.none { padding-left: 0; color: var(--muted); }
+.rev li.none::before { display: none; }
+.rv-basis { font-size: 12px; color: var(--muted); }
+.p-foot { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-top: 1px solid var(--line); }
+.p-foot button {
+  width: 36px; height: 36px; border-radius: 9px; border: 1px solid var(--line); background: var(--raise);
+  color: var(--ink); cursor: pointer; display: grid; place-items: center;
+}
+.count { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+button:focus-visible, a:focus-visible, .mk-in:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+.maplibregl-ctrl-group { background: var(--panel) !important; border: 1px solid var(--line); box-shadow: var(--shadow) !important; }
+.maplibregl-ctrl-group button + button { border-top-color: var(--line) !important; }
+@media (prefers-color-scheme: dark) { .maplibregl-ctrl-icon { filter: invert(1); } }
+
+@media (max-width: 640px) {
+  .panel { top: auto; left: 8px; right: 8px; bottom: 8px; width: auto; height: 56%; }
+  .legend { top: 8px; left: 8px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div id="map" aria-label="Map of student dorms in Garching"></div>
+
+<div class="legend" aria-label="Legend">
+  <b>Student dorms · Garching &amp; München-Nord</b>
+  <span><i class="sw" style="--c:var(--stwm)"></i>Waiting list · STWM</span>
+  <span><i class="sw" style="--c:var(--eswm)"></i>Selection · ESWM</span>
+  <span><i class="sw" style="--c:var(--priv)"></i>Direct · private</span>
+  <span><i class="ux">U</i><i class="sw u6"></i>U6 line and stations</span>
+  <span><i class="sw ln"></i>Solid: Garching</span>
+  <span><i class="sw ln dash"></i>Dashed: München-Nord</span>
+  <div class="areas">
+    <button type="button" id="go-g">Garching</button>
+    <button type="button" id="go-n">München-Nord</button>
+  </div>
+</div>
+
+<section class="panel" id="panel" aria-live="polite">
+  <div class="p-head">
+    <button class="close" id="close" type="button" aria-label="Close panel">
+      <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+    <div class="op" id="p-op"></div>
+    <h1 id="p-name"></h1>
+    <div class="meta" id="p-meta"></div>
+    <div class="actions">
+      <a class="btn primary" id="p-dir" target="_blank" rel="noopener">Directions</a>
+      <a class="btn icon" id="p-web" target="_blank" rel="noopener" aria-label="Official page" title="Official page">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.3" stroke="currentColor" stroke-width="1.4"/><path d="M1.7 8h12.6M8 1.7c1.8 1.9 2.6 4 2.6 6.3S9.8 12.4 8 14.3C6.2 12.4 5.4 10.3 5.4 8S6.2 3.6 8 1.7z" stroke="currentColor" stroke-width="1.4"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="p-body">
+    <div class="label">Can you apply?</div>
+    <div class="chips" id="p-chips"></div>
+    <dl>
+      <dt>How</dt><dd id="p-how"></dd>
+      <dt>When</dt><dd id="p-when"></dd>
+      <dt>Rent</dt><dd class="num" id="p-rent"></dd>
+      <dt>Wait</dt><dd class="num" id="p-wait"></dd>
+    </dl>
+    <p class="note" id="p-note"></p>
+    <div class="rev">
+      <div class="label">What reviewers say</div>
+      <div class="rv-row"><span class="rv-k good">Liked</span><ul id="p-good"></ul></div>
+      <div class="rv-row"><span class="rv-k bad">Watch out</span><ul id="p-bad"></ul></div>
+      <div class="rv-basis" id="p-basis"></div>
+      <div class="rv-row"><span class="rv-k other">Elsewhere</span><ul id="p-other"></ul></div>
+    </div>
+  </div>
+  <div class="p-foot">
+    <button type="button" id="prev" aria-label="Previous dorm"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3M7 4L3 8l4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <span class="count" id="count"></span>
+    <button type="button" id="next" aria-label="Next dorm"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+</section>
+
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script>
+const DORMS = [
+  { name:"Garching I", short:"Garching I", street:"Jochbergweg 1–7", op:"STWM", ch:"stwm", lng:11.66009, lat:48.25274, rating:"5.0 ★ (2)",
+    chips:[["ok","Yes, from 15 May 2027"],["check","Earlier? Ask STWM"]],
+    how:"STWM online application, choose up to 3 dorms", when:"Window for the winter semester opens 15 May",
+    rent:"€385.90–403.90 warm · room in a WG", wait:"≈ 3 semesters",
+    note:"Max. 4 semesters on a Master's, 7 on a Bachelor's. Deposit is 3× base rent. In-house pub.",
+    other:[],
+    rev:{ good:[], bad:[], basis:"no written reviews, only 2 star ratings." },
+    url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/garching-oberschleissheim/jochbergweg-garching-i/" },
+  { name:"Garching II", short:"Garching II", street:"Enzianstraße 1+3", op:"STWM", ch:"stwm", lng:11.65552, lat:48.25780, rating:"4.0 ★ (8)",
+    chips:[["ok","Yes, from 15 May 2027"],["check","Earlier? Ask STWM"]],
+    how:"STWM online application, choose up to 3 dorms", when:"Window for the winter semester opens 15 May",
+    rent:"€340.00–369.90 warm · 2-person WG, Teilapartment, Einzelapartment", wait:"≈ 4–5 semesters",
+    note:"Glass outer walls, access by outdoor walkway. Max. 4 semesters on a Master's. Deposit is 3× base rent.",
+    other:[],
+    rev:{ good:["Quiet; the basement party room is rarely used","Bright, roomy, well-designed rooms","Fast internet included","Bar and cinema room, storage basement","Bus at the door, U-Bahn 8–10 min walk, supermarkets opposite"],
+          bad:["Top (3rd) floor gets very hot in summer"],
+          basis:"3 written reviews, newest 2 months ago." },
+    url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/garching-oberschleissheim/enzianstrasse-garching-ii/" },
+  { name:"Hochschulhaus Garching", short:"HHG", street:"Enzianstraße 5+7", op:"ESWM", ch:"eswm", lng:11.65516, lat:48.25701, rating:"4.5 ★ (50)",
+    chips:[["ok","Yes"],["check","Enrolment in Munich needed at move-in"]],
+    how:"ESWM online form, only one ESWM house per person", when:"Deadline 30 May for the winter semester",
+    rent:"from €547 · 20.6–24 m² apartment", wait:"No queue. Chosen or not, each semester",
+    note:"Home address must be outside MVV zones M–4. Stay 1–6 semesters. Tutor programme and bar evenings.",
+    other:["Residents run their own house app and wiki for dorm life (Google Play, HHG wiki)","Mix of students, PhDs and university staff living together (ESWM)","The application form expects residents to take on responsibility in the community (ESWM form)"],
+    rev:{ good:["Strong community: bar nights, tutor events, movie nights","Quiet and safe","Supermarkets and U6 close by","Rent seen as fair; friendly, helpful residents"],
+          bad:["Apartments are small","No sofa or TV provided"],
+          basis:"13 written reviews, newest about a year ago." },
+    url:"https://eswm.de/haeuser/hhg" },
+  { name:"Studentenhaus DOMINO", short:"DOMINO", street:"Untere Straßäcker 21", op:"Private", ch:"priv", lng:11.65772, lat:48.25800, rating:"4.6 ★ (23)",
+    chips:[["ok","Yes"],["check","Rent not published"]],
+    how:"Email the application form to studentenhaus@domino-bau.de", when:"No published deadline",
+    rent:"Not published · ask", wait:"Not published · ask",
+    note:"69 one-room and 13 two-room apartments. Students, assistants, PhDs and university staff only.",
+    other:["A resident subletting in 2020: bright room with balcony, TUM visible from the window, park nearby for jogging, grilling on the balcony (WG-Gesucht)"],
+    rev:{ good:["Clean, calm and well maintained","Walking distance to TUM and the town centre","Supermarkets at the corner","Fast internet"],
+          bad:[],
+          basis:"8 written reviews, newest 9 months ago. Most are 6–9 years old." },
+    url:"https://www.studentenhaus-domino.de/bewerbungsbogen.htm" },
+  { name:"Student Living Campus", short:"SLC 1–3", street:"Freisinger Landstraße 45a, 47, 47a", op:"Private", ch:"priv", lng:11.65225, lat:48.25672, rating:"3.5 ★ (41)",
+    chips:[["ok","Yes"],["check","Deposit complaints"]],
+    how:"Rental inquiry form on apartments-garching.de, or info@jost-verwaltung.de", when:"No published deadline",
+    rent:"from €940 all-in · ≈ 22–48 m²", wait:"Not published · ask",
+    note:"SLC 1, 2 and 3, run by Jost Verwaltung (same as GLC).",
+    other:["Two reviews from 2012: modern, almost always fully rented, residents play football and grill together (yopi.de, very old)"],
+    rev:{ good:["Next to Rewe and Lidl, close to the university","Pool, football pitch, beach volleyball, small gym","Well kept, private storage room per apartment"],
+          bad:["Deposit returns: several waited months, some went to court","Expensive (one cites about €900 for 28 m²)","Slow email replies; one finds the caretaker rude"],
+          basis:"17 written reviews. The newest real ones (3–4 months ago) are about deposit disputes." },
+    url:"https://apartments-garching.de/en/prices" },
+  { name:"Garching Living Center", short:"GLC", street:"Einsteinstraße 3", op:"Private", ch:"priv", lng:11.64606, lat:48.25072, rating:"4.0 ★ (77)",
+    chips:[["ok","Yes"],["check","Deposit complaints"]],
+    how:"Rental inquiry form on apartments-garching.de, or info@jost-verwaltung.de", when:"No published deadline",
+    rent:"€1,220 all-in", wait:"Not published · ask",
+    note:"Run by Jost Verwaltung (same as SLC).",
+    other:["A resident subletting: supermarket, drugstore and pharmacy in the complex; U-Bahn and town centre 5 min away (WG-Gesucht)"],
+    rev:{ good:["Modern furnished apartments with balcony","Gym, sauna, rooftop pool, cinema, kitchens with billiards","Shops in the building, U-Bahn within walking distance"],
+          bad:["High price per m²","Deposit held back for months; strict move-out checks and cleaning fees","Extra electricity charges (one parent says the contract states this)","Defects from move-in left unfixed (review 9 months ago)"],
+          basis:"33 written reviews, newest 2 months ago." },
+    url:"https://apartments-garching.de/en/prices" },
+  { area:"north", name:"Josef-Wirth-Weg", short:"Josef-Wirth-Weg", street:"Josef-Wirth-Weg 19, München", op:"STWM", ch:"stwm", lng:11.62551, lat:48.20004, rating:"3.7 ★ (16)",
+    chips:[["ok","Yes, from 15 May 2027"],["check","Not in Garching"]],
+    how:"STWM online application, choose up to 3 dorms", when:"Window for the winter semester opens 15 May",
+    rent:"€471.90–538.30 warm · Einzelapartment", wait:"≈ 2–3 semesters",
+    note:"Listed under München, so it may not combine with Garching I/II in one application. 8 km to campus, U6 Kieferngarten.",
+    other:["Residents subletting (2023): 16 m² apartment, common room on every floor, bus stop almost at the door, quiet residential area (WG-Gesucht)","The house brochure describes a resident-run bar (Wohnheimtreff), a study room and a Facebook group (jww19.de brochure)"],
+    rev:{ good:["Quiet and clean","Lidl nearby","Bus 181 to Studentenstadt"],
+          bad:["Rent high for a dorm","Repairs slow; internet and heating problems (one says no working heating in winter)","Bus 181 takes a long detour; a bike helps"],
+          basis:"7 written reviews, newest about a year ago." },
+    url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/munich/north-munich/hall-of-residence-josef-wirth-weg/" }
+,
+  { area:"north", name:"Heidemannstraße", short:"Heidemannstraße", street:"Paul-Hindemith-Allee 4+6, Karl-Köglsperger-Str. 3–9", op:"STWM", ch:"stwm", lng:11.60621, lat:48.20040, rating:"No Google listing",
+    chips:[["ok","Yes, from 15 May 2027"],["check","May not combine with Garching picks"]],
+    how:"STWM online application, choose up to 3 dorms", when:"Window for the winter semester opens 15 May",
+    rent:"€362.80–416.80 warm · Einzelapartment (2er-WG rooms €335.90 / €380.90)", wait:"≈ 2–3 semesters",
+    note:"Almost only studio apartments. U6 Kieferngarten. Max. 4 semesters on a Master's. Deposit is 3× base rent.",
+    other:["STWM: residents can choose to join community life or keep to themselves (STWM)"],
+    rev:{ good:[], bad:[], basis:"no listing for the dorm itself, so no reviews." },
+    url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/munich/north-munich/hall-of-residence-heidemannstrasse/" },
+  { area:"north", name:"Studentenstadt Freimann", short:"Studentenstadt", street:"Studentenstadt, 80805 München", op:"STWM", ch:"stwm", lng:11.61135, lat:48.18307, rating:"4.2 ★ (115)",
+    chips:[["ok","Yes, from 15 May 2027"],["check","Renovation ongoing"]],
+    how:"STWM online application, choose up to 3 dorms", when:"Window for the winter semester opens 15 May",
+    rent:"€283.20–480.70 warm · room in a WG (apartments €401.10–505.50)", wait:"≈ 3–4 semesters",
+    note:"Germany's largest student housing complex, next to the Englischer Garten, U6 Studentenstadt. Some houses are being renovated.",
+    other:["Houses 9 and 12 are being renovated by BayernHeim: 1,025 apartments, finished 2027–2028 (Bavarian government, Apr 2026)","Goldbeck was hired in Nov 2026 to renovate houses 10 and 13 (konii.de)","STWM has been doing urgent repairs in the old part (kitchens, showers, common rooms) since Feb 2026 (STWM)"],
+    rev:{ good:["Cheap for Munich, U6 right at the door","Next to the Englischer Garten; sports hall and restaurant","Active community, rooftop events on weekends"],
+          bad:["Dirty, run-down kitchens; one review mentions insects","Rooms sometimes need cleaning at move-in","Student-run services keep irregular hours","Empty buildings under renovation make parts feel odd"],
+          basis:"10 written reviews read (of 115 ratings), newest 5 months ago." },
+    url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/" },
+  { area:"north", name:"Felsennelkenanger", short:"Felsennelkenanger", street:"Felsennelkenanger 7–21, 80937 München", op:"STWM", ch:"stwm", lng:11.56397, lat:48.21001, rating:"4.1 ★ (48)",
+    chips:[["ok","Yes, from 15 May 2027"],["check","On the U2, not the U6"]],
+    how:"STWM online application, choose up to 3 dorms", when:"Window for the winter semester opens 15 May",
+    rent:"€378.10–390.30 warm · room in a 3–5er WG (Teilapartment €378.40–420.30)", wait:"≈ 1–2 semesters",
+    note:"Shortest STWM wait in this area. U2 Dülferstraße, so Garching needs a change of line.",
+    other:[],
+    rev:{ good:["Helpful tutors and caretaker","Clean; cheap bar, gym, rooftop terrace, study room","Penny, Aldi and a mall nearby; fair rent"],
+          bad:["Noise and parties, especially near ground-floor common rooms","Thin walls; one recent review says food was taken from the shared fridge","Single apartments are very small; kitchens always shared"],
+          basis:"8 written reviews read (of 48 ratings), newest 5 months ago." },
+    url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/" },
+  { area:"north", name:"Georg-Lanzenstiel-Haus", short:"GLH", street:"Kieferngartenstraße 12, 80939 München", op:"ESWM", ch:"eswm", lng:11.61215, lat:48.20113, rating:"4.8 ★ (45)",
+    chips:[["ok","Yes"],["check","Only one ESWM house: GLH or HHG"]],
+    how:"ESWM online form, only one ESWM house per person", when:"Deadline 30 May for the winter semester",
+    rent:"from €430 · single room", wait:"No queue. Chosen or not, each semester",
+    note:"127 single rooms. Same ESWM rules as HHG: home address outside MVV zones M–4, stay 1–6 semesters.",
+    other:[],
+    rev:{ good:["Very strong community; warmly run","Low rent; practical rooms with their own bathroom","Several call it the best part of their studies"],
+          bad:["Hard to get a place (one compares it to winning the lottery)"],
+          basis:"11 written reviews read, newest 3 months ago." },
+    url:"https://eswm.de/en" },
+  { area:"north", name:"Unity Alpha", short:"Unity Alpha", street:"Josef-Wirth-Weg 21, 80939 München", op:"Private", ch:"priv", lng:11.62586, lat:48.19963, rating:"4.0 ★ (65)", nudge:24,
+    chips:[["ok","Yes"],["check","Booking route not published"]],
+    how:"No public application page found; listed on rental platforms; private sublets on WG-Gesucht", when:"No published deadline",
+    rent:"≈ €1,200 on rental platforms · 23 m² (a 2026 sublet asked €950)", wait:"Not published · ask",
+    note:"Private apartment complex right next to Josef-Wirth-Weg. Platform listings ask a €2,700 deposit.",
+    other:["A resident subletting in 2026: own bathroom, terrace and kitchenette; free study rooms, bike cellar and washers; quiet atmosphere (WG-Gesucht)"],
+    rev:{ good:["Clean, well designed and well maintained","Very helpful caretaker and manager","Courtyards for volleyball and BBQ; Aldi and bus stop nearby"],
+          bad:["Rent has gone up in recent years","Heating a bit weak","Washers €2 per load; buses every 20 min"],
+          basis:"about 6 written reviews read (of 65 ratings), newest 1 month ago." },
+    url:"https://www.wg-gesucht.de/1-zimmer-wohnungen-in-Muenchen-Schwabing-Freimann.14220170.html" },
+  { area:"north", name:"Helmut-Kamm-Haus", short:"Helmut-Kamm-Haus", street:"Maiglöckchenstraße 6, 80939 München", op:"EWV", ch:"eswm", lng:11.62948, lat:48.19472, rating:"4.8 ★ (17)",
+    chips:[["ok","Yes"],["check","Rent not published"]],
+    how:"Contact the Evangelischer Waisenhausverein via ewv-muenchen.de", when:"No published deadline",
+    rent:"Not published · ask", wait:"Not published · ask",
+    note:"New building run by the Evangelischer Waisenhausverein München, a church-related association.",
+    other:[],
+    rev:{ good:["Calm area, good for students","Clean, spacious, functional studios"],
+          bad:["A bit far from the bus stop"],
+          basis:"3 written reviews, newest 2 years ago." },
+    url:"https://ewv-muenchen.de/" }
+
+];
+const COL = { stwm:"var(--stwm)", eswm:"var(--eswm)", priv:"var(--priv)" };
+const $ = id => document.getElementById(id);
+const dark = matchMedia("(prefers-color-scheme: dark)");
+const STYLE_LIGHT = "https://tiles.openfreemap.org/styles/positron";
+const STYLE_DARK  = "https://tiles.openfreemap.org/styles/dark";
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const map = new maplibregl.Map({
+  container: "map", style: dark.matches ? STYLE_DARK : STYLE_LIGHT,
+  bounds: [[11.642, 48.2485], [11.664, 48.2605]], fitBoundsOptions: { padding: { top: 60, bottom: 60, left: 60, right: 400 } },
+  attributionControl: { compact: true }, dragRotate: false, pitchWithRotate: false
+});
+map.touchZoomRotate.disableRotation();
+map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-left");
+map.addControl(new maplibregl.ScaleControl({ unit: "metric" }), "bottom-left");
+// if the dark style is unavailable, fall back to the light one
+let fellBack = false;
+map.on("error", () => { if (!fellBack && dark.matches && !map.isStyleLoaded()) { fellBack = true; map.setStyle(STYLE_LIGHT); } });
+dark.addEventListener("change", () => map.setStyle(dark.matches ? STYLE_DARK : STYLE_LIGHT));
+
+
+// U6 track and stations, Studentenstadt to Garching-Forschungszentrum.
+// Geometry from OpenStreetMap route relation 3476787 (U-Bahn U6), simplified. © OpenStreetMap contributors.
+const U6_LINE = [[11.67129,48.2647],[11.67065,48.26285],[11.67002,48.26128],[11.66895,48.25901],[11.66786,48.25726],[11.6674,48.25639],[11.66621,48.2532],[11.66598,48.25272],[11.66547,48.25198],[11.66426,48.25068],[11.66368,48.25024],[11.66295,48.24984],[11.66262,48.24972],[11.6618,48.24952],[11.66076,48.24941],[11.65404,48.24934],[11.64996,48.24948],[11.64706,48.24974],[11.64574,48.24992],[11.63983,48.25097],[11.63868,48.25102],[11.63799,48.25098],[11.63741,48.25093],[11.63626,48.25073],[11.63517,48.25045],[11.6341,48.25003],[11.63301,48.24942],[11.63264,48.24916],[11.63223,48.24885],[11.63173,48.24832],[11.63057,48.24664],[11.6303,48.24611],[11.62834,48.23989],[11.62794,48.23888],[11.62731,48.23772],[11.62486,48.23389],[11.62424,48.2327],[11.62361,48.23116],[11.62167,48.22566],[11.62124,48.22407],[11.62108,48.22331],[11.621,48.22256],[11.62114,48.221],[11.62112,48.22063],[11.62107,48.22022],[11.62087,48.21962],[11.61833,48.21489],[11.61786,48.21409],[11.61713,48.21301],[11.61571,48.21041],[11.61518,48.20924],[11.61302,48.20363],[11.61288,48.20304],[11.61282,48.20221],[11.6129,48.20148],[11.61309,48.20084],[11.61344,48.20023],[11.61369,48.19993],[11.61424,48.19944],[11.61532,48.19865],[11.61568,48.19828],[11.61596,48.19792],[11.61624,48.19736],[11.61637,48.19677],[11.61635,48.19619],[11.6162,48.19567],[11.61494,48.19311],[11.61404,48.19174],[11.6135,48.19067],[11.61331,48.18999],[11.61333,48.18935],[11.61327,48.18902],[11.61295,48.18834],[11.61262,48.18793],[11.61125,48.18664],[11.60994,48.18563],[11.60757,48.18354],[11.60716,48.18313]];
+const U6_STOPS = [["Garching-Forschungszentrum",11.67129,48.2647],["Garching",11.65254,48.24938],["Garching-Hochbrück",11.63106,48.24735],["Fröttmaning",11.6165,48.2119],["Kieferngarten",11.6131,48.20388],["Freimann",11.6142,48.19201],["Studentenstadt",11.60716,48.18313]];
+const U6_COLOR = "#0065ae";
+function addU6() {
+  if (map.getSource("u6")) return;
+  map.addSource("u6", { type: "geojson", data: { type: "Feature", geometry: { type: "LineString", coordinates: U6_LINE } } });
+  map.addLayer({ id: "u6-casing", type: "line", source: "u6", layout: { "line-cap": "round", "line-join": "round" },
+    paint: { "line-color": dark.matches ? "#15171a" : "#ffffff", "line-width": ["interpolate", ["linear"], ["zoom"], 11, 4, 16, 9], "line-opacity": .9 } });
+  map.addLayer({ id: "u6-line", type: "line", source: "u6", layout: { "line-cap": "round", "line-join": "round" },
+    paint: { "line-color": U6_COLOR, "line-width": ["interpolate", ["linear"], ["zoom"], 11, 2, 16, 5] } });
+}
+map.on("style.load", addU6);
+const stnMarkers = U6_STOPS.map(([n, lng, lat]) => {
+  const el = document.createElement("div");
+  el.className = "stn";
+  el.innerHTML = '<span class="stn-in"><span class="u" aria-hidden="true">U</span><span class="s"></span></span>';
+  el.querySelector(".s").textContent = n;
+  el.setAttribute("aria-label", "U6 station " + n);
+  return new maplibregl.Marker({ element: el, anchor: "center" }).setLngLat([lng, lat]).addTo(map);
+});
+const labelZoom = () => document.body.classList.toggle("far", map.getZoom() < 12.6);
+map.on("zoom", labelZoom); labelZoom();
+
+const markers = DORMS.map((d, i) => {
+  const root = document.createElement("div");
+  root.className = "mk" + (d.area === "north" ? " north" : "");
+  const inner = document.createElement("span");
+  inner.className = "mk-in"; inner.textContent = d.short; inner.tabIndex = 0;
+  inner.setAttribute("role", "button"); inner.setAttribute("aria-label", d.name);
+  inner.style.setProperty("--c", COL[d.ch]);
+  inner.addEventListener("click", () => show(i, false));
+  inner.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); show(i, true); } });
+  root.appendChild(inner);
+  if (d.nudge) inner.style.marginTop = d.nudge * 2 + "px";
+  return new maplibregl.Marker({ element: root, anchor: "bottom" }).setLngLat([d.lng, d.lat]).addTo(map);
+});
+
+let cur = 0;
+function show(i, fly) {
+  cur = (i + DORMS.length) % DORMS.length;
+  const d = DORMS[cur];
+  const panel = $("panel");
+  panel.hidden = false;
+  panel.style.setProperty("--c", COL[d.ch]);
+  $("p-op").textContent = d.op + (d.area === "north" ? " · München-Nord" : " · Garching");
+  $("p-name").textContent = d.name;
+  $("p-meta").textContent = `${d.rating} · ${d.street}`;
+  $("p-dir").href = `https://www.openstreetmap.org/directions?route=%3B${d.lat}%2C${d.lng}#map=16/${d.lat}/${d.lng}`;
+  $("p-web").href = d.url;
+  $("p-chips").replaceChildren(...d.chips.map(([k, t]) => { const s = document.createElement("span"); s.className = "chip " + k; s.textContent = t; return s; }));
+  $("p-how").textContent = d.how; $("p-when").textContent = d.when;
+  $("p-rent").textContent = d.rent; $("p-wait").textContent = d.wait;
+  $("p-note").textContent = d.note;
+  const fill = (id, arr) => $(id).replaceChildren(...(arr.length ? arr : ["Nothing mentioned"]).map(x => { const li = document.createElement("li"); li.textContent = x; if (!arr.length) li.className = "none"; return li; }));
+  fill("p-good", d.rev.good); fill("p-bad", d.rev.bad);
+  $("p-other").replaceChildren(...(d.other.length ? d.other : ["Nothing found outside Google Maps"]).map(x => { const li = document.createElement("li"); li.textContent = x; if (!d.other.length) li.className = "none"; return li; }));
+  $("p-basis").textContent = "Google Maps: " + d.rev.basis + " Read Nov 2026.";
+  $("count").textContent = `${cur + 1} of ${DORMS.length}`;
+  markers.forEach((m, j) => m.getElement().classList.toggle("on", j === cur));
+  if (fly) {
+    const narrow = innerWidth <= 640;
+    map.flyTo({ center: [d.lng, d.lat], zoom: Math.max(map.getZoom(), 15),
+      padding: narrow ? { bottom: innerHeight * .56 } : { right: 380 }, duration: reduce ? 0 : 800 });
+  }
+}
+$("prev").addEventListener("click", () => show(cur - 1, true));
+$("next").addEventListener("click", () => show(cur + 1, true));
+$("close").addEventListener("click", () => { $("panel").hidden = true; markers.forEach(m => m.getElement().classList.remove("on")); });
+const pad = innerWidth <= 640 ? { top: 40, bottom: innerHeight * .58, left: 30, right: 30 } : { top: 60, bottom: 60, left: 60, right: 400 };
+$("go-g").addEventListener("click", () => map.fitBounds([[11.642, 48.2485], [11.664, 48.2605]], { padding: pad, duration: reduce ? 0 : 900 }));
+$("go-n").addEventListener("click", () => map.fitBounds([[11.558, 48.180], [11.634, 48.213]], { padding: pad, duration: reduce ? 0 : 900 }));
+show(0, false);
+</script>
+</body>
+</html>
