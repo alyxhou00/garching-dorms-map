@@ -858,7 +858,7 @@ function show(i, fly) {
     t.textContent = `U6 ${d.conn.st} via ${via} · ≈ ${d.conn.door} min`;
   } else t.textContent = `U6 ${w.st} · ${walkText(w)} walk (${fmtDist(w.m)})`;
   $("p-u6").append(u, t);
-  $("p-dir").href = `https://www.openstreetmap.org/directions?route=%3B${d.lat}%2C${d.lng}#map=16/${d.lat}/${d.lng}`;
+  $("p-dir").href = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(d.name + ", " + d.street)}&travelmode=transit`;
   $("p-web").href = d.url;
   const chips = d.chips.slice();
   if (d.u6.m > FAR_M) chips.push(["far", `Far from U6 · ${walkText(walkInfo(d))} walk`]);
