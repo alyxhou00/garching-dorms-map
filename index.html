@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Garching &amp; München-Nord Student Dorms</title>
+<title>Student Dorms Along the U6</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
 /* Full-bleed map with one floating detail panel and a pager, like a place card. */
 :root {
   --bg: #f4f3ef; --panel: #ffffff; --raise: #f1efe9; --ink: #1f1e1b; --muted: #6d6a62; --line: #e4e1d8;
-  --stwm: #c2603e; --eswm: #3f6d8f; --priv: #5d7a55; --good: #2f7a4b; --warn: #a8701a;
+  --stwm: #c2603e; --no: #b3412e; --eswm: #3f6d8f; --priv: #5d7a55; --good: #2f7a4b; --warn: #a8701a;
   --shadow: 0 8px 30px rgba(0,0,0,.12);
   --font: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "Geist Mono", ui-monospace, Menlo, monospace;
@@ -21,7 +21,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #15171a; --panel: #1c1d20; --raise: #2a2b2f; --ink: #ecebe6; --muted: #a29e94; --line: #34353a;
-    --stwm: #e0805c; --eswm: #79a6c8; --priv: #8fb185; --good: #6cc08d; --warn: #e0b05a;
+    --stwm: #e0805c; --no: #e57a66; --eswm: #79a6c8; --priv: #8fb185; --good: #6cc08d; --warn: #e0b05a;
     --shadow: 0 8px 30px rgba(0,0,0,.45);
     color-scheme: dark;
   }
@@ -136,22 +136,59 @@ button:focus-visible, a:focus-visible, .mk-in:focus-visible { outline: 2px solid
   .legend { top: 8px; left: 8px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* far-from-U6 markers: dotted border */
+.mk.far .mk-in { border-style: dotted; border-width: 2px; background: var(--raise); }
+.mk.far.on .mk-in { border-style: solid; background: var(--c); }
+/* parts badge on a marker */
+.mk-in .pc { display: inline-grid; place-items: center; min-width: 16px; height: 16px; margin-left: 6px; padding: 0 4px; border-radius: 8px;
+  background: var(--c); color: var(--panel); font: 600 10px/1 var(--font); vertical-align: 1px; }
+.mk.on .mk-in .pc { background: var(--panel); color: var(--c); }
+/* cluster bubble */
+.cl-in { display: grid; place-items: center; min-width: 30px; height: 30px; padding: 0 9px; border-radius: 15px; cursor: pointer;
+  background: var(--ink); color: var(--panel); border: 2px solid var(--panel); font: 600 13px/1 var(--font);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 55%, transparent), 0 3px 10px rgba(0,0,0,.25); transition: transform .15s; }
+.cl-in:hover { transform: scale(1.08); }
+.cl.north .cl-in { outline: 1.5px dashed var(--muted); outline-offset: 4px; }
+/* part dots for the open dorm */
+.pt { display: flex; align-items: center; gap: 5px; pointer-events: none; }
+.pt-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); border: 2px solid var(--panel); box-shadow: 0 0 0 1px var(--c); }
+.pt-label { font-size: 11px; font-weight: 500; color: var(--ink); text-shadow: 0 0 3px var(--panel), 0 0 3px var(--panel), 0 0 3px var(--panel); white-space: nowrap; transform: translateX(2px); }
+.pt { transform: translateX(calc(50% - 5px)); }
+/* panel additions */
+.u6row { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+.u6row .u { width: 16px; height: 16px; border-radius: 3px; background: #0065ae; color: #fff; font: 700 10px/16px var(--font); text-align: center; flex: none; }
+.chip.no { color: var(--no); } .chip.far { color: var(--muted); border-style: dotted; }
+.parts { display: grid; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; }
+.parts[hidden] { display: none; }
+.parts ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 7px; }
+.parts li { display: grid; gap: 1px; padding-left: 12px; border-left: 2px solid var(--c); }
+.pt-name { font: 500 13px var(--font); color: var(--ink); background: none; border: 0; padding: 0; text-align: left; }
+button.pt-name { cursor: pointer; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
+button.pt-name:hover { text-decoration-color: var(--c); }
+.pt-note { font-size: 12px; color: var(--muted); }
+.legend .sw.ln.dot { border-style: dotted; border-width: 2px; }
+.legend .clx { display: inline-grid; place-items: center; width: 16px; height: 16px; border-radius: 8px; background: var(--ink); color: var(--panel); font: 600 9px/1 var(--font); }
 </style>
 </head>
 <body>
-<div id="map" aria-label="Map of student dorms in Garching"></div>
+<div id="map" aria-label="Map of student dorms along the U6, Garching to Münchner Freiheit"></div>
 
 <div class="legend" aria-label="Legend">
-  <b>Student dorms · Garching &amp; München-Nord</b>
+  <b>Student dorms along the U6</b>
   <span><i class="sw" style="--c:var(--stwm)"></i>Waiting list · STWM</span>
-  <span><i class="sw" style="--c:var(--eswm)"></i>Selection · ESWM</span>
+  <span><i class="sw" style="--c:var(--eswm)"></i>Selection · associations, church</span>
   <span><i class="sw" style="--c:var(--priv)"></i>Direct · private</span>
   <span><i class="ux">U</i><i class="sw u6"></i>U6 line and stations</span>
   <span><i class="sw ln"></i>Solid: Garching</span>
-  <span><i class="sw ln dash"></i>Dashed: München-Nord</span>
+  <span><i class="sw ln dash"></i>Dashed: U6 München-Nord</span>
+  <span><i class="sw ln dot"></i>Dotted: far from the U6</span>
+  <span><i class="clx">3</i>Dorms too close together; click to zoom in</span>
   <div class="areas">
     <button type="button" id="go-g">Garching</button>
     <button type="button" id="go-n">München-Nord</button>
+    <button type="button" id="go-f">Far from U6</button>
+    <button type="button" id="go-a">All</button>
   </div>
 </div>
 
@@ -163,6 +200,7 @@ button:focus-visible, a:focus-visible, .mk-in:focus-visible { outline: 2px solid
     <div class="op" id="p-op"></div>
     <h1 id="p-name"></h1>
     <div class="meta" id="p-meta"></div>
+    <div class="u6row" id="p-u6"></div>
     <div class="actions">
       <a class="btn primary" id="p-dir" target="_blank" rel="noopener">Directions</a>
       <a class="btn icon" id="p-web" target="_blank" rel="noopener" aria-label="Official page" title="Official page">
@@ -180,6 +218,10 @@ button:focus-visible, a:focus-visible, .mk-in:focus-visible { outline: 2px solid
       <dt>Wait</dt><dd class="num" id="p-wait"></dd>
     </dl>
     <p class="note" id="p-note"></p>
+    <div class="parts" id="p-parts" hidden>
+      <div class="label" id="p-parts-label">Made up of</div>
+      <ul id="p-parts-list"></ul>
+    </div>
     <div class="rev">
       <div class="label">What reviewers say</div>
       <div class="rv-row"><span class="rv-k good">Liked</span><ul id="p-good"></ul></div>
@@ -197,104 +239,86 @@ button:focus-visible, a:focus-visible, .mk-in:focus-visible { outline: 2px solid
 
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script>
+// area: "garching" | "north" (U6 München-Nord, down to Münchner Freiheit) | "far" (far from the U6)
+// ch: "stwm" waiting list | "eswm" selection by an association, church or foundation | "priv" private
+const STWM_HOW = "STWM online application, choose up to 3 dorms";
+const STWM_WHEN = "Window for the winter semester opens 15 May";
+const STWM_YES = ["ok", "Yes, from 15 May 2027"];
 const DORMS = [
-  { name:"Garching I", short:"Garching I", street:"Jochbergweg 1–7", op:"STWM", ch:"stwm", lng:11.66009, lat:48.25274, rating:"5.0 ★ (2)",
-    chips:[["ok","Yes, from 15 May 2027"],["check","Earlier? Ask STWM"]],
-    how:"STWM online application, choose up to 3 dorms", when:"Window for the winter semester opens 15 May",
+  // ---------------- Garching ----------------
+  { area:"garching", name:"Garching I", short:"Garching I", street:"Jochbergweg 1–7", op:"STWM", ch:"stwm", lng:11.66009, lat:48.25274, rating:"5.0 ★ (2)",
+    chips:[STWM_YES,["check","Earlier? Ask STWM"]], how:STWM_HOW, when:STWM_WHEN,
     rent:"€385.90–403.90 warm · room in a WG", wait:"≈ 3 semesters",
     note:"Max. 4 semesters on a Master's, 7 on a Bachelor's. Deposit is 3× base rent. In-house pub.",
-    other:[],
-    rev:{ good:[], bad:[], basis:"no written reviews, only 2 star ratings." },
+    parts:[{name:"Jochbergweg 1"},{name:"Jochbergweg 3"},{name:"Jochbergweg 5", note:"house management"},{name:"Jochbergweg 7"}],
+    other:[], rev:{ good:[], bad:[], basis:"no written reviews, only 2 star ratings." },
     url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/garching-oberschleissheim/jochbergweg-garching-i/" },
-  { name:"Garching II", short:"Garching II", street:"Enzianstraße 1+3", op:"STWM", ch:"stwm", lng:11.65552, lat:48.25780, rating:"4.0 ★ (8)",
-    chips:[["ok","Yes, from 15 May 2027"],["check","Earlier? Ask STWM"]],
-    how:"STWM online application, choose up to 3 dorms", when:"Window for the winter semester opens 15 May",
+  { area:"garching", name:"Garching II", short:"Garching II", street:"Enzianstraße 1+3", op:"STWM", ch:"stwm", lng:11.65552, lat:48.25780, rating:"4.0 ★ (8)",
+    chips:[STWM_YES,["check","Earlier? Ask STWM"]], how:STWM_HOW, when:STWM_WHEN,
     rent:"€340.00–369.90 warm · 2-person WG, Teilapartment, Einzelapartment", wait:"≈ 4–5 semesters",
     note:"Glass outer walls, access by outdoor walkway. Max. 4 semesters on a Master's. Deposit is 3× base rent.",
+    parts:[{name:"Enzianstraße 1"},{name:"Enzianstraße 3"}],
     other:[],
-    rev:{ good:["Quiet; the basement party room is rarely used","Bright, roomy, well-designed rooms","Fast internet included","Bar and cinema room, storage basement","Bus at the door, U-Bahn 8–10 min walk, supermarkets opposite"],
-          bad:["Top (3rd) floor gets very hot in summer"],
-          basis:"3 written reviews, newest 2 months ago." },
+    rev:{ good:["Quiet; the basement party room is rarely used","Bright, roomy, well-designed rooms; fast internet included","Bar and cinema room, storage basement","Bus at the door, U-Bahn 8–10 min walk, supermarkets opposite"],
+          bad:["Top (3rd) floor gets very hot in summer"], basis:"all 3 written reviews (of 8 ratings), newest 2 months ago." },
     url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/garching-oberschleissheim/enzianstrasse-garching-ii/" },
-  { name:"Hochschulhaus Garching", short:"HHG", street:"Enzianstraße 5+7", op:"ESWM", ch:"eswm", lng:11.65516, lat:48.25701, rating:"4.5 ★ (50)",
-    chips:[["ok","Yes"],["check","Enrolment in Munich needed at move-in"]],
+  { area:"garching", name:"Hochschulhaus Garching", short:"HHG", street:"Enzianstraße 5+7", op:"ESWM", ch:"eswm", lng:11.65516, lat:48.25701, rating:"4.5 ★ (50)",
+    chips:[["ok","Yes"],["check","Only one ESWM house: HHG or GLH"]],
     how:"ESWM online form, only one ESWM house per person", when:"Deadline 30 May for the winter semester",
     rent:"from €547 · 20.6–24 m² apartment", wait:"No queue. Chosen or not, each semester",
-    note:"Home address must be outside MVV zones M–4. Stay 1–6 semesters. Tutor programme and bar evenings.",
-    other:["Residents run their own house app and wiki for dorm life (Google Play, HHG wiki)","Mix of students, PhDs and university staff living together (ESWM)","The application form expects residents to take on responsibility in the community (ESWM form)"],
-    rev:{ good:["Strong community: bar nights, tutor events, movie nights","Quiet and safe","Supermarkets and U6 close by","Rent seen as fair; friendly, helpful residents"],
-          bad:["Apartments are small","No sofa or TV provided"],
-          basis:"13 written reviews, newest about a year ago." },
+    note:"Home address must be outside MVV zones M–4. Enrolment in Munich needed at move-in. Stay 1–6 semesters.",
+    parts:[{name:"Enzianstraße 5"},{name:"Enzianstraße 7"}],
+    other:["Residents run their own house app and wiki (Google Play, HHG wiki)","Mix of students, PhDs and university staff (ESWM)","The application form expects residents to take on responsibility in the community (ESWM form)"],
+    rev:{ good:["Strong community: bar nights, tutor events, movie nights","Quiet and safe; friendly, helpful residents","Lidl, Rewe and the U6 close by; rent seen as fair","Party room you can book, with a big screen"],
+          bad:["Apartments are small","No sofa or TV provided"], basis:"all 13 written reviews (of 50 ratings), newest about a year ago." },
     url:"https://eswm.de/haeuser/hhg" },
-  { name:"Studentenhaus DOMINO", short:"DOMINO", street:"Untere Straßäcker 21", op:"Private", ch:"priv", lng:11.65772, lat:48.25800, rating:"4.6 ★ (23)",
+  { area:"garching", name:"Studentenhaus DOMINO", short:"DOMINO", street:"Untere Straßäcker 21", op:"Private", ch:"priv", lng:11.65772, lat:48.25800, rating:"4.6 ★ (23)",
     chips:[["ok","Yes"],["check","Rent not published"]],
     how:"Email the application form to studentenhaus@domino-bau.de", when:"No published deadline",
     rent:"Not published · ask", wait:"Not published · ask",
     note:"69 one-room and 13 two-room apartments. Students, assistants, PhDs and university staff only.",
-    other:["A resident subletting in 2020: bright room with balcony, TUM visible from the window, park nearby for jogging, grilling on the balcony (WG-Gesucht)"],
-    rev:{ good:["Clean, calm and well maintained","Walking distance to TUM and the town centre","Supermarkets at the corner","Fast internet"],
-          bad:[],
-          basis:"8 written reviews, newest 9 months ago. Most are 6–9 years old." },
+    other:["A resident subletting in 2020: bright room with balcony, TUM visible from the window, park nearby, grilling on the balcony (WG-Gesucht)"],
+    rev:{ good:["Clean, calm and well maintained","Walking distance to TUM and the town centre","Supermarkets at the corner; fast internet"],
+          bad:[], basis:"all 8 written reviews (of 23 ratings), newest 9 months ago. Most are 6–9 years old." },
     url:"https://www.studentenhaus-domino.de/bewerbungsbogen.htm" },
-  { name:"Student Living Campus", short:"SLC 1–3", street:"Freisinger Landstraße 45a, 47, 47a", op:"Private", ch:"priv", lng:11.65225, lat:48.25672, rating:"3.5 ★ (41)",
+  { area:"garching", name:"Student Living Campus", short:"SLC", street:"Freisinger Landstraße 45a, 47, 47a", op:"Private", ch:"priv", lng:11.65225, lat:48.25672, rating:"3.5 ★ (41)",
     chips:[["ok","Yes"],["check","Deposit complaints"]],
     how:"Rental inquiry form on apartments-garching.de, or info@jost-verwaltung.de", when:"No published deadline",
     rent:"from €940 all-in · ≈ 22–48 m²", wait:"Not published · ask",
-    note:"SLC 1, 2 and 3, run by Jost Verwaltung (same as GLC).",
+    note:"Run by Jost Verwaltung (same as GLC).",
+    parts:[{name:"SLC 1", note:"Freisinger Landstraße 47 · Single, Patio Couple and Two Party apartments"},{name:"SLC 2", note:"Freisinger Landstraße 45a · letting office"},{name:"SLC 3", note:"Freisinger Landstraße 47a"}],
     other:["Two reviews from 2012: modern, almost always fully rented, residents play football and grill together (yopi.de, very old)"],
     rev:{ good:["Next to Rewe and Lidl, close to the university","Pool, football pitch, beach volleyball, small gym","Well kept, private storage room per apartment"],
           bad:["Deposit returns: several waited months, some went to court","Expensive (one cites about €900 for 28 m²)","Slow email replies; one finds the caretaker rude"],
-          basis:"17 written reviews. The newest real ones (3–4 months ago) are about deposit disputes." },
+          basis:"all 17 written reviews (of 41 ratings). The newest real ones (3–4 months ago) are about deposit disputes." },
     url:"https://apartments-garching.de/en/prices" },
-  { name:"Garching Living Center", short:"GLC", street:"Einsteinstraße 3", op:"Private", ch:"priv", lng:11.64606, lat:48.25072, rating:"4.0 ★ (77)",
+  { area:"garching", name:"Garching Living Center", short:"GLC", street:"Einsteinstraße 3", op:"Private", ch:"priv", lng:11.64606, lat:48.25072, rating:"4.0 ★ (77)",
     chips:[["ok","Yes"],["check","Deposit complaints"]],
     how:"Rental inquiry form on apartments-garching.de, or info@jost-verwaltung.de", when:"No published deadline",
-    rent:"€1,220 all-in", wait:"Not published · ask",
-    note:"Run by Jost Verwaltung (same as SLC).",
+    rent:"€1,220 all-in", wait:"Not published · ask", note:"Run by Jost Verwaltung (same as SLC).",
     other:["A resident subletting: supermarket, drugstore and pharmacy in the complex; U-Bahn and town centre 5 min away (WG-Gesucht)"],
     rev:{ good:["Modern furnished apartments with balcony","Gym, sauna, rooftop pool, cinema, kitchens with billiards","Shops in the building, U-Bahn within walking distance"],
           bad:["High price per m²","Deposit held back for months; strict move-out checks and cleaning fees","Extra electricity charges (one parent says the contract states this)","Defects from move-in left unfixed (review 9 months ago)"],
-          basis:"33 written reviews, newest 2 months ago." },
+          basis:"all 33 written reviews (of 77 ratings), newest 2 months ago." },
     url:"https://apartments-garching.de/en/prices" },
-  { area:"north", name:"Josef-Wirth-Weg", short:"Josef-Wirth-Weg", street:"Josef-Wirth-Weg 19, München", op:"STWM", ch:"stwm", lng:11.62551, lat:48.20004, rating:"3.7 ★ (16)",
-    chips:[["ok","Yes, from 15 May 2027"],["check","Not in Garching"]],
-    how:"STWM online application, choose up to 3 dorms", when:"Window for the winter semester opens 15 May",
-    rent:"€471.90–538.30 warm · Einzelapartment", wait:"≈ 2–3 semesters",
-    note:"Listed under München, so it may not combine with Garching I/II in one application. 8 km to campus, U6 Kieferngarten.",
-    other:["Residents subletting (2023): 16 m² apartment, common room on every floor, bus stop almost at the door, quiet residential area (WG-Gesucht)","The house brochure describes a resident-run bar (Wohnheimtreff), a study room and a Facebook group (jww19.de brochure)"],
-    rev:{ good:["Quiet and clean","Lidl nearby","Bus 181 to Studentenstadt"],
-          bad:["Rent high for a dorm","Repairs slow; internet and heating problems (one says no working heating in winter)","Bus 181 takes a long detour; a bike helps"],
-          basis:"7 written reviews, newest about a year ago." },
-    url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/munich/north-munich/hall-of-residence-josef-wirth-weg/" }
-,
+
+  // ---------------- U6 München-Nord (north to south) ----------------
+  { area:"north", name:"Studentisches Wohnen im Haidpark", short:"Haidpark (AWO)", street:"Admiralbogen 37, 80939 München", op:"AWO", ch:"eswm", lng:11.61410, lat:48.21032, rating:"3.5 ★ (8)",
+    chips:[["ok","Yes"],["check","Applicants report no reply"]],
+    how:"Apply to AWO München (phone +49 89 46228130)", when:"No published deadline",
+    rent:"Not published · ask", wait:"Not published · ask", note:"Run by the AWO, a social welfare association.",
+    other:[],
+    rev:{ good:["Garden, friendly staff and management","Solar panels planned on all balconies"],
+          bad:["Two applicants (2 months ago) say they waited 2.5 and 4.5 years and stopped getting replies"], basis:"all 4 written reviews (of 8 ratings)." },
+    url:"https://www.awo-muenchen.de/" },
   { area:"north", name:"Heidemannstraße", short:"Heidemannstraße", street:"Paul-Hindemith-Allee 4+6, Karl-Köglsperger-Str. 3–9", op:"STWM", ch:"stwm", lng:11.60621, lat:48.20040, rating:"No Google listing",
-    chips:[["ok","Yes, from 15 May 2027"],["check","May not combine with Garching picks"]],
-    how:"STWM online application, choose up to 3 dorms", when:"Window for the winter semester opens 15 May",
+    chips:[STWM_YES,["check","May not combine with Garching picks"]], how:STWM_HOW, when:STWM_WHEN,
     rent:"€362.80–416.80 warm · Einzelapartment (2er-WG rooms €335.90 / €380.90)", wait:"≈ 2–3 semesters",
-    note:"Almost only studio apartments. U6 Kieferngarten. Max. 4 semesters on a Master's. Deposit is 3× base rent.",
+    note:"Almost only studio apartments. Max. 4 semesters on a Master's. Deposit is 3× base rent.",
+    parts:[{name:"Paul-Hindemith-Allee 4"},{name:"Paul-Hindemith-Allee 6"},{name:"Karl-Köglsperger-Straße 3–9", note:"includes 19 larger flats"}],
     other:["STWM: residents can choose to join community life or keep to themselves (STWM)"],
     rev:{ good:[], bad:[], basis:"no listing for the dorm itself, so no reviews." },
     url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/munich/north-munich/hall-of-residence-heidemannstrasse/" },
-  { area:"north", name:"Studentenstadt Freimann", short:"Studentenstadt", street:"Studentenstadt, 80805 München", op:"STWM", ch:"stwm", lng:11.61135, lat:48.18307, rating:"4.2 ★ (115)", nudge:-14,
-    chips:[["ok","Yes, from 15 May 2027"],["check","Renovation ongoing"]],
-    how:"STWM online application, choose up to 3 dorms", when:"Window for the winter semester opens 15 May",
-    rent:"€283.20–480.70 warm · room in a WG (apartments €401.10–505.50)", wait:"≈ 3–4 semesters",
-    note:"Germany's largest student housing complex, next to the Englischer Garten, U6 Studentenstadt. Some houses are being renovated.",
-    other:["Houses 9 and 12 are being renovated by BayernHeim: 1,025 apartments, finished 2027–2028 (Bavarian government, Apr 2026)","Goldbeck was hired in Nov 2026 to renovate houses 10 and 13 (konii.de)","STWM has been doing urgent repairs in the old part (kitchens, showers, common rooms) since Feb 2026 (STWM)"],
-    rev:{ good:["Cheap for Munich, U6 right at the door","Next to the Englischer Garten; sports hall and restaurant","Active community, rooftop events on weekends"],
-          bad:["Dirty, run-down kitchens; one review mentions insects","Rooms sometimes need cleaning at move-in","Student-run services keep irregular hours","Empty buildings under renovation make parts feel odd"],
-          basis:"10 written reviews read (of 115 ratings), newest 5 months ago." },
-    url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/" },
-  { area:"north", name:"Felsennelkenanger", short:"Felsennelkenanger", street:"Felsennelkenanger 7–21, 80937 München", op:"STWM", ch:"stwm", lng:11.56397, lat:48.21001, rating:"4.1 ★ (48)",
-    chips:[["ok","Yes, from 15 May 2027"],["check","On the U2, not the U6"]],
-    how:"STWM online application, choose up to 3 dorms", when:"Window for the winter semester opens 15 May",
-    rent:"€378.10–390.30 warm · room in a 3–5er WG (Teilapartment €378.40–420.30)", wait:"≈ 1–2 semesters",
-    note:"Shortest STWM wait in this area. U2 Dülferstraße, so Garching needs a change of line.",
-    other:[],
-    rev:{ good:["Helpful tutors and caretaker","Clean; cheap bar, gym, rooftop terrace, study room","Penny, Aldi and a mall nearby; fair rent"],
-          bad:["Noise and parties, especially near ground-floor common rooms","Thin walls; one recent review says food was taken from the shared fridge","Single apartments are very small; kitchens always shared"],
-          basis:"8 written reviews read (of 48 ratings), newest 5 months ago." },
-    url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/" },
   { area:"north", name:"Georg-Lanzenstiel-Haus", short:"GLH", street:"Kieferngartenstraße 12, 80939 München", op:"ESWM", ch:"eswm", lng:11.61215, lat:48.20113, rating:"4.8 ★ (45)",
     chips:[["ok","Yes"],["check","Only one ESWM house: GLH or HHG"]],
     how:"ESWM online form, only one ESWM house per person", when:"Deadline 30 May for the winter semester",
@@ -302,96 +326,228 @@ const DORMS = [
     note:"127 single rooms. Same ESWM rules as HHG: home address outside MVV zones M–4, stay 1–6 semesters.",
     other:[],
     rev:{ good:["Very strong community; warmly run","Low rent; practical rooms with their own bathroom","Several call it the best part of their studies"],
-          bad:["Hard to get a place (one compares it to winning the lottery)"],
-          basis:"11 written reviews read, newest 3 months ago." },
+          bad:["Hard to get a place (one compares it to winning the lottery)"], basis:"all 11 written reviews (of 45 ratings), newest 3 months ago." },
     url:"https://eswm.de/en" },
-  { area:"north", name:"Unity Alpha", short:"Unity Alpha", street:"Josef-Wirth-Weg 21, 80939 München", op:"Private", ch:"priv", lng:11.62586, lat:48.19963, rating:"4.0 ★ (65)", nudge:30,
+  { area:"north", name:"Josef-Wirth-Weg", short:"Josef-Wirth-Weg", street:"Josef-Wirth-Weg 19, München", op:"STWM", ch:"stwm", lng:11.62551, lat:48.20004, rating:"3.7 ★ (16)",
+    chips:[STWM_YES,["check","May not combine with Garching picks"]], how:STWM_HOW, when:STWM_WHEN,
+    rent:"€471.90–538.30 warm · Einzelapartment", wait:"≈ 2–3 semesters",
+    note:"Rented by STWM. No lift. Bus 181 to U6 Kieferngarten.",
+    other:["Residents subletting (2023): 16 m² apartment, common room on every floor, bus stop almost at the door (WG-Gesucht)","The house brochure describes a resident-run bar, a study room and a Facebook group (jww19.de brochure)"],
+    rev:{ good:["Quiet and clean","Lidl nearby","Bus 181 to Studentenstadt"],
+          bad:["Rent high for a dorm","Repairs slow; internet and heating problems (one: no working heating in winter)","Bus 181 takes a long detour; a bike helps"], basis:"all 7 written reviews (of 16 ratings), newest about a year ago." },
+    url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/munich/north-munich/hall-of-residence-josef-wirth-weg/" },
+  { area:"north", name:"Unity Alpha", short:"Unity Alpha", street:"Josef-Wirth-Weg 21, 80939 München", op:"Private", ch:"priv", lng:11.62586, lat:48.19963, rating:"4.0 ★ (65)",
     chips:[["ok","Yes"],["check","Booking route not published"]],
     how:"No public application page found; listed on rental platforms; private sublets on WG-Gesucht", when:"No published deadline",
     rent:"≈ €1,200 on rental platforms · 23 m² (a 2026 sublet asked €950)", wait:"Not published · ask",
-    note:"Private apartment complex right next to Josef-Wirth-Weg; seems to share management with Unity Beta (same phone on Google). Platform listings ask a €2,700 deposit.",
+    note:"Seems to share management with Unity Beta (same phone on Google). Platform listings ask a €2,700 deposit.",
     other:["A resident subletting in 2026: own bathroom, terrace and kitchenette; free study rooms, bike cellar and washers; quiet atmosphere (WG-Gesucht)"],
-    rev:{ good:["Clean, well designed and well maintained","Very helpful caretaker and manager","Courtyards for volleyball and BBQ; Aldi and bus stop nearby"],
-          bad:["Rent has gone up in recent years","Heating a bit weak","Washers €2 per load; buses every 20 min"],
-          basis:"about 6 written reviews read (of 65 ratings), newest 1 month ago." },
+    rev:{ good:["Clean, modern, well maintained","Very helpful caretaker and manager (several recent reviews)","Courtyards for volleyball and BBQ; Aldi and bus nearby"],
+          bad:["Rent has gone up; some call it too expensive","Contracts only for six months, then renewed (one review)","Main-road noise right by the building (one review)","Long, narrow rooms; heating a bit weak; buses every 20 min, less often at weekends"],
+          basis:"25 written reviews read (of 65 ratings), newest 1 month ago." },
     url:"https://www.wg-gesucht.de/1-zimmer-wohnungen-in-Muenchen-Schwabing-Freimann.14220170.html" },
+  { area:"north", name:"Unity Beta", short:"Unity Beta", street:"Freisinger Landstraße 86–90, 80939 München", op:"Private", ch:"priv", lng:11.62752, lat:48.20016, rating:"3.6 ★ (103)",
+    chips:[["ok","Yes"],["check","Caretaker complaints"]],
+    how:"Contact the management (same phone as Unity Alpha on Google); no public application page found", when:"No published deadline",
+    rent:"Not published · ask (all costs included, per listing)", wait:"Not published · ask",
+    note:"Built around 2015, next to the Isar meadows. Bus to U6 Kieferngarten.",
+    parts:[{name:"Freisinger Landstraße 86"},{name:"Freisinger Landstraße 88"},{name:"Freisinger Landstraße 90"}],
+    other:["A listing describes 482 furnished apartments of 19–45 m², most with balcony, loggia or roof deck, near the Isar and the Englischer Garten; rent covers all costs (WG-Gesucht)"],
+    rev:{ good:["Next to the Isar meadows and woods","Fairly new, clean and well kept; furnished; study rooms, party and bike cellar","Aldi a few steps away"],
+          bad:["Many reviews describe a rude, aggressive caretaker, especially at move-out (others defend him)","Large deposit deductions at move-out; one says cash without a receipt","Internet outages; uncomfortable furniture, no oven; flats close together; bugs in summer"],
+          basis:"51 written reviews read (of 103 ratings), newest 5 months ago." },
+    url:"https://www.wg-gesucht.de/en/1-zimmer-wohnungen-in-Muenchen-Schwabing-Freimann.9231219.html" },
   { area:"north", name:"Helmut-Kamm-Haus", short:"Helmut-Kamm-Haus", street:"Maiglöckchenstraße 6, 80939 München", op:"EWV", ch:"eswm", lng:11.62948, lat:48.19472, rating:"4.8 ★ (17)",
     chips:[["ok","Yes"],["check","Rent not published"]],
     how:"Contact the Evangelischer Waisenhausverein via ewv-muenchen.de", when:"No published deadline",
     rent:"Not published · ask", wait:"Not published · ask",
-    note:"New building run by the Evangelischer Waisenhausverein München, a church-related association.",
+    note:"New building of the Evangelischer Waisenhausverein, same association as Spengelhof.",
     other:[],
-    rev:{ good:["Calm area, good for students","Clean, spacious, functional studios"],
-          bad:["A bit far from the bus stop"],
-          basis:"3 written reviews, newest 2 years ago." },
+    rev:{ good:["Calm area, good for students","Clean, spacious, functional studios"], bad:["A bit far from the bus stop"],
+          basis:"all 3 written reviews (of 17 ratings), newest 2 years ago." },
     url:"https://ewv-muenchen.de/" },
-  { area:"north", name:"Unity Beta", short:"Unity Beta", street:"Freisinger Landstraße 86–90, 80939 München", op:"Private", ch:"priv", lng:11.62752, lat:48.20016, rating:"3.6 ★ (103)", nudgeX:55,
-    chips:[["ok","Yes"],["check","Caretaker complaints"]],
-    how:"Contact the management (same phone as Unity Alpha on Google); no public application page found", when:"No published deadline",
-    rent:"Not published · ask (all costs included, per listing)", wait:"Not published · ask",
-    note:"Large private apartment complex built around 2015, next to Unity Alpha and Josef-Wirth-Weg. Bus to U6 Kieferngarten.",
-    other:["A listing describes 482 furnished apartments of 19–45 m², most with balcony, loggia or roof deck, near the Isar and the Englischer Garten; rent covers all costs (WG-Gesucht)"],
-    rev:{ good:["Next to the river and woods; nice surroundings","Fairly new, clean flats; decent rent for Munich"],
-          bad:["Many reviews describe a rude, hostile caretaker, including at move-out inspections","Internet drops for hours, sometimes weekly","Uncomfortable bed and furniture; no oven"],
-          basis:"5 written reviews read (of 103 ratings)." },
-    url:"https://www.wg-gesucht.de/en/1-zimmer-wohnungen-in-Muenchen-Schwabing-Freimann.9231219.html" },
-  { area:"north", name:"Spengelhof", short:"Spengelhof", street:"Sondermeierstraße 86, 80939 München", op:"EWV", ch:"eswm", lng:11.62843, lat:48.19421, rating:"4.6 ★ (10)", nudge:30,
+  { area:"north", name:"Spengelhof", short:"Spengelhof", street:"Sondermeierstraße 86, 80939 München", op:"EWV", ch:"eswm", lng:11.62843, lat:48.19421, rating:"4.6 ★ (10)",
     chips:[["ok","Yes"],["check","Wait not published"]],
     how:"Apply via ewv-muenchen.de (Evangelischer Waisenhausverein)", when:"No published deadline",
     rent:"€413 · room with own shower and WC", wait:"Not published · ask",
-    note:"Same association as Helmut-Kamm-Haus, a few streets away. Also has mother-and-child apartments.",
+    note:"Same association as Helmut-Kamm-Haus. Also has mother-and-child apartments.",
     other:["LMU's list of dorms (Aug 2026): rooms with own shower/WC for €413, plus 5 wheelchair-accessible rooms (LMU)"],
-    rev:{ good:["Residents are glad to have a place","Nicely redesigned outdoor area"],
-          bad:[],
-          basis:"2 written reviews (of 10 ratings)." },
+    rev:{ good:["Residents are glad to have a place","Nicely redesigned outdoor area"], bad:[], basis:"all 2 written reviews (of 10 ratings)." },
     url:"https://ewv-muenchen.de/" },
-  { area:"north", name:"Studentenwohnheim Schwabing", short:"Berzeliusstraße", street:"Berzeliusstraße 3, 80939 München", op:"Private", ch:"priv", lng:11.61196, lat:48.18983, rating:"4.5 ★ (24)",
-    chips:[["ok","Yes"],["check","Operator and rent unknown"]],
-    how:"Phone listed on Google: +49 7142 4698910; no website found", when:"No published deadline",
-    rent:"Not published · ask", wait:"Not published · ask",
-    note:"Very close to U6 Freimann.",
+  { area:"north", name:"NP3 Studentenwohnungen", short:"NP3", street:"St.-Nikolaus-Platz 3, 80939 München", op:"Private", ch:"priv", lng:11.61596, lat:48.19297, rating:"3.5 ★ (25)",
+    chips:[["ok","Yes"],["check","Mixed reviews on heating and hot water"]],
+    how:"Contact the landlord (phone on Google: +49 1511 4798167)", when:"No published deadline",
+    rent:"Not published · one tenant paid €913 (2 years ago)", wait:"Not published · ask",
+    note:"Small private building about 2 minutes on foot from U6 Freimann.",
     other:[],
-    rev:{ good:["Quiet; very close to the U-Bahn","Good, affordable apartments; park behind the building","Caretaker is thorough and quick to fix problems"],
-          bad:["No supermarket nearby"],
-          basis:"5 written reviews read (of 24 ratings)." },
-    url:"https://www.google.com/maps/search/?api=1&query=Berzeliusstra%C3%9Fe+3+80939+M%C3%BCnchen" },
-  { area:"north", name:"Max-Bill-Straße", short:"Max-Bill-Straße", street:"Max-Bill-Straße 67, 80807 München", op:"STWM", ch:"stwm", lng:11.59852, lat:48.18697, rating:"4.2 ★ (46)",
-    chips:[["ok","Yes, from 15 May 2027"],["check","May not combine with Garching picks"]],
-    how:"STWM online application, choose up to 3 dorms", when:"Window for the winter semester opens 15 May",
-    rent:"€429.80–447.30 warm · Einzelapartment (WG rooms €436.10–461.10)", wait:"≈ 4 semesters",
-    note:"Rented by STWM. U6 Alte Heide or Studentenstadt, about 1 km away.",
-    other:[],
-    rev:{ good:["Good common-room parties","Pleasant neighbourhood"],
-          bad:["One reviewer moved out at once: locked windows, smell, vermin in bathroom and wardrobe"],
-          basis:"5 written reviews read (of 46 ratings)." },
-    url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/" },
-  { area:"north", name:"Studentisches Wohnen im Haidpark", short:"Haidpark (AWO)", street:"Admiralbogen 37, 80939 München", op:"AWO", ch:"eswm", lng:11.61410, lat:48.21032, rating:"3.5 ★ (8)",
-    chips:[["ok","Yes"],["check","Applicants report no reply"]],
-    how:"Apply to AWO München (phone +49 89 46228130)", when:"No published deadline",
-    rent:"Not published · ask", wait:"Not published · ask",
-    note:"Run by the AWO, a social welfare association. Near U6 Fröttmaning.",
-    other:[],
-    rev:{ good:["Garden, friendly staff and management","Solar panels planned on all balconies"],
-          bad:["Two applicants say they waited 2.5 and 4.5 years and stopped getting replies"],
-          basis:"4 written reviews (of 8 ratings)." },
-    url:"https://www.awo-muenchen.de/" },
-  { area:"north", name:"My Room Active", short:"My Room Active", street:"Freisinger Landstraße 21, 80939 München", op:"Private", ch:"priv", lng:11.62003, lat:48.19153, rating:"1.8 ★ (12)", nudgeX:45,
+    rev:{ good:["2 minutes to U6 Freimann but you don't hear it; quiet street next to a cemetery","Modern, recently renovated, clean and well equipped","Several say the landlord replies fast and paperwork is clear"],
+          bad:["Heating or hot water out for weeks (several reviews)","Months of loud renovation work (two reviews)","Rent keeps rising; one paid €913","A few describe slow or rude management"],
+          basis:"21 written reviews read (of 25 ratings), newest about a year ago." },
+    url:"https://www.google.com/maps/search/?api=1&query=NP3+Studentenwohnungen+M%C3%BCnchen" },
+  { area:"north", name:"My Room Active", short:"My Room Active", street:"Freisinger Landstraße 21, 80939 München", op:"Private", ch:"priv", lng:11.62003, lat:48.19153, rating:"1.8 ★ (12)",
     chips:[["ok","Yes"],["check","Very poor reviews"]],
     how:"No public application page found", when:"No published deadline",
     rent:"Not published · ask", wait:"Not published · ask",
-    note:"Small private apartment building between U6 Freimann and Kieferngarten.",
+    note:"Small private apartment building for students and trainees, with common rooms.",
     other:[],
-    rev:{ good:[],
-          bad:["Poor soundproofing; loud music and a dryer that beeps day and night","Heating and hot water break down often; doorbell broken for a year","Several management companies; bills kept coming after moving out"],
-          basis:"5 written reviews read (of 12 ratings)." },
-    url:"https://www.google.com/maps/search/?api=1&query=Freisinger+Landstra%C3%9Fe+21+80939+M%C3%BCnchen" }
+    rev:{ good:["New building with common rooms"],
+          bad:["Poor soundproofing; loud music and a dryer that beeps day and night","Heating and hot water break down often; doorbell broken for a year","Several management companies; bills kept coming after moving out; strict house rules"],
+          basis:"all 8 written reviews (of 12 ratings), newest 5 months ago." },
+    url:"https://www.google.com/maps/search/?api=1&query=Freisinger+Landstra%C3%9Fe+21+80939+M%C3%BCnchen" },
+  { area:"north", name:"Studentenwohnheim Schwabing", short:"Berzeliusstraße", street:"Berzeliusstraße 3, 80939 München", op:"Private", ch:"priv", lng:11.61196, lat:48.18983, rating:"4.5 ★ (24)",
+    chips:[["ok","Yes"],["check","Operator and rent unknown"]],
+    how:"Phone listed on Google: +49 7142 4698910; no website found", when:"No published deadline",
+    rent:"Not published · ask", wait:"Not published · ask", note:"Very close to U6 Freimann.",
+    other:[],
+    rev:{ good:["Quiet; very close to the U-Bahn","Good, affordable apartments; park behind the building","Caretaker and management very helpful"],
+          bad:["No supermarket nearby","Usually full"], basis:"all 10 written reviews (of 24 ratings), newest 2 years ago." },
+    url:"https://www.google.com/maps/search/?api=1&query=Berzeliusstra%C3%9Fe+3+80939+M%C3%BCnchen" },
+  { area:"north", name:"Studentenstadt Freimann", short:"Studentenstadt", street:"Studentenstadt, 80805 München", op:"STWM", ch:"stwm", lng:11.61135, lat:48.18307, rating:"4.2 ★ (115)",
+    chips:[STWM_YES,["check","Renovation ongoing"]], how:STWM_HOW, when:STWM_WHEN,
+    rent:"€283.20–480.70 warm · room in a WG (apartments €401.10–505.50)", wait:"≈ 3–4 semesters",
+    note:"Germany's largest student housing complex, next to the Englischer Garten. Many houses are empty while being renovated.",
+    parts:[
+      {name:"Altstadt", note:"low 2–3 storey houses, mostly numbered; 627 single rooms of 8–20 m² with shared kitchens and baths"},
+      {name:"Max-Kade-Haus", note:"9-storey tower, Grasmeierstraße 25 · 4.3 ★ (28): cheap but dirty, one mentions mouldy kitchens", lng:11.61178, lat:48.18190},
+      {name:"Egon-Wiberg-Haus (EWH)", note:"9-storey tower, Willi-Graf-Straße 17 · 4.3 ★ (23): party floors, unclean kitchen; friendly rivalry with Max-Kade-Haus", lng:11.61302, lat:48.18290},
+      {name:"Dieter-Maßberg-Haus", note:"formerly Haus 14; shared flats"},
+      {name:"Sophie-Scholl-Haus", note:"formerly the Blue House; renovated and reopened May 2023 with 246 places"},
+      {name:"Hanns-Seidel-Haus", note:"Green House, 19 storeys, about 620 apartments; closed after the 2021 fire, being renovated"},
+      {name:"Oranges Haus, Rotes Haus, Erich-Markel-Haus", note:"other Neustadt towers; Rotes Haus partly unusable after a 2021 sauna fire"},
+      {name:"Hans-Scholl-Halle", note:"multi-purpose hall, reopened 2025 after renovation"}],
+    other:["Houses 9 and 12 are being renovated by BayernHeim: 1,025 apartments, finished 2027–2028 (Bavarian government, Apr 2026)","Goldbeck was hired in Nov 2026 to renovate houses 10 and 13 (konii.de)","STWM has been doing urgent repairs in the Altstadt (kitchens, showers, common rooms) since Feb 2026 (STWM)"],
+    rev:{ good:["Cheap for Munich; U6 right at the door","Next to the Englischer Garten; green, mostly quiet grounds","Lively community, parties and the Stustaculum festival"],
+          bad:["Many buildings empty or under renovation; parts feel neglected","Old, dirty kitchens and rooms; one review mentions insects","Student-run services keep irregular hours"],
+          basis:"39 written reviews read (of 115 ratings), newest 5 months ago." },
+    url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/munich/north-munich/studentenstadt-freimann/" },
+  { area:"north", name:"Max-Bill-Straße", short:"Max-Bill-Straße", street:"Max-Bill-Straße 67, 80807 München", op:"STWM", ch:"stwm", lng:11.59852, lat:48.18697, rating:"4.2 ★ (46)",
+    chips:[STWM_YES,["check","May not combine with Garching picks"]], how:STWM_HOW, when:STWM_WHEN,
+    rent:"€429.80–447.30 warm · Einzelapartment (WG rooms €436.10–461.10)", wait:"≈ 4 semesters",
+    note:"Rented by STWM. U6 Alte Heide or Studentenstadt.",
+    other:[],
+    rev:{ good:["Modern and clean; good value for Munich","Good common-room parties"],
+          bad:["Anonymous if you live in a single apartment; few common spaces","Poor cleaning company; one mentions theft in the laundry room","One reviewer moved out at once: smell and vermin"],
+          basis:"23 written reviews read (of 46 ratings), newest 10 months ago." },
+    url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/" },
+  { area:"north", name:"Ludwigskolleg", short:"Ludwigskolleg", street:"Guerickestraße 19, 80805 München", op:"Church", ch:"eswm", lng:11.59725, lat:48.17500, rating:"5.0 ★ (3)",
+    chips:[["ok","Yes"],["check","Shared showers on the corridor"]],
+    how:"Email ludwigskolleg@eomuc.de (Archdiocese of Munich and Freising)", when:"No published deadline",
+    rent:"€217–300 · room, shower and WC on the corridor", wait:"Not published · ask",
+    note:"103 rooms, described as an international dorm. Run by the Catholic archdiocese.",
+    other:["Archdiocese list of its dorms: 103 rooms, shower/WC on the corridor, €217–300 (erzbistum-muenchen.de)"],
+    rev:{ good:[], bad:[], basis:"no written reviews, only 3 star ratings." },
+    url:"https://www.erzbistum-muenchen.de/ludwigskolleg" },
+  { area:"north", name:"Biedersteiner Wohnheim", short:"Biederstein", street:"Biedersteiner Straße 22–32, 80805 München", op:"STWM", ch:"stwm", lng:11.59569, lat:48.16559, rating:"4.6 ★ (52)",
+    chips:[STWM_YES,["check","May not combine with Garching picks"]], how:STWM_HOW, when:STWM_WHEN,
+    rent:"€350.00–465.10 warm · room in a WG (apartments €362.90–418.30)", wait:"≈ 4 semesters",
+    note:"U6 Dietlindenstraße. Known for its parties.",
+    parts:[{name:"Biedersteiner Straße 22–32", note:"several houses around a shared atrium; WG rooms and single apartments"}],
+    other:[],
+    rev:{ good:["Famous parties (atrium carnival, pool parties) and calmer events like acoustic sessions","Sauna, gym, music room, beach volleyball, pizza oven","Friendly community; fair prices"],
+          bad:["Loud traffic from the Mittlerer Ring","Some kitchens and baths shared","One review describes the basement as in bad shape"],
+          basis:"22 written reviews read (of 52 ratings), newest 11 months ago." },
+    url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/" },
+  { area:"north", name:"Deutsche Burse", short:"Deutsche Burse", street:"Friedrichstraße 34, 80801 München", op:"Assoc.", ch:"eswm", lng:11.58061, lat:48.16055, rating:"4.8 ★ (25)",
+    chips:[["no","Men only"],["check","Rent not published"]],
+    how:"Contact the house office (phone 089 349414)", when:"No published deadline",
+    rent:"Not published · a 2026 sublet asked €590", wait:"Not published · ask",
+    note:"Run by an association; for male students only, per LMU's list. Near U3/U6 Münchner Freiheit and Giselastraße.",
+    other:["LMU's list of dorms (Aug 2026) puts it under 'only for male students' (LMU)"],
+    rev:{ good:["Cheap for such a central location","Good community; helpful house speaker and friendly management","Fibre internet via LRZ"], bad:[],
+          basis:"all 7 written reviews (of 25 ratings), newest about a year ago." },
+    url:"https://www.google.com/maps/search/?api=1&query=Deutsche+Burse+Friedrichstra%C3%9Fe+34+M%C3%BCnchen" },
+  { area:"north", name:"Pater-Rupert-Mayer-Heim", short:"Pater-Rupert-Mayer", street:"Kaiserplatz 13, 80803 München", op:"Assoc.", ch:"eswm", lng:11.57999, lat:48.16146, rating:"3.8 ★ (25)",
+    chips:[["ok","Yes"],["check","Strict management (reviews)"]],
+    how:"Contact the Pater-Rupert-Mayer-Heim association", when:"No published deadline",
+    rent:"€184–276 · room (91 rooms)", wait:"Not published · ask",
+    note:"Catholic-affiliated association. Near U6 Münchner Freiheit.",
+    other:["LMU's list of dorms (Aug 2026): 91 rooms, €184–276 (LMU)"],
+    rev:{ good:["Freshly renovated; quiet, pleasant area","Nice people, relaxed atmosphere (older reviews)"],
+          bad:["Recent reviews describe controlling management; every visitor must be reported by email","One claims only German women will be accepted from now on (unconfirmed)","Dirty shared kitchen and bath; noise at night"],
+          basis:"all 9 written reviews (of 25 ratings), newest 6 months ago." },
+    url:"https://www.google.com/maps/search/?api=1&query=Pater-Rupert-Mayer-Heim+Kaiserplatz+13+M%C3%BCnchen" },
+
+  // ---------------- Far from the U6 ----------------
+  { area:"far", name:"Felsennelkenanger", short:"Felsennelkenanger", street:"Felsennelkenanger 7–21, 80937 München", op:"STWM", ch:"stwm", lng:11.56397, lat:48.21001, rating:"4.1 ★ (48)",
+    chips:[STWM_YES,["check","On the U2, not the U6"]], how:STWM_HOW, when:STWM_WHEN,
+    rent:"€378.10–390.30 warm · room in a 3–5er WG (Teilapartment €378.40–420.30)", wait:"≈ 1–2 semesters",
+    note:"Shortest STWM wait around here. U2 Dülferstraße; Garching needs a change of line.",
+    parts:[{name:"Houses 7–21", note:"Felsennelkenanger 7, 9, 11 … 21; family flats on the ground floor, WGs higher up; open corridors at no. 21"}],
+    other:[],
+    rev:{ good:["Helpful tutors and caretaker","Modern, fair rent, fast internet","Mira mall, Penny and Aldi next door; cheap bar, gym, rooftop terrace"],
+          bad:["Noise, parties, doors slammed at night; house rules ignored","Food and laundry taken from shared kitchens and machines; one mentions rats","Single apartments very small; kitchens always shared"],
+          basis:"21 written reviews read (of 48 ratings), newest 5 months ago." },
+    url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/" },
+  { area:"far", name:"Uni Apart Zwillingstraße", short:"Uni Apart Zwillingstr.", street:"Zwillingstraße 4, 80807 München", op:"Private", ch:"priv", lng:11.56877, lat:48.18292, rating:"3.9 ★ (48)",
+    chips:[["ok","Yes"],["check","German guarantor may be needed"]],
+    how:"Apply to Uni Apart (phone on Google: +49 841 49157272)", when:"No published deadline",
+    rent:"Not published · ask", wait:"Not published · ask",
+    note:"Private student apartments in Milbertshofen, same company as Uni Apart Schleißheimer Straße.",
+    other:[],
+    rev:{ good:["Large furnished apartments (Studio L) with own bath; many stay for years","Helpful management (several recent reviews)","Rewe and Rossmann next door; bus and U-Bahn a few minutes away"],
+          bad:["Fixed-term contracts; leaving early means finding a replacement tenant; German reference person needed (one review)","Weak internet; some appliances broken","One says much of the deposit was kept without reason"],
+          basis:"27 written reviews read (of 48 ratings), newest 3 months ago." },
+    url:"https://www.google.com/maps/search/?api=1&query=Uni+Apart+Zwillingstra%C3%9Fe+4+M%C3%BCnchen" },
+  { area:"far", name:"Uni Apart Schleißheimer Straße", short:"Uni Apart Schleißh.", street:"Schleißheimer Straße 330, 80809 München", op:"Private", ch:"priv", lng:11.56719, lat:48.18121, rating:"3.4 ★ (26)",
+    chips:[["ok","Yes"],["check","Rent not published"]],
+    how:"Apply to Uni Apart (phone on Google: +49 841 49157272)", when:"No published deadline",
+    rent:"Not published · ask", wait:"Not published · ask",
+    note:"Same company as Uni Apart Zwillingstraße, a few hundred metres away.",
+    other:[],
+    rev:{ good:["Bus stop at the door; supermarkets around the corner","Management much better since a new house manager (several reviews)","Modern 30 m² apartments; fast application for some"],
+          bad:["Earlier: poor communication and run-down apartments","One old review mentions a year-long waiting list; one says staff refused to speak English"],
+          basis:"14 written reviews read (of 26 ratings), newest 1 month ago." },
+    url:"https://www.google.com/maps/search/?api=1&query=Uni+Apart+Schlei%C3%9Fheimer+Stra%C3%9Fe+330+M%C3%BCnchen" },
+  { area:"far", name:"Olympisches Dorf", short:"Olympisches Dorf", street:"Helene-Mayer-Ring 7a+b, Connollystraße 3, 7–11", op:"STWM", ch:"stwm", lng:11.55193, lat:48.17995, rating:"4.6 ★ (40)",
+    chips:[STWM_YES,["check","U3, not U6"]], how:STWM_HOW, when:STWM_WHEN,
+    rent:"€391.10–487.10 warm · Einzelapartment (2er-WG rooms €441.15 / €489.85)", wait:"≈ 4–5 semesters (WG rooms 1–2)",
+    note:"Former 1972 Olympic Village, U3 Olympiazentrum. The largest STWM complex after Studentenstadt.",
+    parts:[
+      {name:"Bungalows", note:"Connollystraße 3 · small two-level bungalows painted by their residents · 4.6 ★ (64)", lng:11.55341, lat:48.17898},
+      {name:"Hochhaus", note:"Helene-Mayer-Ring 7a+b · high-rise with single apartments · 4.8 ★ (6)", lng:11.55346, lat:48.17995}],
+    other:[],
+    rev:{ good:["Unique painted bungalows; car-free and quiet","Next to the Olympiapark, U3 and BMW Welt","Affordable single apartments"],
+          bad:["Very small, narrow units; weak sound insulation","Grey and dirty in winter; litter, rats near the bins","One recent review calls it mismanaged"],
+          basis:"22 written reviews of the village (of 40) and 27 of the bungalows (of 64), newest 4 weeks ago." },
+    url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/" },
+  { area:"far", name:"Marchionini-Stiftung", short:"Marchionini", street:"Lerchenauer Straße 41, 80809 München", op:"Foundation", ch:"eswm", lng:11.56131, lat:48.17282, rating:"4.5 ★ (24)",
+    chips:[["ok","Yes"],["check","Rent not published"]],
+    how:"Apply to the Alfred and Karl Marchionini Foundation (listed by TUM)", when:"No published deadline",
+    rent:"Not published · ask", wait:"Not published · ask",
+    note:"Foundation-run dorm near the Olympiapark, with its own bar.",
+    other:[],
+    rev:{ good:["Great community; several call it the best dorm in Munich","Popular house bar"], bad:["Hexagonal rooms look striking but are hard to furnish"],
+          basis:"all 7 written reviews (of 24 ratings), newest 10 months ago." },
+    url:"https://www.tum.de/en/studies/during-your-studies/living-and-working/accommodations/student-halls-of-residence/religious-and-social-organizations" }
 ];
+
 const COL = { stwm:"var(--stwm)", eswm:"var(--eswm)", priv:"var(--priv)" };
 const $ = id => document.getElementById(id);
 const dark = matchMedia("(prefers-color-scheme: dark)");
 const STYLE_LIGHT = "https://tiles.openfreemap.org/styles/positron";
 const STYLE_DARK  = "https://tiles.openfreemap.org/styles/dark";
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// U6 from Münchner Freiheit to Garching-Forschungszentrum.
+// Geometry from OpenStreetMap route relation 3476787 (U-Bahn U6), simplified. © OpenStreetMap contributors.
+const U6_LINE = [[11.67129,48.2647],[11.67065,48.26285],[11.67002,48.26128],[11.66895,48.25901],[11.66786,48.25726],[11.6674,48.25639],[11.66621,48.2532],[11.66598,48.25272],[11.66547,48.25198],[11.66426,48.25068],[11.66368,48.25024],[11.66295,48.24984],[11.66262,48.24972],[11.6618,48.24952],[11.66076,48.24941],[11.65404,48.24934],[11.64996,48.24948],[11.64706,48.24974],[11.64574,48.24992],[11.63983,48.25097],[11.63868,48.25102],[11.63799,48.25098],[11.63741,48.25093],[11.63626,48.25073],[11.63517,48.25045],[11.6341,48.25003],[11.63301,48.24942],[11.63264,48.24916],[11.63223,48.24885],[11.63173,48.24832],[11.63057,48.24664],[11.6303,48.24611],[11.62834,48.23989],[11.62794,48.23888],[11.62731,48.23772],[11.62486,48.23389],[11.62424,48.2327],[11.62361,48.23116],[11.62167,48.22566],[11.62124,48.22407],[11.62108,48.22331],[11.621,48.22256],[11.62114,48.221],[11.62112,48.22063],[11.62107,48.22022],[11.62087,48.21962],[11.61833,48.21489],[11.61786,48.21409],[11.61713,48.21301],[11.61571,48.21041],[11.61518,48.20924],[11.61302,48.20363],[11.61288,48.20304],[11.61282,48.20221],[11.6129,48.20148],[11.61309,48.20084],[11.61344,48.20023],[11.61369,48.19993],[11.61424,48.19944],[11.61532,48.19865],[11.61568,48.19828],[11.61596,48.19792],[11.61624,48.19736],[11.61637,48.19677],[11.61635,48.19619],[11.6162,48.19567],[11.61494,48.19311],[11.61404,48.19174],[11.6135,48.19067],[11.61331,48.18999],[11.61333,48.18935],[11.61327,48.18902],[11.61295,48.18834],[11.61262,48.18793],[11.61125,48.18664],[11.60994,48.18563],[11.60757,48.18354],[11.60648,48.18238],[11.60213,48.17825],[11.60159,48.1776],[11.59736,48.17359],[11.59237,48.16867],[11.59027,48.16669],[11.58955,48.1661],[11.58764,48.16434],[11.58706,48.16345],[11.58669,48.16253],[11.58651,48.1622],[11.58625,48.16147]];
+const U6_STOPS = [["Garching-Forschungszentrum",11.67129,48.2647],["Garching",11.65254,48.24938],["Garching-Hochbrück",11.63106,48.24735],["Fröttmaning",11.6165,48.2119],["Kieferngarten",11.6131,48.20388],["Freimann",11.6142,48.19201],["Studentenstadt",11.60716,48.18313],["Alte Heide",11.60259,48.17868],["Nordfriedhof",11.59693,48.17317],["Dietlindenstraße",11.59078,48.16717],["Münchner Freiheit",11.58625,48.16147]];
+const U6_COLOR = "#0065ae";
+const FAR_M = 1200;
+
+// distance to the nearest U6 station (straight line)
+function metres(aLng, aLat, bLng, bLat) {
+  const R = 6371000, toR = Math.PI / 180;
+  const dLat = (bLat - aLat) * toR, dLng = (bLng - aLng) * toR;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(aLat * toR) * Math.cos(bLat * toR) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+DORMS.forEach(d => {
+  let best = null;
+  U6_STOPS.forEach(([n, lng, lat]) => { const m = metres(d.lng, d.lat, lng, lat); if (!best || m < best.m) best = { n, m }; });
+  d.u6 = best;
+});
+const fmtDist = m => m < 1000 ? `${Math.round(m / 10) * 10} m` : `${(m / 1000).toFixed(1)} km`;
 
 const map = new maplibregl.Map({
   container: "map", style: dark.matches ? STYLE_DARK : STYLE_LIGHT,
@@ -401,17 +557,10 @@ const map = new maplibregl.Map({
 map.touchZoomRotate.disableRotation();
 map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-left");
 map.addControl(new maplibregl.ScaleControl({ unit: "metric" }), "bottom-left");
-// if the dark style is unavailable, fall back to the light one
 let fellBack = false;
 map.on("error", () => { if (!fellBack && dark.matches && !map.isStyleLoaded()) { fellBack = true; map.setStyle(STYLE_LIGHT); } });
 dark.addEventListener("change", () => map.setStyle(dark.matches ? STYLE_DARK : STYLE_LIGHT));
 
-
-// U6 track and stations, Studentenstadt to Garching-Forschungszentrum.
-// Geometry from OpenStreetMap route relation 3476787 (U-Bahn U6), simplified. © OpenStreetMap contributors.
-const U6_LINE = [[11.67129,48.2647],[11.67065,48.26285],[11.67002,48.26128],[11.66895,48.25901],[11.66786,48.25726],[11.6674,48.25639],[11.66621,48.2532],[11.66598,48.25272],[11.66547,48.25198],[11.66426,48.25068],[11.66368,48.25024],[11.66295,48.24984],[11.66262,48.24972],[11.6618,48.24952],[11.66076,48.24941],[11.65404,48.24934],[11.64996,48.24948],[11.64706,48.24974],[11.64574,48.24992],[11.63983,48.25097],[11.63868,48.25102],[11.63799,48.25098],[11.63741,48.25093],[11.63626,48.25073],[11.63517,48.25045],[11.6341,48.25003],[11.63301,48.24942],[11.63264,48.24916],[11.63223,48.24885],[11.63173,48.24832],[11.63057,48.24664],[11.6303,48.24611],[11.62834,48.23989],[11.62794,48.23888],[11.62731,48.23772],[11.62486,48.23389],[11.62424,48.2327],[11.62361,48.23116],[11.62167,48.22566],[11.62124,48.22407],[11.62108,48.22331],[11.621,48.22256],[11.62114,48.221],[11.62112,48.22063],[11.62107,48.22022],[11.62087,48.21962],[11.61833,48.21489],[11.61786,48.21409],[11.61713,48.21301],[11.61571,48.21041],[11.61518,48.20924],[11.61302,48.20363],[11.61288,48.20304],[11.61282,48.20221],[11.6129,48.20148],[11.61309,48.20084],[11.61344,48.20023],[11.61369,48.19993],[11.61424,48.19944],[11.61532,48.19865],[11.61568,48.19828],[11.61596,48.19792],[11.61624,48.19736],[11.61637,48.19677],[11.61635,48.19619],[11.6162,48.19567],[11.61494,48.19311],[11.61404,48.19174],[11.6135,48.19067],[11.61331,48.18999],[11.61333,48.18935],[11.61327,48.18902],[11.61295,48.18834],[11.61262,48.18793],[11.61125,48.18664],[11.60994,48.18563],[11.60757,48.18354],[11.60716,48.18313]];
-const U6_STOPS = [["Garching-Forschungszentrum",11.67129,48.2647],["Garching",11.65254,48.24938],["Garching-Hochbrück",11.63106,48.24735],["Fröttmaning",11.6165,48.2119],["Kieferngarten",11.6131,48.20388],["Freimann",11.6142,48.19201],["Studentenstadt",11.60716,48.18313]];
-const U6_COLOR = "#0065ae";
 function addU6() {
   if (map.getSource("u6")) return;
   map.addSource("u6", { type: "geojson", data: { type: "Feature", geometry: { type: "LineString", coordinates: U6_LINE } } });
@@ -421,65 +570,189 @@ function addU6() {
     paint: { "line-color": U6_COLOR, "line-width": ["interpolate", ["linear"], ["zoom"], 11, 2, 16, 5] } });
 }
 map.on("style.load", addU6);
-const stnMarkers = U6_STOPS.map(([n, lng, lat]) => {
+
+U6_STOPS.forEach(([n, lng, lat]) => {
   const el = document.createElement("div");
   el.className = "stn";
   el.innerHTML = '<span class="stn-in"><span class="u" aria-hidden="true">U</span><span class="s"></span></span>';
   el.querySelector(".s").textContent = n;
-  el.setAttribute("aria-label", "U6 station " + n);
-  return new maplibregl.Marker({ element: el, anchor: "center" }).setLngLat([lng, lat]).addTo(map);
+  new maplibregl.Marker({ element: el, anchor: "center" }).setLngLat([lng, lat]).addTo(map);
 });
 const labelZoom = () => document.body.classList.toggle("far", map.getZoom() < 12.6);
 map.on("zoom", labelZoom); labelZoom();
 
+// dorm markers
 const markers = DORMS.map((d, i) => {
   const root = document.createElement("div");
-  root.className = "mk" + (d.area === "north" ? " north" : "");
+  root.className = "mk " + d.area;
   const inner = document.createElement("span");
-  inner.className = "mk-in"; inner.textContent = d.short; inner.tabIndex = 0;
-  inner.setAttribute("role", "button"); inner.setAttribute("aria-label", d.name);
+  inner.className = "mk-in"; inner.tabIndex = 0;
+  inner.setAttribute("role", "button");
   inner.style.setProperty("--c", COL[d.ch]);
+  inner.textContent = d.short;
+  if (d.parts && d.parts.length > 1) {
+    const b = document.createElement("span"); b.className = "pc"; b.textContent = d.parts.length;
+    b.title = `Made up of ${d.parts.length} parts`; inner.appendChild(b);
+  }
+  inner.setAttribute("aria-label", d.name + (d.parts ? `, made up of ${d.parts.length} parts` : ""));
   inner.addEventListener("click", () => show(i, false));
   inner.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); show(i, true); } });
   root.appendChild(inner);
-  if (d.nudge || d.nudgeX) inner.style.translate = `${d.nudgeX || 0}px ${d.nudge || 0}px`;
   return new maplibregl.Marker({ element: root, anchor: "bottom" }).setLngLat([d.lng, d.lat]).addTo(map);
 });
 
-let cur = 0;
+// clustering: markers whose labels would overlap on screen collapse into a count bubble
+const clusterPool = [];
+let cur = 0, panelOpen = true;
+function widthOf(i) {
+  const el = markers[i].getElement().firstChild;
+  if (!el._w || el._w < 10) el._w = el.offsetWidth || (DORMS[i].short.length * 7 + 28);
+  return el._w;
+}
+function recluster() {
+  const items = DORMS.map((d, i) => ({ i, p: map.project([d.lng, d.lat]), w: widthOf(i) }));
+  const groups = [];
+  items.forEach(it => {
+    if (panelOpen && it.i === cur) { groups.push({ m: [it.i], keep: true }); return; }
+    const g = groups.find(g => !g.keep && Math.abs(g.p.x - it.p.x) < (g.w + it.w) / 2 + 6 && Math.abs(g.p.y - it.p.y) < 30);
+    if (g) { g.m.push(it.i); g.w = Math.max(g.w, it.w); } else groups.push({ p: it.p, w: it.w, m: [it.i] });
+  });
+  // merge groups whose labels or bubbles would still overlap, until stable
+  const geo = g => {
+    if (g.m.length === 1) return { p: g.p || map.project([DORMS[g.m[0]].lng, DORMS[g.m[0]].lat]), w: g.w || widthOf(g.m[0]) };
+    const lng = g.m.reduce((s, i) => s + DORMS[i].lng, 0) / g.m.length, lat = g.m.reduce((s, i) => s + DORMS[i].lat, 0) / g.m.length;
+    return { p: map.project([lng, lat]), w: 34 };
+  };
+  for (let pass = 0, merged = true; merged && pass < 6; pass++) {
+    merged = false;
+    for (let a = 0; a < groups.length && !merged; a++) for (let b = a + 1; b < groups.length && !merged; b++) {
+      if (groups[a].keep || groups[b].keep) continue;
+      const A = geo(groups[a]), B = geo(groups[b]);
+      if (Math.abs(A.p.x - B.p.x) < (A.w + B.w) / 2 + 6 && Math.abs(A.p.y - B.p.y) < 32) {
+        groups[a].m.push(...groups[b].m); groups[a].p = null; groups[a].w = null; groups.splice(b, 1); merged = true;
+      }
+    }
+  }
+  let used = 0;
+  groups.forEach(g => {
+    if (g.m.length === 1) { markers[g.m[0]].getElement().style.display = ""; return; }
+    g.m.forEach(i => markers[i].getElement().style.display = "none");
+    const lng = g.m.reduce((s, i) => s + DORMS[i].lng, 0) / g.m.length;
+    const lat = g.m.reduce((s, i) => s + DORMS[i].lat, 0) / g.m.length;
+    let c = clusterPool[used];
+    if (!c) {
+      const el = document.createElement("div"); el.className = "cl";
+      const b = document.createElement("button"); b.type = "button"; b.className = "cl-in"; el.appendChild(b);
+      b.addEventListener("click", () => {
+        const pts = c.members.map(i => [DORMS[i].lng, DORMS[i].lat]);
+        const lngs = pts.map(p => p[0]), lats = pts.map(p => p[1]);
+        const pad = innerWidth <= 640 ? { top: 80, bottom: innerHeight * .58, left: 60, right: 60 } : { top: 120, bottom: 120, left: 120, right: 460 };
+        map.fitBounds([[Math.min(...lngs), Math.min(...lats)], [Math.max(...lngs), Math.max(...lats)]], { padding: pad, maxZoom: Math.max(map.getZoom() + 2, 17.5), duration: reduce ? 0 : 700 });
+      });
+      c = { el, b, marker: new maplibregl.Marker({ element: el, anchor: "bottom" }).setLngLat([lng, lat]).addTo(map), members: [] };
+      clusterPool.push(c);
+    }
+    c.members = g.m;
+    c.marker.setLngLat([lng, lat]);
+    c.el.style.display = "";
+    c.b.textContent = g.m.length;
+    const names = g.m.map(i => DORMS[i].short);
+    c.b.title = names.join(" · ");
+    c.b.setAttribute("aria-label", `${g.m.length} dorms here: ${names.join(", ")}. Zoom in`);
+    c.b.style.setProperty("--c", COL[DORMS[g.m[0]].ch]);
+    c.el.classList.toggle("north", g.m.every(i => DORMS[i].area !== "garching"));
+    used++;
+  });
+  for (let k = used; k < clusterPool.length; k++) clusterPool[k].el.style.display = "none";
+}
+let raf = 0;
+const schedule = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; recluster(); }); };
+map.on("move", schedule); map.on("load", schedule); window.addEventListener("resize", schedule);
+if (document.fonts) document.fonts.ready.then(() => { markers.forEach(m => m.getElement().firstChild._w = 0); schedule(); });
+
+// part markers (shown only for the open dorm)
+let partMarkers = [];
+function clearParts() { partMarkers.forEach(m => m.remove()); partMarkers = []; }
+
 function show(i, fly) {
   cur = (i + DORMS.length) % DORMS.length;
+  panelOpen = true;
   const d = DORMS[cur];
   const panel = $("panel");
   panel.hidden = false;
   panel.style.setProperty("--c", COL[d.ch]);
-  $("p-op").textContent = d.op + (d.area === "north" ? " · München-Nord" : " · Garching");
+  const areaName = { garching: "Garching", north: "München-Nord", far: "Far from U6" }[d.area];
+  $("p-op").textContent = `${d.op} · ${areaName}`;
   $("p-name").textContent = d.name;
   $("p-meta").textContent = `${d.rating} · ${d.street}`;
+  $("p-u6").innerHTML = "";
+  const u = document.createElement("span"); u.className = "u"; u.textContent = "U"; u.setAttribute("aria-hidden", "true");
+  const t = document.createElement("span"); t.textContent = `Nearest U6: ${d.u6.n} · ${fmtDist(d.u6.m)} in a straight line`;
+  $("p-u6").append(u, t);
   $("p-dir").href = `https://www.openstreetmap.org/directions?route=%3B${d.lat}%2C${d.lng}#map=16/${d.lat}/${d.lng}`;
   $("p-web").href = d.url;
-  $("p-chips").replaceChildren(...d.chips.map(([k, t]) => { const s = document.createElement("span"); s.className = "chip " + k; s.textContent = t; return s; }));
+  const chips = d.chips.slice();
+  if (d.u6.m > FAR_M) chips.push(["far", `Far from U6 · ${fmtDist(d.u6.m)}`]);
+  $("p-chips").replaceChildren(...chips.map(([k, tx]) => { const s = document.createElement("span"); s.className = "chip " + k; s.textContent = tx; return s; }));
   $("p-how").textContent = d.how; $("p-when").textContent = d.when;
   $("p-rent").textContent = d.rent; $("p-wait").textContent = d.wait;
   $("p-note").textContent = d.note;
-  const fill = (id, arr) => $(id).replaceChildren(...(arr.length ? arr : ["Nothing mentioned"]).map(x => { const li = document.createElement("li"); li.textContent = x; if (!arr.length) li.className = "none"; return li; }));
-  fill("p-good", d.rev.good); fill("p-bad", d.rev.bad);
-  $("p-other").replaceChildren(...(d.other.length ? d.other : ["Nothing found outside Google Maps"]).map(x => { const li = document.createElement("li"); li.textContent = x; if (!d.other.length) li.className = "none"; return li; }));
+
+  // parts
+  clearParts();
+  const box = $("p-parts");
+  if (d.parts && d.parts.length) {
+    box.hidden = false;
+    $("p-parts-label").textContent = d.parts.length > 1 ? `Made up of ${d.parts.length} parts` : "Made up of";
+    $("p-parts-list").replaceChildren(...d.parts.map(p => {
+      const li = document.createElement("li");
+      const nm = document.createElement(p.lng ? "button" : "span");
+      nm.className = "pt-name"; nm.textContent = p.name;
+      if (p.lng) {
+        nm.type = "button"; nm.title = "Show on map";
+        nm.addEventListener("click", () => map.flyTo({ center: [p.lng, p.lat], zoom: 17, padding: innerWidth <= 640 ? { bottom: innerHeight * .56 } : { right: 380 }, duration: reduce ? 0 : 700 }));
+        const el = document.createElement("div"); el.className = "pt";
+        el.innerHTML = '<span class="pt-dot"></span><span class="pt-label"></span>';
+        el.querySelector(".pt-label").textContent = p.name;
+        el.style.setProperty("--c", COL[d.ch]);
+        partMarkers.push(new maplibregl.Marker({ element: el, anchor: "center" }).setLngLat([p.lng, p.lat]).addTo(map));
+      }
+      li.appendChild(nm);
+      if (p.note) { const n = document.createElement("span"); n.className = "pt-note"; n.textContent = p.note; li.appendChild(n); }
+      return li;
+    }));
+  } else box.hidden = true;
+
+  const fill = (id, arr, empty) => $(id).replaceChildren(...(arr.length ? arr : [empty]).map(x => { const li = document.createElement("li"); li.textContent = x; if (!arr.length) li.className = "none"; return li; }));
+  fill("p-good", d.rev.good, "Nothing mentioned"); fill("p-bad", d.rev.bad, "Nothing mentioned");
+  fill("p-other", d.other, "Nothing found outside Google Maps");
   $("p-basis").textContent = "Google Maps: " + d.rev.basis + " Read Nov 2026.";
   $("count").textContent = `${cur + 1} of ${DORMS.length}`;
   markers.forEach((m, j) => m.getElement().classList.toggle("on", j === cur));
   if (fly) {
     const narrow = innerWidth <= 640;
-    map.flyTo({ center: [d.lng, d.lat], zoom: Math.max(map.getZoom(), 15),
+    map.flyTo({ center: [d.lng, d.lat], zoom: Math.max(map.getZoom(), 15.5),
       padding: narrow ? { bottom: innerHeight * .56 } : { right: 380 }, duration: reduce ? 0 : 800 });
   }
+  schedule();
 }
 $("prev").addEventListener("click", () => show(cur - 1, true));
 $("next").addEventListener("click", () => show(cur + 1, true));
-$("close").addEventListener("click", () => { $("panel").hidden = true; markers.forEach(m => m.getElement().classList.remove("on")); });
-const pad = innerWidth <= 640 ? { top: 40, bottom: innerHeight * .58, left: 30, right: 30 } : { top: 60, bottom: 60, left: 60, right: 400 };
-$("go-g").addEventListener("click", () => map.fitBounds([[11.642, 48.2485], [11.664, 48.2605]], { padding: pad, duration: reduce ? 0 : 900 }));
-$("go-n").addEventListener("click", () => map.fitBounds([[11.558, 48.180], [11.634, 48.213]], { padding: pad, duration: reduce ? 0 : 900 }));
+$("close").addEventListener("click", () => {
+  $("panel").hidden = true; panelOpen = false; clearParts();
+  markers.forEach(m => m.getElement().classList.remove("on")); schedule();
+});
+
+// area buttons
+const pad = () => innerWidth <= 640 ? { top: 40, bottom: innerHeight * .58, left: 30, right: 30 } : { top: 60, bottom: 60, left: 60, right: 400 };
+function fitArea(filter) {
+  const ds = DORMS.filter(filter);
+  map.fitBounds([[Math.min(...ds.map(d => d.lng)), Math.min(...ds.map(d => d.lat))], [Math.max(...ds.map(d => d.lng)), Math.max(...ds.map(d => d.lat))]], { padding: pad(), duration: reduce ? 0 : 900 });
+}
+$("go-g").addEventListener("click", () => fitArea(d => d.area === "garching"));
+$("go-n").addEventListener("click", () => fitArea(d => d.area === "north"));
+$("go-f").addEventListener("click", () => fitArea(d => d.area === "far"));
+$("go-a").addEventListener("click", () => fitArea(() => true));
 show(0, false);
 </script>
 </body>
