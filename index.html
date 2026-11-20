@@ -137,6 +137,10 @@ button:focus-visible, a:focus-visible, .mk-in:focus-visible { outline: 2px solid
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
+/* Unterföhring markers: double border */
+.mk.ufg .mk-in { border-style: double; border-width: 3px; background: var(--raise); }
+.mk.ufg.on .mk-in { border-style: solid; border-width: 1.5px; background: var(--c); }
+.legend .sw.ln.dbl { border-style: double; border-width: 3px; }
 /* far-from-U6 markers: dotted border */
 .mk.far .mk-in { border-style: dotted; border-width: 2px; background: var(--raise); }
 .mk.far.on .mk-in { border-style: solid; background: var(--c); }
@@ -206,14 +210,16 @@ button.pt-name:hover { text-decoration-color: var(--c); }
   <span><i class="sw" style="--c:var(--eswm)"></i>The house chooses · application rounds</span>
   <span><i class="sw" style="--c:var(--priv)"></i>First come, first served · private</span>
   <span><i class="ux">U</i><i class="sw u6"></i>U6 line and stations</span>
-  <span><i class="sw ln"></i>Solid: Garching</span>
-  <span><i class="sw ln dash"></i>Dashed: U6 München-Nord</span>
-  <span><i class="sw ln dot"></i>Dotted: far from the U6</span>
+  <span><i class="sw ln"></i>Solid · Garching</span>
+  <span><i class="sw ln dash"></i>Dashed · München-Nord, on the U6</span>
+  <span><i class="sw ln dot"></i>Dotted · far from the U6 (other lines)</span>
+  <span><i class="sw ln dbl"></i>Double · Unterföhring, bus to the U6</span>
   <span><i class="clx">3</i>Dorms too close together; click to zoom in</span>
   <div class="areas">
     <button type="button" id="go-g">Garching</button>
     <button type="button" id="go-n">München-Nord</button>
     <button type="button" id="go-f">Far from U6</button>
+    <button type="button" id="go-u">Unterföhring</button>
     <button type="button" id="go-a">All</button>
   </div>
 </div>
@@ -275,7 +281,7 @@ button.pt-name:hover { text-decoration-color: var(--c); }
 
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script>
-// area: "garching" | "north" (U6 München-Nord, down to Münchner Freiheit) | "far" (far from the U6)
+// area: "garching" | "north" (U6 München-Nord, down to Münchner Freiheit) | "far" (far from the U6) | "ufg" (Unterföhring)
 // ch: "stwm" waiting list | "eswm" selection by an association, church or foundation | "priv" private
 const STWM_HOW = "STWM online application, choose up to 3 dorms";
 const STWM_WHEN = "Window for the winter semester opens 15 May";
@@ -561,11 +567,11 @@ const DORMS = [
     rev:{ good:["Great community; several call it the best dorm in Munich","Popular house bar"], bad:["Hexagonal rooms look striking but are hard to furnish"],
           basis:"all 7 written reviews (of 24 ratings), newest 10 months ago." },
     url:"https://www.marchionini.net/de/bewerbung" },
-  { area:"far", name:"Apian Aparthaus", short:"Apian", street:"Apianstraße 7–7b, 85774 Unterföhring", op:"Private", ch:"priv", lng:11.64038, lat:48.17415, rating:"3.6 ★ (63)",
+  { area:"ufg", name:"Apian Aparthaus", short:"Apian", street:"Apianstraße 7–7b, 85774 Unterföhring", op:"Private", ch:"priv", lng:11.64038, lat:48.17415, rating:"3.6 ★ (63)",
     chips:[["ok","Yes, students"],["check","Early-exit fees (reviews)"]],
     how:"Email info@apian-aparthaus.de or use the form on apian-aparthaus.de, with a copy of your ID, your enrolment certificate and the start date you want", when:"Any time, while flats are free",
     rent:"€830 all-in (Apian 1, ≈ 20 m²) or €950 (Apian 2, ≈ 24 m²) · incl. €230 costs", wait:"No list: flats are let while any are free",
-    note:"Two private houses in Unterföhring, across the Isar from the U6. Apian 1 is for students only; Apian 2 also takes nursing and social-care staff. The town owns 17 flats in Apian 2 (house B) and lets them itself for €450 + costs.",
+    note:"Two private houses in Unterföhring, across the Isar from the U6 (bus 233 to Studentenstadt). Apian 1 is for students only; Apian 2 also takes nursing and social-care staff. The town owns 17 flats in Apian 2 (house B) and lets them itself for €450 + costs.",
     parts:[{name:"Apian 1 · Apianstraße 7", note:"475 flats ≈ 20 m², students only · €600 + €230 costs"},{name:"Apian 2 · Apianstraße 7a/7b", note:"128 flats ≈ 24 m², built over the car park; students and social/nursing jobs · €720 + €230"},{name:"Town flats in Apian 2, house B", note:"17 furnished flats of 23.7 m² for €450 + heating and costs; students, trainees, town staff and social jobs; max. 8 years; town hall allocates in rounds"}],
     other:["Unterföhring town paper (Apr 2026): the town bought 17 flats in Apian 2 house B and lets them for €450 + costs; written applications to the town hall, decided by the housing committee (unterfoehring.de)","Operator website: let 'at any time, while stocks last'; furnished, kitchenette with ceramic hob and fridge, own bath with daylight; security service and video surveillance (apian-aparthaus.de)"],
     rev:{ good:[],
@@ -845,7 +851,7 @@ function show(i, fly) {
   const panel = $("panel");
   panel.hidden = false;
   panel.style.setProperty("--c", COL[d.ch]);
-  const areaName = { garching: "Garching", north: "München-Nord", far: "Far from U6" }[d.area];
+  const areaName = { garching: "Garching", north: "München-Nord", far: "Far from U6", ufg: "Unterföhring" }[d.area];
   $("p-op").textContent = `${d.op} · ${areaName}`;
   $("p-name").textContent = d.name;
   $("p-meta").textContent = `${d.rating} · ${d.street}`;
@@ -861,7 +867,7 @@ function show(i, fly) {
   $("p-dir").href = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(d.name + ", " + d.street + (/\d{5}/.test(d.street) ? "" : (d.area === "garching" ? ", 85748 Garching bei München" : ", München")))}&travelmode=transit`;
   $("p-web").href = d.url;
   const chips = d.chips.slice();
-  if (d.u6.m > FAR_M) chips.push(["far", `Far from U6 · ${walkText(walkInfo(d))} walk`]);
+  if (d.u6.m > FAR_M) chips.push(["far", `Walk to the U6 · ${walkText(walkInfo(d))}`]);
   $("p-chips").replaceChildren(...chips.map(([k, tx]) => { const s = document.createElement("span"); s.className = "chip " + k; s.textContent = tx; return s; }));
   $("p-how").textContent = d.how; $("p-when").textContent = d.when;
   $("p-rent").textContent = d.rent; $("p-wait").textContent = d.wait;
@@ -923,6 +929,7 @@ function fitArea(filter) {
 $("go-g").addEventListener("click", () => fitArea(d => d.area === "garching"));
 $("go-n").addEventListener("click", () => fitArea(d => d.area === "north"));
 $("go-f").addEventListener("click", () => fitArea(d => d.area === "far"));
+$("go-u").addEventListener("click", () => fitArea(d => d.area === "ufg"));
 $("go-a").addEventListener("click", () => fitArea(() => true));
 show(0, false);
 </script>
