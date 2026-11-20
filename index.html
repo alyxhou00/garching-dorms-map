@@ -303,14 +303,17 @@ const DORMS = [
     url:"https://apartments-garching.de/en/prices" },
 
   // ---------------- U6 München-Nord (north to south) ----------------
-  { area:"north", name:"Studentisches Wohnen im Haidpark", short:"Haidpark (AWO)", street:"Admiralbogen 37, 80939 München", op:"AWO", ch:"eswm", lng:11.61410, lat:48.21032, rating:"3.5 ★ (8)",
+  { area:"north", name:"Studentisches Wohnen im Haidpark", short:"Haidpark (AWO)", street:"Admiralbogen 37–47, 80939 München", op:"AWO", ch:"eswm", lng:11.61410, lat:48.21032, rating:"3.5 ★ (8)",
     chips:[["ok","Yes"],["check","Applicants report no reply"]],
     how:"Apply to AWO München (phone +49 89 46228130)", when:"No published deadline",
-    rent:"Not published · ask", wait:"Not published · ask", note:"Run by the AWO, a social welfare association.",
-    other:[],
+    rent:"Not published · sublets ask about €550 all-in for 20 m²", wait:"Not published · ask",
+    note:"Built 2012 by the AWO, a social welfare association; also called 'Studentenwohnheim Fröttmaning'. 5 min on foot to U6 Fröttmaning. Same rules as STWM: enrolled in Munich, income not above the BAföG maximum.",
+    parts:[{name:"Single apartments", note:"17.5 m², kitchenette, own WC and shower"},{name:"Maisonette WGs", note:"for 4, 7 or 8 people; every room has its own WC and shower; shared kitchen"},{name:"Shared spaces", note:"roof terraces, student pub, copy shop, bike rooms, laundry"}],
+    partsLabel:"What's inside",
+    other:["AWO: rooftop terraces with views of the Allianz Arena and the Alps; student pub in the house (awo-muenchen.de)","Residents subletting: 20 m² single apartment for €550 incl. Wi-Fi, power and heating; WG rooms with own bath and balcony (WG-Gesucht)"],
     rev:{ good:["Garden, friendly staff and management","Solar panels planned on all balconies"],
           bad:["Two applicants (2 months ago) say they waited 2.5 and 4.5 years and stopped getting replies"], basis:"all 4 written reviews (of 8 ratings)." },
-    url:"https://www.awo-muenchen.de/" },
+    url:"https://www.awo-muenchen.de/spezielles/studentisches-wohnen-im-haidpark/ueber-uns" },
   { area:"north", name:"Heidemannstraße", short:"Heidemannstraße", street:"Paul-Hindemith-Allee 4+6, Karl-Köglsperger-Str. 3–9", op:"STWM", ch:"stwm", lng:11.60621, lat:48.20040, rating:"No Google listing",
     chips:[STWM_YES,["check","May not combine with Garching picks"]], how:STWM_HOW, when:STWM_WHEN,
     rent:"€362.80–416.80 warm · Einzelapartment (2er-WG rooms €335.90 / €380.90)", wait:"≈ 2–3 semesters",
@@ -395,13 +398,16 @@ const DORMS = [
           basis:"all 8 written reviews (of 12 ratings), newest 5 months ago." },
     url:"https://www.google.com/maps/search/?api=1&query=Freisinger+Landstra%C3%9Fe+21+80939+M%C3%BCnchen" },
   { area:"north", name:"Studentenwohnheim Schwabing", short:"Berzeliusstraße", street:"Berzeliusstraße 3, 80939 München", op:"Private", ch:"priv", lng:11.61196, lat:48.18983, rating:"4.5 ★ (24)",
-    chips:[["ok","Yes"],["check","Operator and rent unknown"]],
-    how:"Phone listed on Google: +49 7142 4698910; no website found", when:"No published deadline",
-    rent:"Not published · ask", wait:"Not published · ask", note:"Very close to U6 Freimann.",
-    other:[],
-    rev:{ good:["Quiet; very close to the U-Bahn","Good, affordable apartments; park behind the building","Caretaker and management very helpful"],
+    chips:[["ok","Yes"],["check","Minimum 12-month contract"]],
+    how:"Contact form on studentenwohnheim-schwabing.com (choose 'Mietgesuch'), or phone 07142 46989-10", when:"No published deadline",
+    rent:"€815–920 all-in · ≈ 20 m² apartment (by balcony/terrace)", wait:"Not published · ask",
+    note:"Run by KüSt Invest II GmbH, built 2013. For students, trainees and interns. Deposit €1,935–2,250. Net rent rises 2.5% a year. Very close to U6 Freimann.",
+    parts:[{name:"Category 1", note:"no balcony or terrace · €815 · deposit €1,935"},{name:"Category 2", note:"small terrace · €830 · deposit €1,980"},{name:"Category 3", note:"ground-floor terrace · €845 · deposit €2,025"},{name:"Category 4", note:"large ground-floor terrace · €870 · deposit €2,100"},{name:"Category 5", note:"roof terrace (12 on the 3rd floor) · €920 · deposit €2,250"}],
+    partsLabel:"Apartment types",
+    other:["Website: all-inclusive rent (heating, power, 60 Mbit/s Wi-Fi); stay until you finish your studies; subletting allowed for up to 12 months; deposit returned about 6 weeks after moving out (studentenwohnheim-schwabing.com)","Party room with table football and darts, barbecue area, fitness room, own solar panels; supervisor on site weekdays 8–15 (studentenwohnheim-schwabing.com)"],
+    rev:{ good:["Quiet; very close to the U-Bahn","Good apartments; park behind the building","Caretaker and management very helpful"],
           bad:["No supermarket nearby","Usually full"], basis:"all 10 written reviews (of 24 ratings), newest 2 years ago." },
-    url:"https://www.google.com/maps/search/?api=1&query=Berzeliusstra%C3%9Fe+3+80939+M%C3%BCnchen" },
+    url:"https://www.studentenwohnheim-schwabing.com/" },
   { area:"north", name:"Studentenstadt Freimann", short:"Studentenstadt", street:"Studentenstadt, 80805 München", op:"STWM", ch:"stwm", lng:11.61135, lat:48.18307, rating:"4.2 ★ (115)",
     chips:[STWM_YES,["check","Renovation ongoing"]], how:STWM_HOW, when:STWM_WHEN,
     rent:"€283.20–480.70 warm · room in a WG (apartments €401.10–505.50)", wait:"≈ 3–4 semesters",
@@ -590,7 +596,7 @@ const markers = DORMS.map((d, i) => {
   inner.setAttribute("role", "button");
   inner.style.setProperty("--c", COL[d.ch]);
   inner.textContent = d.short;
-  if (d.parts && d.parts.length > 1) {
+  if (d.parts && d.parts.length > 1 && !d.partsLabel) {
     const b = document.createElement("span"); b.className = "pc"; b.textContent = d.parts.length;
     b.title = `Made up of ${d.parts.length} parts`; inner.appendChild(b);
   }
@@ -703,7 +709,7 @@ function show(i, fly) {
   const box = $("p-parts");
   if (d.parts && d.parts.length) {
     box.hidden = false;
-    $("p-parts-label").textContent = d.parts.length > 1 ? `Made up of ${d.parts.length} parts` : "Made up of";
+    $("p-parts-label").textContent = d.partsLabel || (d.parts.length > 1 ? `Made up of ${d.parts.length} parts` : "Made up of");
     $("p-parts-list").replaceChildren(...d.parts.map(p => {
       const li = document.createElement("li");
       const nm = document.createElement(p.lng ? "button" : "span");
