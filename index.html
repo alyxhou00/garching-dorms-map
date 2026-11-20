@@ -141,6 +141,10 @@ button:focus-visible, a:focus-visible, .mk-in:focus-visible { outline: 2px solid
 .mk.ufg .mk-in { border-style: double; border-width: 3px; background: var(--raise); }
 .mk.ufg.on .mk-in { border-style: solid; border-width: 1.5px; background: var(--c); }
 .legend .sw.ln.dbl { border-style: double; border-width: 3px; }
+/* Oberschleißheim markers: solid border with an outer ring */
+.mk.osh .mk-in { background: var(--raise); box-shadow: 0 0 0 2px var(--panel), 0 0 0 3.5px var(--c), 0 2px 8px rgba(0,0,0,.18); }
+.mk.osh.on .mk-in { background: var(--c); }
+.legend .sw.ln.ring { box-shadow: 0 0 0 1.5px var(--panel), 0 0 0 3px var(--muted); width: 11px; height: 7px; margin: 0 1.5px; }
 /* far-from-U6 markers: dotted border */
 .mk.far .mk-in { border-style: dotted; border-width: 2px; background: var(--raise); }
 .mk.far.on .mk-in { border-style: solid; background: var(--c); }
@@ -214,12 +218,14 @@ button.pt-name:hover { text-decoration-color: var(--c); }
   <span><i class="sw ln dash"></i>Dashed · München-Nord, on the U6</span>
   <span><i class="sw ln dot"></i>Dotted · far from the U6 (other lines)</span>
   <span><i class="sw ln dbl"></i>Double · Unterföhring, bus to the U6</span>
+  <span><i class="sw ln ring"></i>Ringed · Oberschleißheim, bus to the U6</span>
   <span><i class="clx">3</i>Dorms too close together; click to zoom in</span>
   <div class="areas">
     <button type="button" id="go-g">Garching</button>
     <button type="button" id="go-n">München-Nord</button>
     <button type="button" id="go-f">Far from U6</button>
     <button type="button" id="go-u">Unterföhring</button>
+    <button type="button" id="go-o">Oberschleißheim</button>
     <button type="button" id="go-a">All</button>
   </div>
 </div>
@@ -281,7 +287,7 @@ button.pt-name:hover { text-decoration-color: var(--c); }
 
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script>
-// area: "garching" | "north" (U6 München-Nord, down to Münchner Freiheit) | "far" (far from the U6) | "ufg" (Unterföhring)
+// area: "garching" | "north" (U6 München-Nord, down to Münchner Freiheit) | "far" (far from the U6) | "ufg" (Unterföhring) | "osh" (Oberschleißheim)
 // ch: "stwm" waiting list | "eswm" selection by an association, church or foundation | "priv" private
 const STWM_HOW = "STWM online application, choose up to 3 dorms";
 const STWM_WHEN = "Window for the winter semester opens 15 May";
@@ -577,7 +583,16 @@ const DORMS = [
     rev:{ good:[],
           bad:["Expensive for the size: one calls it 'over €830 for a prison cell', another says about €30 per m²","Fees to leave early (€1,000 and €3,500 mentioned); deposits returned slowly and not in full","Contract says move out 3 days before it ends, which falls in Oktoberfest week","Strict quiet rules after 22:00, unfriendly staff, slow repairs; one mentions bugs","Several say the operator gets bad reviews removed, so the score may be too high"],
           basis:"the 5 written reviews Google shows first (of 63 ratings); I could not page through the rest without the browser." },
-    url:"https://www.apian-aparthaus.de/en" }
+    url:"https://www.apian-aparthaus.de/en" },
+  { area:"osh", name:"Studierendenwohnanlage Oberschleißheim", short:"Oberschleißheim", street:"Am Schäferanger 9–15, 85764 Oberschleißheim", op:"STWM", ch:"stwm", lng:11.54568, lat:48.25626, rating:"4.0 ★ (71)",
+    chips:[STWM_YES,["check","Bus 292 every 20 min"]], how:STWM_HOW, when:STWM_WHEN,
+    rent:"€399.50–420.40 warm · room in a WG (bath shared by two €431.30–438.20; own bath €445.30)", wait:"≈ 1 semester",
+    note:"171 places next to the regatta lake, opened 1997, first meant for vet students. S1 Oberschleißheim for Munich; bus 292 for Garching. Max. 7 semesters on a Bachelor's, 4 on a Master's. Deposit is 3× base rent.",
+    other:["STWM: Munich, Garching and Weihenstephan are each about 25 min away by public transport; communal kitchens and a common room (studierendenwerk-muenchen-oberbayern.de)","DAAD hall finder: 171 furnished places; single rooms share shower, WC and kitchen in their group (daad.de)"],
+    rev:{ good:["Friendly people; good for studying and for parties","Quiet and peaceful","Direct bus to the Garching campus; supermarkets, pool, post office nearby"],
+          bad:["Rural, feels far from Munich at first","A bit far from the city centre"],
+          basis:"the 5 written reviews Google shows first." },
+    url:"https://www.studierendenwerk-muenchen-oberbayern.de/en/accommodation/halls-of-residence/garching-oberschleissheim/oberschleissheim/" }
 ];
 
 // Room types: kind = studio (own kitchen + own bath), part (own bath, shared kitchen),
@@ -625,11 +640,13 @@ const EXTRA = {
     conn:{ st:"Münchner Freiheit", door:13, steps:[["walk","","to U3 Olympiazentrum","6 min"],["u3","U3","Olympiazentrum → Münchner Freiheit","5 min · every 5 min"]], alt:"Some U3 trips are better to change at Giselastraße instead." }, campus:37 },
   "Apian": { rooms:[["studio","≈ 20 m² (Apian 1) or ≈ 24 m² (Apian 2): kitchenette with ceramic hob and fridge, own shower bath"]],
     conn:{ st:"Studentenstadt", door:15, steps:[["walk","","to the stop Apianstraße","8 min"],["bus","233","Apianstraße → Studentenstadt","7 min · every 10 min"]], alt:"" }, campus:35 },
+  "Oberschleißheim": { rooms:[["wg","Room in a flat for 3–4 · 41 places"],["wg","Room in a flat for 4–12, bath shared by two · 122 places"],["part","8 places"]],
+    conn:{ st:"Garching-Hochbrück", door:27, steps:[["walk","","to the stop Am Stutenanger","6 min"],["bus","292","Am Stutenanger → Garching-Hochbrück","19 min · every 20 min"]], alt:"Or stay on bus 292 all the way to Garching-Forschungszentrum (33 min ride)." }, campus:37 },
   "Marchionini": { rooms:[["studio","84 hexagonal rooms of 20 m² with own bath and kitchenette; shared kitchen too"]],
     conn:{ st:"Münchner Freiheit", door:16, steps:[["walk","","to U3 Petuelring","8 min"],["u3","U3","Petuelring → Münchner Freiheit","4 min · every 5 min"]], alt:"Some U3 trips are better to change at Giselastraße instead." }, campus:40 }
 };
 // Walking distance along footpaths to the nearest U6 station (OSRM foot router on OpenStreetMap data, Nov 2026)
-const WALK = {"Garching I": [910, "Garching"], "Garching II": [1143, "Garching"], "HHG": [1052, "Garching"], "DOMINO": [1369, "Garching"], "SLC": [1064, "Garching"], "GLC": [593, "Garching"], "Haidpark (AWO)": [324, "Fröttmaning"], "Heidemannstraße": [928, "Kieferngarten"], "GLH": [360, "Kieferngarten"], "Josef-Wirth-Weg": [1430, "Freimann"], "Unity Alpha": [1451, "Freimann"], "Unity Beta": [1645, "Freimann"], "Helmut-Kamm-Haus": [1760, "Freimann"], "Spengelhof": [1583, "Freimann"], "NP3": [336, "Freimann"], "My Room Active": [664, "Freimann"], "Berzeliusstraße": [351, "Freimann"], "Studentenstadt": [462, "Studentenstadt"], "Max-Bill-Straße": [1376, "Alte Heide"], "Ludwigskolleg": [333, "Nordfriedhof"], "Biederstein": [657, "Dietlindenstraße"], "Deutsche Burse": [698, "Münchner Freiheit"], "Pater-Rupert-Mayer": [686, "Münchner Freiheit"], "Felsennelkenanger": [4560, "Fröttmaning"], "Uni Apart Zwillingstr.": [3070, "Nordfriedhof"], "Uni Apart Schleißh.": [3025, "Dietlindenstraße"], "Olympisches Dorf": [4244, "Münchner Freiheit"], "Marchionini": [2823, "Dietlindenstraße"], "Apian": [3881, "Freimann"]};
+const WALK = {"Garching I": [910, "Garching"], "Garching II": [1143, "Garching"], "HHG": [1052, "Garching"], "DOMINO": [1369, "Garching"], "SLC": [1064, "Garching"], "GLC": [593, "Garching"], "Haidpark (AWO)": [324, "Fröttmaning"], "Heidemannstraße": [928, "Kieferngarten"], "GLH": [360, "Kieferngarten"], "Josef-Wirth-Weg": [1430, "Freimann"], "Unity Alpha": [1451, "Freimann"], "Unity Beta": [1645, "Freimann"], "Helmut-Kamm-Haus": [1760, "Freimann"], "Spengelhof": [1583, "Freimann"], "NP3": [336, "Freimann"], "My Room Active": [664, "Freimann"], "Berzeliusstraße": [351, "Freimann"], "Studentenstadt": [462, "Studentenstadt"], "Max-Bill-Straße": [1376, "Alte Heide"], "Ludwigskolleg": [333, "Nordfriedhof"], "Biederstein": [657, "Dietlindenstraße"], "Deutsche Burse": [698, "Münchner Freiheit"], "Pater-Rupert-Mayer": [686, "Münchner Freiheit"], "Felsennelkenanger": [4560, "Fröttmaning"], "Uni Apart Zwillingstr.": [3070, "Nordfriedhof"], "Uni Apart Schleißh.": [3025, "Dietlindenstraße"], "Olympisches Dorf": [4244, "Münchner Freiheit"], "Marchionini": [2823, "Dietlindenstraße"], "Apian": [3881, "Freimann"], "Oberschleißheim": [7888, "Garching-Hochbrück"]};
 DORMS.forEach(d => { Object.assign(d, EXTRA[d.short] || {}); d.walk = WALK[d.short]; });
 
 const COL = { stwm:"var(--stwm)", eswm:"var(--eswm)", priv:"var(--priv)" };
@@ -851,7 +868,7 @@ function show(i, fly) {
   const panel = $("panel");
   panel.hidden = false;
   panel.style.setProperty("--c", COL[d.ch]);
-  const areaName = { garching: "Garching", north: "München-Nord", far: "Far from U6", ufg: "Unterföhring" }[d.area];
+  const areaName = { garching: "Garching", north: "München-Nord", far: "Far from U6", ufg: "Unterföhring", osh: "Oberschleißheim" }[d.area];
   $("p-op").textContent = `${d.op} · ${areaName}`;
   $("p-name").textContent = d.name;
   $("p-meta").textContent = `${d.rating} · ${d.street}`;
@@ -930,6 +947,7 @@ $("go-g").addEventListener("click", () => fitArea(d => d.area === "garching"));
 $("go-n").addEventListener("click", () => fitArea(d => d.area === "north"));
 $("go-f").addEventListener("click", () => fitArea(d => d.area === "far"));
 $("go-u").addEventListener("click", () => fitArea(d => d.area === "ufg"));
+$("go-o").addEventListener("click", () => fitArea(d => d.area === "osh"));
 $("go-a").addEventListener("click", () => fitArea(() => true));
 show(0, false);
 </script>
